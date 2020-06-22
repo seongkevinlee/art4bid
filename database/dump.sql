@@ -270,7 +270,6 @@ CREATE TABLE public.watchlists (
     "watchlistId" integer NOT NULL,
     "postId" integer NOT NULL,
     "userId" integer NOT NULL,
-    "isWatchlisted" boolean DEFAULT true NOT NULL,
     "createdAt" date DEFAULT '2020-06-22'::date NOT NULL
 );
 
@@ -382,7 +381,7 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 -- Data for Name: watchlists; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.watchlists ("watchlistId", "postId", "userId", "isWatchlisted", "createdAt") FROM stdin;
+COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM stdin;
 \.
 
 
