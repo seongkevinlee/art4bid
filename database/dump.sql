@@ -373,7 +373,7 @@ COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startin
 --
 
 COPY public."user" ("userId", "userName", email, password, "profileImg", "coverImg", description, location, "createdAt") FROM stdin;
-1	Uzair	uzair@lfz.com	uzair1234	/images/uzair.png	/images/uziar-cover.png	uzair best	Irvine	2020-06-22 22:43:37.442217+00
+1	Uzair	uzair@lfz.com	uzair1234	/images/uzair.png	/images/uziar-cover.png	uzair best	92620	2020-06-22 22:43:37.442217+00
 \.
 
 
