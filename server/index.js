@@ -4,12 +4,13 @@ const db = require('./database');
 const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
-
+const multer = require('multer');
 const app = express();
 app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
+// Users can search posts by location(zipcode)
 app.get('/api/post/:location', (req, res, next) => {
   const { location } = req.params;
   const sql = `
@@ -40,6 +41,37 @@ app.get('/api/post/:location', (req, res, next) => {
     });
 });
 
+// To upload an image
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './server/public/images');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+// To upload an image
+app.post('/api/post/image', (req, res) => {
+  const upload = multer({
+    limits: {
+      fileSize: 1000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    console.error(err);
+    res.end('File is successfully uploaded');
+  });
+});
+
+// Users can create a post
 app.post('/api/post/', (req, res, next) => {
   const { sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt } = req.body;
   const sql = `
