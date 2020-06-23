@@ -168,6 +168,35 @@ app.post('/api/post/', (req, res, next) => {
     });
 });
 
+// USER CAN VIEW ALL POSTS
+app.get('/api/posts/:category', (req, res, next) => {
+  const category = req.params.category;
+  const sql = `
+    select *
+    from  "post"
+    where "category" = $1
+  `;
+  const params = [category];
+  db.query(sql, params)
+    .then(result => {
+      const posts = result.rows;
+      if (!posts) {
+        return res.status(404).json({
+          error: `There are no posts with the category ${category}`
+        });
+      } else {
+        res.status(200).json(posts);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+
+});
+
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
     .then(result => res.json(result.rows[0]))
