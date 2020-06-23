@@ -201,7 +201,8 @@ CREATE TABLE public.post (
     "biddingEnabled" boolean DEFAULT true NOT NULL,
     "isDeleted" boolean DEFAULT true NOT NULL,
     "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL,
-    "expiredAt" date NOT NULL
+    "expiredAt" date NOT NULL,
+    category text
 );
 
 
@@ -364,7 +365,13 @@ COPY public.message ("messageId", "senderId", "receipientId", message, "createdA
 -- Data for Name: post; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startingBid", "biddingEnabled", "isDeleted", "createdAt", "expiredAt") FROM stdin;
+COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startingBid", "biddingEnabled", "isDeleted", "createdAt", "expiredAt", category) FROM stdin;
+1	1	example1 description	https://i.picsum.photos/id/546/200/200.jpg?hmac=qPx0UfEYgljp1xwhEAy3t7xCT8uLxWCGibv7hu6EkwQ	exampleOne	20	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	paintings
+2	1	example2 description	https://i.picsum.photos/id/154/200/200.jpg?hmac=ljiYfN3Am3TR0-aMErtWNuSQm8RTYarrv2QJfmWG6Cw	exampleTwo	30	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	paintings
+3	2	example3 description	https://i.picsum.photos/id/204/200/200.jpg?hmac=gppQCOIV43fSCLsdUCoPQxrc16lrOEvVu2u5nH-I4Zo	exampleThree	40	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs
+4	2	example4 description	https://i.picsum.photos/id/306/200/200.jpg?hmac=_MA2OQbvCf09ghW0BrkSYh9mOhP-xpHqg2c5joDIRFg	exampleFour	100	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs
+5	3	example5 description	https://i.picsum.photos/id/121/200/200.jpg?hmac=0aiR--xgWy1aIM85HCFMySsuQ7DJJBE6XW_Yv4nqU6s	exampleFive	110	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other
+6	3	example6 description	https://i.picsum.photos/id/460/200/200.jpg?hmac=hL3I5G2p0p6vDGPyV9hergug-KipbUJVxqnnGIEBXg4	exampleSix	510	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other
 \.
 
 
@@ -414,7 +421,7 @@ SELECT pg_catalog.setval('public."message_messageId_seq"', 1, false);
 -- Name: post_postId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."post_postId_seq"', 1, false);
+SELECT pg_catalog.setval('public."post_postId_seq"', 6, true);
 
 
 --
