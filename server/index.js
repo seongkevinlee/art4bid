@@ -40,6 +40,33 @@ app.get('/api/post/:location', (req, res, next) => {
     });
 });
 
+app.post('/api/post/', (req, res, next) => {
+  const { sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt } = req.body;
+  const sql = `
+    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING "postId"
+  `;
+  const params = [sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt];
+  db.query(sql, params)
+    .then(result => {
+      const post = result.rows[0];
+      if (!post) {
+        res.status(404).json({
+          error: 'Failed to create post'
+        });
+      } else {
+        res.json(post);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
