@@ -8,20 +8,25 @@ export default class ThumbnailColumn extends React.Component {
     };
   }
 
-  render() {
-    return (
-      <div className="flex-column thumbnail-column">
-        <img className="w-100 contain" src="https://i.picsum.photos/id/51/600/600.jpg?hmac=wJi4zmJL9qrtlE5QRV9LR4gO8SQiTfYivU14RJG9Zbo"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/822/200/200.jpg?hmac=pXgRn-rbZIan3GYBv9xCVsdyt_Kzq5Q_d0AbLnzeT3k"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/703/200/200.jpg?hmac=6zWxIBRmIf2e0jZTqvKBIwrc7wm-dPkvGky4go6Yyvg"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/402/200/200.jpg?hmac=9PZqzeq_aHvVAxvDPNfP6GuD58m4rilq-TUrG4e7V80"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/969/200/200.jpg?hmac=p4_e12QQOwtyNXXwJjJs_2kwmu87KZGqAhiUV8goVos"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/822/200/200.jpg?hmac=pXgRn-rbZIan3GYBv9xCVsdyt_Kzq5Q_d0AbLnzeT3k"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/703/200/200.jpg?hmac=6zWxIBRmIf2e0jZTqvKBIwrc7wm-dPkvGky4go6Yyvg"></img>
-        <img className="w-100 contain" src="https://i.picsum.photos/id/402/200/200.jpg?hmac=9PZqzeq_aHvVAxvDPNfP6GuD58m4rilq-TUrG4e7V80"></img>
-      </div>
-
-    );
+  componentDidMount() {
+    // maybe need to slice the state and concat?
+    this.setState({ postThumbnails: this.props.thumbnails });
   }
 
+  render() {
+    const thumbnails = this.state.postThumbnails.map((thumbnail, index) => {
+      return (
+        <img
+          key = {index}
+          src={thumbnail}
+          className="w-100 contain">
+        </img>
+      );
+    });
+    return (
+      <div className="flex-column thumbnail-column">
+        {thumbnails}
+      </div>
+    );
+  }
 }
