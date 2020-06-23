@@ -1,12 +1,20 @@
 import React from 'react';
 import EditProfile from './edit-profile';
+import SearchPage from './search-page';
+import NavBar from './navbar';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoading: true
+      isLoading: true,
+      view: 'search'
     };
+    this.setView = this.setView.bind(this);
+  }
+
+  setView(currentView) {
+    this.setState({ view: currentView });
   }
 
   componentDidMount() {
@@ -25,6 +33,22 @@ export default class App extends React.Component {
         <EditProfile/>
       </div>
     );
+  }
+
+  render() {
+    let pageBody;
+    if (this.state.view === 'search') {
+      pageBody = <SearchPage setView = {this.setView}/>;
+    } else {
+      pageBody = <h1>Hi</h1>;
+    }
+    return (
+      <div>
+        {pageBody}
+        <NavBar view={this.state.view} setView={this.setView} />
+      </div>
+    );
+
   }
 
 }

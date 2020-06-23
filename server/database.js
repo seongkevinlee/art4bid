@@ -3,6 +3,7 @@ const pg = require('pg');
 const db = new pg.Pool({
   connectionString: process.env.DATABASE_URL
 });
+
 // eslint-disable-next-line no-console
 console.log(`trying to connect DB: ${process.env.DATABASE_URL}`);
 
