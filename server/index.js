@@ -11,8 +11,8 @@ app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
 // USER CAN LOGIN
-app.get('/api/login/:userName', (req, res, next) => {
-  const { userName } = req.params;
+app.post('/api/login/', (req, res, next) => {
+  const { userName } = req.body;
   const value = [`${userName}`];
 
   const findUserDB = `
@@ -142,13 +142,31 @@ app.post('/api/post/image', (req, res) => {
 
 // USER CAN CREATE A POST
 app.post('/api/post/', (req, res, next) => {
-  const { sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt } = req.body;
+  const {
+    sellerId,
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt
+  } = req.body;
   const sql = `
     INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING "postId"
   `;
-  const params = [sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt];
+  const params = [
+    sellerId,
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt
+  ];
   db.query(sql, params)
     .then(result => {
       const post = result.rows[0];
