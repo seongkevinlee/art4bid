@@ -171,12 +171,17 @@ app.post('/api/post/', (req, res, next) => {
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category', (req, res, next) => {
   const category = req.params.category;
+  const offset = req.params.offset;
   const sql = `
-    select *
+    select "postId",
+           "imageUrl",
+           "createdAt"
     from  "post"
     where "category" = $1
+    order by "createdAt" desc
+    limit 10 offset $2
   `;
-  const params = [category];
+  const params = [category, offset];
   db.query(sql, params)
     .then(result => {
       const posts = result.rows;
