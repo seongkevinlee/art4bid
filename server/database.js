@@ -5,7 +5,7 @@ const db = new pg.Pool({
 });
 
 // eslint-disable-next-line no-console
-console.log(`trying to connect DB: ${process.env.DB_HOSTNAME}`);
+console.log(`trying to connect DB: ${process.env.DATABASE_URL}`);
 
 db.connect(err => {
   // eslint-disable-next-line no-console
