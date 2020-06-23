@@ -10,6 +10,36 @@ app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
+app.get('/api/post/', (req, res, next) => {
+  const { location } = req.body;
+  const sql = `
+    SELECT *
+      FROM "post"
+     WHERE "sellerId" IN
+      (SELECT "userId"
+         FROM "user"
+        WHERE "location" = $1)
+  `;
+  const params = [location];
+  db.query(sql, params)
+    .then(result => {
+      const posts = result.rows;
+      if (!posts.length) {
+        res.status(404).json({
+          error: `Cannot find posts in area ${location}`
+        });
+      } else {
+        res.json(posts);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 app.get('/api/health-check', (req, res, next) => {
   db.query('select \'successfully connected\' as "message"')
     .then(result => res.json(result.rows[0]))
