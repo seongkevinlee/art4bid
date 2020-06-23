@@ -9,16 +9,17 @@ export default class ThumbnailColumn extends React.Component {
   }
 
   componentDidMount() {
-    // maybe need to slice the state and concat?
-    this.setState({ postThumbnails: this.props.thumbnails });
+    this.setState({
+      postThumbnails: this.props.thumbnails
+    });
   }
 
   render() {
-    const thumbnails = this.state.postThumbnails.map((thumbnail, index) => {
+    const thumbnails = this.state.postThumbnails.map(thumbnail => {
       return (
         <img
-          key = {index}
-          src={thumbnail}
+          key={thumbnail.postId}
+          src={thumbnail.imageUrl}
           className="w-100 contain">
         </img>
       );
