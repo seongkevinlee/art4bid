@@ -41,15 +41,10 @@ app.get('/api/post/:location', (req, res, next) => {
     });
 });
 
-
 // USER CAN EDIT PROFILE
 app.put('/api/user/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId);
-  const { email } = req.body;
-  const { profileImg } = req.body;
-  const { coverImg } = req.body;
-  const { description } = req.body;
-  const { location } = req.body;
+  const { email, profileImg, coverImg, description, location } = req.body;
   if (!Number.isInteger(userId) || userId <= 0) {
     return res.status(400).json({
       error: 'UserId must be a positive integer'
@@ -80,6 +75,7 @@ app.put('/api/user/:userId', (req, res, next) => {
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
+});
 
 // To upload an image
 const storage = multer.diskStorage({
