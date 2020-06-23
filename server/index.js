@@ -189,7 +189,7 @@ app.post('/api/post/', (req, res, next) => {
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category', (req, res, next) => {
   const category = req.params.category;
-  const offset = req.params.offset;
+  const offset = req.body.offset;
   const sql = `
     select "postId",
            "imageUrl",
