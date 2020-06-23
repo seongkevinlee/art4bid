@@ -200,20 +200,31 @@ app.get('/api/posts/:category', (req, res, next) => {
     limit 10 offset $2
   `;
   const params = [category, offset];
-  db.query(sql, params)
-    .then(result => {
-      const posts = result.rows;
-      if (!posts) {
-        return res.status(404).json({
-          error: `There are no posts with the category ${category}`
-        });
-      } else {
-        res.status(200).json(posts);   
+  db.query(sql, params).then(result => {
+    const posts = result.rows;
+    if (!posts) {
+      return res.status(404).json({
+        error: `There are no posts with the category ${category}`
+      });
+    } else {
+      res.status(200).json(posts);
+    }
+  });
 });
 
 // USER CAN EDIT A POST
 app.patch('/api/post/', (req, res, next) => {
-  const { postId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt, category } = req.body;
+  const {
+    postId,
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt,
+    category
+  } = req.body;
   const sql = `
       UPDATE "post"
          SET "description" = $1,
@@ -227,7 +238,17 @@ app.patch('/api/post/', (req, res, next) => {
       WHERE "postId" = $9
       RETURNING *
   `;
-  const params = [description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt, category, postId];
+  const params = [
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt,
+    category,
+    postId
+  ];
   db.query(sql, params)
     .then(result => {
       const post = result.rows[0];
