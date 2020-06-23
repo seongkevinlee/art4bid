@@ -24,12 +24,17 @@ export default class LoginPage extends React.Component {
       headers: {
         'Content-Type': 'application/json'
       },
-      userName: `${this.state.value}`
+      body: JSON.stringify({ userName: this.state.value })
     })
       .then(res => res.json())
       .then(data => {
         // eslint-disable-next-line no-console
         console.log(data, 'data');
+      })
+      .then(() => {
+        this.setState(() => {
+          return { loggedIn: true };
+        });
       });
   }
 
