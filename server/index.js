@@ -10,8 +10,40 @@ app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
+app.get('/api/login/:userName', (req, res, next) => {
+  const { userName } = req.params;
+  const value = [`${userName}`];
+
+  const findUserDB = `
+  select *
+  from "user"
+  where "userName" = $1;`;
+
+  db.query(findUserDB, value)
+    .then(result => {
+      const userObject = result && result.rows && result.rows[0];
+      if (!userObject) {
+        const sql2 = `
+        insert into "user" ("userName")
+                    values ($1)
+                    returning *`;
+        const value2 = [`${userName}`];
+        db.query(sql2, value2).then(data => {
+          req.session.userInfo = data.rows[0];
+          return res.json(req.session);
+        });
+      } else {
+        req.session.userInfo = userObject;
+        return res.json(req.session);
+      }
+    })
+    .catch(err => {
+      return res.send({ message: err });
+    });
+});
+
 app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
+  db.query("select 'successfully connected' as \"message\"")
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });
