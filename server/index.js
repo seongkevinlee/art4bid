@@ -4,13 +4,13 @@ const db = require('./database');
 const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
-
+const multer = require('multer');
 const app = express();
 app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
-// USER CAN SEARCH POSTS BY LOCATION
+// USER CAN SEARCH POST BY LOCATION (ZIPCODE)
 app.get('/api/post/:location', (req, res, next) => {
   const { location } = req.params;
   const sql = `
@@ -40,6 +40,7 @@ app.get('/api/post/:location', (req, res, next) => {
       });
     });
 });
+
 
 // USER CAN EDIT PROFILE
 app.put('/api/user/:userId', (req, res, next) => {
@@ -79,6 +80,64 @@ app.put('/api/user/:userId', (req, res, next) => {
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
+
+// To upload an image
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './server/public/images');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+// TO UPLOAD AN IMAGE
+app.post('/api/post/image', (req, res) => {
+  const upload = multer({
+    limits: {
+      fileSize: 1000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    console.error(err);
+    res.end('File is successfully uploaded');
+  });
+});
+
+// USER CAN CREATE A POST
+app.post('/api/post/', (req, res, next) => {
+  const { sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt } = req.body;
+  const sql = `
+    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING "postId"
+  `;
+  const params = [sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt];
+  db.query(sql, params)
+    .then(result => {
+      const post = result.rows[0];
+      if (!post) {
+        res.status(404).json({
+          error: 'Failed to create post'
+        });
+      } else {
+        res.json(post);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+
 });
 
 app.get('/api/health-check', (req, res, next) => {
