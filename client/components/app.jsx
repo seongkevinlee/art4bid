@@ -1,6 +1,9 @@
 import React from 'react';
-import LoginPage from './login-page';
 
+import LoginPage from './login-page';
+import EditProfile from './edit-profile';
+import SearchPage from './search-page';
+import NavBar from './navbar';
 const UserContext = React.createContext('userInfo');
 
 export default class App extends React.Component {
@@ -9,9 +12,15 @@ export default class App extends React.Component {
     this.state = {
       isLoading: true,
       loggedIn: false,
-      userInfo: {}
+      userInfo: {},
+      view: 'search'
     };
+    this.setView = this.setView.bind(this);
     this.login = this.login.bind(this);
+  }
+
+  setView(currentView) {
+    this.setState({ view: currentView });
   }
 
   componentDidMount() {}
@@ -35,12 +44,23 @@ export default class App extends React.Component {
   }
 
   render() {
+    let pageBody;
+    if (this.state.view ==='login') {
+      pageBody = <LoginPage userInfo={this.login} />
+    }
+    if (this.state.view === 'search') {
+      pageBody = <SearchPage setView = {this.setView}/>;
+    } else {
+      pageBody = <h1>Hi</h1>;
+    }
     return (
+      <UserContext.Provider value={this.state.userInfo}>
       <div>
-        <UserContext.Provider value={this.state.userInfo}>
-          <LoginPage userInfo={this.login} />
-        </UserContext.Provider>
+        {pageBody}
+        <NavBar view={this.state.view} setView={this.setView} />
       </div>
+      </UserContext.Provider>
     );
+
   }
 }
