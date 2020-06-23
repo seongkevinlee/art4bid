@@ -59,7 +59,7 @@ app.get('/api/post/:location', (req, res, next) => {
     .then(result => {
       const posts = result.rows;
       if (!posts.length) {
-        res.status(404).json({
+        res.status(400).json({
           error: `Cannot find posts in area ${location}`
         });
       } else {
@@ -110,7 +110,7 @@ app.put('/api/user/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-// To upload an image
+// TO UPLOAD AN IMAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './server/public/images');
@@ -153,7 +153,7 @@ app.post('/api/post/', (req, res, next) => {
     .then(result => {
       const post = result.rows[0];
       if (!post) {
-        res.status(404).json({
+        res.status(400).json({
           error: 'Failed to create post'
         });
       } else {
@@ -168,6 +168,43 @@ app.post('/api/post/', (req, res, next) => {
     });
 });
 
+// USER CAN EDIT A POST
+app.patch('/api/post/', (req, res, next) => {
+  const { postId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt, category } = req.body;
+  const sql = `
+      UPDATE "post"
+         SET "description" = $1,
+             "imageUrl" = $2,
+             "title" = $3,
+             "startingBid" = $4,
+             "biddingEnabled" = $5,
+             "isDeleted" = $6,
+             "expiredAt" = $7,
+             "category" = $8
+      WHERE "postId" = $9
+      RETURNING *
+  `;
+  const params = [description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt, category, postId];
+  db.query(sql, params)
+    .then(result => {
+      const post = result.rows[0];
+      if (!post) {
+        res.status(400).json({
+          error: 'Failed to update post'
+        });
+      } else {
+        res.status(202).json(post);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
     .then(result => res.json(result.rows[0]))
