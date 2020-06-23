@@ -1,4 +1,5 @@
 import React from 'react';
+import LoginPage from './login-page';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -15,12 +16,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <h1 className='logo'>ART4BID</h1>
-        <h2 className='header-title'>THIS IS A HEADER TITLE</h2>
-        <p>This is a social network art bidding website</p>
-        <input type="text" placeholder='Username'/>
-        <button className='btn btn-submit'>Submit</button>
-        <button className='btn btn-cancel'>Cancel</button>
+        <LoginPage/>
       </div>
     );
   }
