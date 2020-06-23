@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
-app.get('/api/post/', (req, res, next) => {
-  const { location } = req.body;
+app.get('/api/post/:location', (req, res, next) => {
+  const { location } = req.params;
   const sql = `
     SELECT *
       FROM "post"
