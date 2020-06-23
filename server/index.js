@@ -4,14 +4,172 @@ const db = require('./database');
 const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
-
+const multer = require('multer');
 const app = express();
 app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
+// USER CAN LOGIN
+app.get('/api/login/:userName', (req, res, next) => {
+  const { userName } = req.params;
+  const value = [`${userName}`];
+
+  const findUserDB = `
+  select *
+  from "user"
+  where "userName" = $1;`;
+
+  db.query(findUserDB, value)
+    .then(result => {
+      const userObject = result && result.rows && result.rows[0];
+      if (!userObject) {
+        const sql2 = `
+        insert into "user" ("userName")
+                    values ($1)
+                    returning *`;
+        const value2 = [`${userName}`];
+        db.query(sql2, value2).then(data => {
+          req.session.userInfo = data.rows[0];
+          return res.json(req.session);
+        });
+      } else {
+        req.session.userInfo = userObject;
+        return res.json(req.session);
+      }
+    })
+    .catch(err => {
+      return res.send({ message: err });
+    });
+});
+
+// USER CAN SEARCH POST BY LOCATION (ZIPCODE)
+app.get('/api/post/:location', (req, res, next) => {
+  const { location } = req.params;
+  const sql = `
+    SELECT *
+      FROM "post"
+     WHERE "sellerId" IN
+      (SELECT "userId"
+         FROM "user"
+        WHERE "location" = $1)
+  `;
+  const params = [location];
+  db.query(sql, params)
+    .then(result => {
+      const posts = result.rows;
+      if (!posts.length) {
+        res.status(404).json({
+          error: `Cannot find posts in area ${location}`
+        });
+      } else {
+        res.json(posts);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// USER CAN EDIT PROFILE
+app.put('/api/user/:userId', (req, res, next) => {
+  const userId = parseInt(req.params.userId);
+  const { email, profileImg, coverImg, description, location } = req.body;
+  if (!Number.isInteger(userId) || userId <= 0) {
+    return res.status(400).json({
+      error: 'UserId must be a positive integer'
+    });
+  }
+  if (!email) {
+    return res.status(400).json({
+      error: 'Email is a required field'
+    });
+  }
+  if (!location) {
+    return res.status(400).json({
+      error: 'Location is a required field'
+    });
+  }
+  const sql = `
+  UPDATE     "user"
+  SET        "email" = $1,
+             "profileImg" = $2,
+             "coverImg" = $3,
+             "description" = $4,
+             "location" = $5
+  WHERE      "userId" = $6
+  RETURNING  *
+  `;
+  const params = [email, profileImg, coverImg, description, location, userId];
+
+  db.query(sql, params)
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
+});
+
+// To upload an image
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './server/public/images');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  }
+});
+
+// TO UPLOAD AN IMAGE
+app.post('/api/post/image', (req, res) => {
+  const upload = multer({
+    limits: {
+      fileSize: 1000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    console.error(err);
+    res.end('File is successfully uploaded');
+  });
+});
+
+// USER CAN CREATE A POST
+app.post('/api/post/', (req, res, next) => {
+  const { sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt } = req.body;
+  const sql = `
+    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      RETURNING "postId"
+  `;
+  const params = [sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt];
+  db.query(sql, params)
+    .then(result => {
+      const post = result.rows[0];
+      if (!post) {
+        res.status(404).json({
+          error: 'Failed to create post'
+        });
+      } else {
+        res.json(post);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 app.get('/api/health-check', (req, res, next) => {
-  db.query('select \'successfully connected\' as "message"')
+  db.query("select 'successfully connected' as \"message\"")
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });
