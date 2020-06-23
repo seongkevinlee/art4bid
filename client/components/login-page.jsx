@@ -4,8 +4,7 @@ export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: '',
-      loggedIn: false
+      value: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -17,25 +16,7 @@ export default class LoginPage extends React.Component {
 
   handleSubmit() {
     event.preventDefault();
-    alert(this.state.value);
-
-    fetch('/api/login/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ userName: this.state.value })
-    })
-      .then(res => res.json())
-      .then(data => {
-        // eslint-disable-next-line no-console
-        console.log(data, 'data');
-      })
-      .then(() => {
-        this.setState(() => {
-          return { loggedIn: true };
-        });
-      });
+    this.props.userInfo(this.state.value);
   }
 
   render() {
