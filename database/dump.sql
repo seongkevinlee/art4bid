@@ -374,6 +374,10 @@ COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startin
 
 COPY public."user" ("userId", "userName", email, password, "profileImg", "coverImg", description, location, "createdAt") FROM stdin;
 1	Uzair	uzair@lfz.com	uzair1234	/images/uzair.png	/images/uziar-cover.png	uzair best	92620	2020-06-22 22:43:37.442217+00
+2	TimD	timd@lfz.com	timd1234	/images/timd.png	/images/timd-cover.png	timd best	92604	2020-06-22 22:43:37.442217+00
+3	TimH	timh@lfz.com	timh1234	/images/timh.png	/images/timh-cover.png	timh best	92604	2020-06-22 22:43:37.442217+00
+5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 22:43:37.442217+00
+6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 22:43:37.442217+00
 \.
 
 
@@ -417,7 +421,7 @@ SELECT pg_catalog.setval('public."post_postId_seq"', 1, false);
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 1, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 6, true);
 
 
 --
