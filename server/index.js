@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
-//USER CAN LOGIN
+// USER CAN LOGIN
 app.get('/api/login/:userName', (req, res, next) => {
   const { userName } = req.params;
   const value = [`${userName}`];
@@ -41,6 +41,7 @@ app.get('/api/login/:userName', (req, res, next) => {
     .catch(err => {
       return res.send({ message: err });
     });
+});
 
 // USER CAN SEARCH POST BY LOCATION (ZIPCODE)
 app.get('/api/post/:location', (req, res, next) => {
