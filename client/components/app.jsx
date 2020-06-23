@@ -1,5 +1,5 @@
 import React from 'react';
-import Profile from './profile';
+import EditProfile from './edit-profile';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -22,7 +22,7 @@ export default class App extends React.Component {
         <input type="text" placeholder='Username'/>
         <button className='btn btn-submit'>Submit</button>
         <button className='btn btn-cancel'>Cancel</button> */}
-        <Profile/>
+        <EditProfile/>
       </div>
     );
   }
