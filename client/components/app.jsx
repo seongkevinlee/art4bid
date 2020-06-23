@@ -1,4 +1,5 @@
 import React from 'react';
+import SearchPage from './search-page';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -16,6 +17,13 @@ export default class App extends React.Component {
       .finally(() => {
         this.setState({ isLoading: false });
       });
+  }
+
+  render() {
+    return (
+      <SearchPage />
+    );
+
   }
 
 }
