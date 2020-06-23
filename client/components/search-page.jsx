@@ -1,6 +1,5 @@
 import React from 'react';
 import ThumbnailColumn from './thumbnail-column';
-import NavBar from './navbar';
 
 export default class SearchPage extends React.Component {
   constructor(props) {
@@ -55,7 +54,6 @@ export default class SearchPage extends React.Component {
           <ThumbnailColumn
             thumbnails={this.state.otherThumbnails} />
         </div>
-        <NavBar/>
       </div>
 
     );
