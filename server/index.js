@@ -275,7 +275,6 @@ app.patch('/api/post/', (req, res, next) => {
     });
 });
 
-
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
   const {
@@ -304,7 +303,7 @@ app.post('/api/message/', (req, res, next) => {
         });
       } else {
         res.status(202).json(message);
-              }
+      }
     })
     .catch(err => {
       console.error(err);
@@ -345,7 +344,6 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
-
 
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
@@ -398,7 +396,6 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
     });
 
 });
-
 
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {

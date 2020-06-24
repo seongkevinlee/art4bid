@@ -3,6 +3,7 @@ import Profile from './profile';
 import LoginPage from './login-page';
 import SearchPage from './search-page';
 import NavBar from './navbar';
+import SpecificPost from './specific-post';
 const UserContext = React.createContext('userInfo');
 
 export default class App extends React.Component {
@@ -10,9 +11,11 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      loggedIn: false,
+      loggedIn: true,
+      // change back to false
       userInfo: {},
-      view: 'search'
+      view: 'post'
+      // change back to search
     };
     this.setView = this.setView.bind(this);
     this.login = this.login.bind(this);
@@ -52,7 +55,9 @@ export default class App extends React.Component {
     }
     if (this.state.view === 'profile') {
       pageBody = <Profile setView = {this.setView}/>;
-
+    }
+    if (this.state.view === 'post') {
+      pageBody = <SpecificPost setView={this.setView}/>;
     }
     return (
       <UserContext.Provider value={this.state.userInfo}>

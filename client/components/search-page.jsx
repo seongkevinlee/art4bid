@@ -210,7 +210,7 @@ export default class SearchPage extends React.Component {
       return (
         <div>
           <div>
-            <nav className="text-center mt-3">
+            <nav className="text-center pt-3">
               <div className="position-relative">
                 <Autocomplete
                   autoFocus
@@ -250,7 +250,8 @@ export default class SearchPage extends React.Component {
               paintings.length > 0
                 ? (
                   <ThumbnailColumn
-                    thumbnails={paintings} />
+                    thumbnails={paintings}
+                    setView={this.props.setView} />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p>There are no images</p>
@@ -260,7 +261,8 @@ export default class SearchPage extends React.Component {
               photographs.length > 0
                 ? (
                   <ThumbnailColumn
-                    thumbnails={photographs} />
+                    thumbnails={photographs}
+                    setView={this.props.setView} />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p>There are no images</p>
@@ -270,7 +272,8 @@ export default class SearchPage extends React.Component {
               other.length > 0
                 ? (
                   <ThumbnailColumn
-                    thumbnails={other} />
+                    thumbnails={other}
+                    setView={this.props.setView} />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p>There are no images</p>
