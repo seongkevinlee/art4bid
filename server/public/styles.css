@@ -139,7 +139,6 @@ button {
 
 .profileImg-container {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  background-image: url(./images/sample-images/sample-profile-pic.png);
   background-repeat: no-repeat;
   background-size: cover;
   padding: 0;
@@ -156,8 +155,6 @@ button {
 }
 .coverPhoto {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
-  url(./images/sample-images/sample-cover-photo1.jpg);
   background-repeat: no-repeat;
   background-size: cover;
   padding: 0;
@@ -202,4 +199,3 @@ button {
     opacity: 1;
   }
 }
-

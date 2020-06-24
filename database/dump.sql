@@ -95,7 +95,7 @@ CREATE TABLE public.bid (
     "bidderId" integer NOT NULL,
     "postId" bigint NOT NULL,
     "currentBid" integer NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT '2020-06-22 15:43:37.442217-07'::timestamp with time zone NOT NULL,
     "bidEnabled" boolean DEFAULT true NOT NULL
 );
 
@@ -129,7 +129,7 @@ CREATE TABLE public.comments (
     "userId" integer NOT NULL,
     comment text NOT NULL,
     "postId" integer NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL
+    "createdAt" timestamp with time zone DEFAULT '2020-06-22 15:43:37.442217-07'::timestamp with time zone NOT NULL
 );
 
 
@@ -160,9 +160,9 @@ ALTER SEQUENCE public."comments_commentId_seq" OWNED BY public.comments."comment
 CREATE TABLE public.message (
     "messageId" integer NOT NULL,
     "senderId" integer NOT NULL,
-    "receipientId" integer NOT NULL,
+    "recipientId" integer NOT NULL,
     message text NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT '2020-06-22 15:43:37.442217-07'::timestamp with time zone NOT NULL,
     "postId" integer NOT NULL
 );
 
@@ -200,7 +200,7 @@ CREATE TABLE public.post (
     "startingBid" integer NOT NULL,
     "biddingEnabled" boolean DEFAULT true NOT NULL,
     "isDeleted" boolean DEFAULT true NOT NULL,
-    "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL,
+    "createdAt" timestamp with time zone DEFAULT '2020-06-22 15:43:37.442217-07'::timestamp with time zone NOT NULL,
     "expiredAt" date NOT NULL,
     category text
 );
@@ -239,7 +239,7 @@ CREATE TABLE public."user" (
     "coverImg" text,
     description text,
     location text,
-    "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL
+    "createdAt" timestamp with time zone DEFAULT '2020-06-22 15:43:37.442217-07'::timestamp with time zone NOT NULL
 );
 
 
@@ -342,8 +342,8 @@ ALTER TABLE ONLY public.watchlists ALTER COLUMN "watchlistId" SET DEFAULT nextva
 --
 
 COPY public.bid ("bidId", "bidderId", "postId", "currentBid", "createdAt", "bidEnabled") FROM stdin;
-1	2	1	30	2020-06-22 22:43:37.442217+00	t
-3	3	1	40	2020-06-22 22:43:37.442217+00	t
+1	2	1	30	2020-06-22 15:43:37.442217-07	t
+3	3	1	40	2020-06-22 15:43:37.442217-07	t
 \.
 
 
@@ -359,7 +359,7 @@ COPY public.comments ("commentId", "userId", comment, "postId", "createdAt") FRO
 -- Data for Name: message; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.message ("messageId", "senderId", "receipientId", message, "createdAt", "postId") FROM stdin;
+COPY public.message ("messageId", "senderId", "recipientId", message, "createdAt", "postId") FROM stdin;
 \.
 
 
@@ -368,12 +368,12 @@ COPY public.message ("messageId", "senderId", "receipientId", message, "createdA
 --
 
 COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startingBid", "biddingEnabled", "isDeleted", "createdAt", "expiredAt", category) FROM stdin;
-1	1	example1 description	https://i.picsum.photos/id/546/200/200.jpg?hmac=qPx0UfEYgljp1xwhEAy3t7xCT8uLxWCGibv7hu6EkwQ	exampleOne	20	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	paintings
-2	1	example2 description	https://i.picsum.photos/id/154/200/200.jpg?hmac=ljiYfN3Am3TR0-aMErtWNuSQm8RTYarrv2QJfmWG6Cw	exampleTwo	30	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	paintings
-3	2	example3 description	https://i.picsum.photos/id/204/200/200.jpg?hmac=gppQCOIV43fSCLsdUCoPQxrc16lrOEvVu2u5nH-I4Zo	exampleThree	40	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs
-4	2	example4 description	https://i.picsum.photos/id/306/200/200.jpg?hmac=_MA2OQbvCf09ghW0BrkSYh9mOhP-xpHqg2c5joDIRFg	exampleFour	100	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs
-5	3	example5 description	https://i.picsum.photos/id/121/200/200.jpg?hmac=0aiR--xgWy1aIM85HCFMySsuQ7DJJBE6XW_Yv4nqU6s	exampleFive	110	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other
-6	3	example6 description	https://i.picsum.photos/id/460/200/200.jpg?hmac=hL3I5G2p0p6vDGPyV9hergug-KipbUJVxqnnGIEBXg4	exampleSix	510	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other
+1	1	example1 description	https://i.picsum.photos/id/546/200/200.jpg?hmac=qPx0UfEYgljp1xwhEAy3t7xCT8uLxWCGibv7hu6EkwQ	exampleOne	20	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	paintings
+2	1	example2 description	https://i.picsum.photos/id/154/200/200.jpg?hmac=ljiYfN3Am3TR0-aMErtWNuSQm8RTYarrv2QJfmWG6Cw	exampleTwo	30	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	paintings
+3	2	example3 description	https://i.picsum.photos/id/204/200/200.jpg?hmac=gppQCOIV43fSCLsdUCoPQxrc16lrOEvVu2u5nH-I4Zo	exampleThree	40	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	photographs
+4	2	example4 description	https://i.picsum.photos/id/306/200/200.jpg?hmac=_MA2OQbvCf09ghW0BrkSYh9mOhP-xpHqg2c5joDIRFg	exampleFour	100	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	photographs
+5	3	example5 description	https://i.picsum.photos/id/121/200/200.jpg?hmac=0aiR--xgWy1aIM85HCFMySsuQ7DJJBE6XW_Yv4nqU6s	exampleFive	110	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	other
+6	3	example6 description	https://i.picsum.photos/id/460/200/200.jpg?hmac=hL3I5G2p0p6vDGPyV9hergug-KipbUJVxqnnGIEBXg4	exampleSix	510	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	other
 \.
 
 
@@ -382,22 +382,23 @@ COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startin
 --
 
 COPY public."user" ("userId", "userName", email, password, "profileImg", "coverImg", description, location, "createdAt") FROM stdin;
-1	Uzair	uzair@lfz.com	uzair1234	/images/uzair.png	/images/uziar-cover.png	uzair best	92620	2020-06-22 22:43:37.442217+00
-2	TimD	timd@lfz.com	timd1234	/images/timd.png	/images/timd-cover.png	timd best	92604	2020-06-22 22:43:37.442217+00
-3	TimH	timh@lfz.com	timh1234	/images/timh.png	/images/timh-cover.png	timh best	92604	2020-06-22 22:43:37.442217+00
-5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 22:43:37.442217+00
-6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 22:43:37.442217+00
-51	Uz	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-52	ea	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-53	eaefas	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-54	qwer	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-55	sadf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-56	sdaf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-57	safd	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-58	asdf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-59	saf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-60	sadfas	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-61	dfas	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+2	TimD	timd@lfz.com	timd1234	/images/timd.png	/images/timd-cover.png	timd best	92604	2020-06-22 15:43:37.442217-07
+3	TimH	timh@lfz.com	timh1234	/images/timh.png	/images/timh-cover.png	timh best	92604	2020-06-22 15:43:37.442217-07
+5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 15:43:37.442217-07
+6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 15:43:37.442217-07
+51	Uz	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+52	ea	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+53	eaefas	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+54	qwer	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+55	sadf	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+56	sdaf	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+57	safd	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+58	asdf	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+59	saf	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+60	sadfas	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+61	dfas	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+62	uzair	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
+1	Uzair	uzair@lfz.com	uzair1234	//i.imgur.com/Xe4ahew.png	https://i.pinimg.com/originals/91/e0/07/91e00767ce57b0979d8b4c7a2f2ae3b2.jpg	UWUUUUUUUUUUUUUU	92620	2020-06-22 15:43:37.442217-07
 \.
 
 
@@ -443,7 +444,7 @@ SELECT pg_catalog.setval('public."post_postId_seq"', 6, true);
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 61, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 62, true);
 
 
 --
@@ -562,7 +563,7 @@ ALTER TABLE ONLY public.message
 --
 
 ALTER TABLE ONLY public.message
-    ADD CONSTRAINT message_fk1 FOREIGN KEY ("receipientId") REFERENCES public."user"("userId");
+    ADD CONSTRAINT message_fk1 FOREIGN KEY ("recipientId") REFERENCES public."user"("userId");
 
 
 --
