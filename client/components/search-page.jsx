@@ -26,6 +26,7 @@ export default class SearchPage extends React.Component {
     this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
     this.getZipcodesByZipcodeWithinRadius = this.getZipcodesByZipcodeWithinRadius.bind(this);
     this.searchPostsByZipcodes = this.searchPostsByZipcodes.bind(this);
+    this.showMessage = this.showMessage.bind(this);
   }
 
   componentDidMount() {
@@ -110,14 +111,7 @@ export default class SearchPage extends React.Component {
           });
           this.searchPostsByZipcodes(data.zip_codes);
         } else {
-          setTimeout(() => {
-            this.setState({
-              search: ''
-            });
-          }, 500);
-          this.setState({
-            search: 'failed to find data'
-          });
+          this.showMessage('failed to find data', 1000);
         }
       })
       .catch(err => console.error(err.message));
@@ -137,14 +131,7 @@ export default class SearchPage extends React.Component {
           });
           this.searchPostsByZipcodes(data.zip_codes);
         } else {
-          setTimeout(() => {
-            this.setState({
-              search: ''
-            });
-          }, 500);
-          this.setState({
-            search: 'failed to find data'
-          });
+          this.showMessage('failed to find data', 1000);
         }
       })
       .catch(err => console.error(err.message));
@@ -175,14 +162,7 @@ export default class SearchPage extends React.Component {
         })
         .catch(err => console.error(err.message));
     } else {
-      setTimeout(() => {
-        this.setState({
-          search: ''
-        });
-      }, 500);
-      this.setState({
-        search: 'failed to find data'
-      });
+      this.showMessage('failed to find data', 1000);
     }
   }
 
@@ -208,15 +188,19 @@ export default class SearchPage extends React.Component {
         this.getZipcodesByZipcodeWithinRadius(search, 5);
       }
     } else {
-      setTimeout(() => {
-        this.setState({
-          search: ''
-        });
-      }, 500);
-      this.setState({
-        search: 'please enter keyword'
-      });
+      this.showMessage('please enter keyword', 1000);
     }
+  }
+
+  showMessage(message, time) {
+    setTimeout(() => {
+      this.setState({
+        search: ''
+      });
+    }, time);
+    this.setState({
+      search: message
+    });
   }
 
   render() {

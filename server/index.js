@@ -275,6 +275,44 @@ app.patch('/api/post/', (req, res, next) => {
     });
 });
 
+// USER CAN SEND A PRIVATE MESSAGE
+app.post('/api/message/', (req, res, next) => {
+  const {
+    senderId,
+    receipientId,
+    postId,
+    message
+  } = req.body;
+  const sql = `
+    INSERT INTO "message" ("senderId", "receipientId", "postId", "message")
+         VALUES ($1, $2, $3, $4)
+      RETURNING "messageId"
+  `;
+  const params = [
+    senderId,
+    receipientId,
+    postId,
+    message
+  ];
+  db.query(sql, params)
+    .then(result => {
+      const message = result.rows[0];
+      if (!message) {
+        res.status(400).json({
+          error: `Failed to send a message ${message}`
+        });
+      } else {
+        res.status(202).json(message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
