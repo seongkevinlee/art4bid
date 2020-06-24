@@ -101,7 +101,21 @@ export default class SearchPage extends React.Component {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        this.searchPostsByZipcodes(data.zip_codes);
+        if (data.zip_codes) {
+          this.setState({
+            search: ''
+          });
+          this.searchPostsByZipcodes(data.zip_codes);
+        } else {
+          setTimeout(() => {
+            this.setState({
+              search: ''
+            });
+          }, 500);
+          this.setState({
+            search: 'failed to find data'
+          });
+        }
       })
       .catch(err => console.error(err.message));
   }
@@ -114,7 +128,21 @@ export default class SearchPage extends React.Component {
     fetch(url)
       .then(res => res.json())
       .then(data => {
-        this.searchPostsByZipcodes(data.zip_codes);
+        if (data.zip_codes) {
+          this.setState({
+            search: ''
+          });
+          this.searchPostsByZipcodes(data.zip_codes);
+        } else {
+          setTimeout(() => {
+            this.setState({
+              search: ''
+            });
+          }, 500);
+          this.setState({
+            search: 'failed to find data'
+          });
+        }
       })
       .catch(err => console.error(err.message));
   }
@@ -123,28 +151,40 @@ export default class SearchPage extends React.Component {
     const paintingArr = [];
     const photographArr = [];
     const otherArr = [];
-    fetch(`/api/post/${zipcodes.join(',')}`)
-      .then(res => res.json())
-      .then(data => {
-        for (const key in data) {
-          if (data[key].category === 'paintings') {
-            paintingArr.push(data[key]);
-          } else if (data[key].category === 'photographs') {
-            photographArr.push(data[key]);
-          } else if (data[key].category === 'other') {
-            otherArr.push(data[key]);
+    if (zipcodes.length > 0) {
+      fetch(`/api/post/${zipcodes.join(',')}`)
+        .then(res => res.json())
+        .then(data => {
+          for (const key in data) {
+            if (data[key].category === 'paintings') {
+              paintingArr.push(data[key]);
+            } else if (data[key].category === 'photographs') {
+              photographArr.push(data[key]);
+            } else if (data[key].category === 'other') {
+              otherArr.push(data[key]);
+            }
           }
-        }
+          this.setState({
+            paintings: paintingArr,
+            photographs: photographArr,
+            other: otherArr
+          });
+        })
+        .catch(err => console.error(err.message));
+    } else {
+      setTimeout(() => {
         this.setState({
-          paintings: paintingArr,
-          photographs: photographArr,
-          other: otherArr
+          search: ''
         });
-      })
-      .catch(err => console.error(err.message));
+      }, 500);
+      this.setState({
+        search: 'failed to find data'
+      });
+    }
   }
 
   handleSearchChange() {
+    event.target.value = event.target.value.trim();
     this.setState({
       search: event.target.value
     });
@@ -152,20 +192,31 @@ export default class SearchPage extends React.Component {
 
   handleSearchClick() {
     const { search } = this.state;
-    if (isNaN(Number(search))) {
-      const city = search.split(',')[0].trim().toUpperCase();
-      const state = search.split(',')[1].trim().toUpperCase();
-      // for now, the api doesn't support search by city, we need to receive city and state together
-      this.getZipcodesByCity(city, state);
-    } else {
+    if (search.trim().length > 0) {
+      if (isNaN(Number(search))) {
+        const city = search.split(',')[0].trim().toUpperCase();
+        const state = search.split(',')[1] ? search.split(',')[1].trim().toUpperCase() : '';
+        // for now, the api doesn't support search by city, we need to receive city and state together
+        this.getZipcodesByCity(city, state);
+      } else {
       // radius mile is set to 5 as default
-      this.getZipcodesByZipcodeWithinRadius(search, 5);
+        this.getZipcodesByZipcodeWithinRadius(search, 5);
+      }
+    } else {
+      setTimeout(() => {
+        this.setState({
+          search: ''
+        });
+      }, 500);
+      this.setState({
+        search: 'please enter keyword'
+      });
     }
   }
 
   render() {
     const { handleSearchChange, handleSearchClick } = this;
-    const { paintings, photographs, other } = this.state;
+    const { search, paintings, photographs, other } = this.state;
     if (paintings.length >= 0 && photographs.length >= 0 && other.length >= 0) {
       return (
         <div>
@@ -173,10 +224,13 @@ export default class SearchPage extends React.Component {
             <nav className="text-center mt-3">
               <div className="position-relative">
                 <input
+                  autoFocus
+                  id="search"
                   className="search-bar text-center w-75 border-0 pt-2 pb-2"
                   type="text"
                   name="search"
                   placeholder="search"
+                  value={search}
                   onChange={handleSearchChange} />
                 <img
                   className="search-mag position-absolute"
