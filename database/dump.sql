@@ -233,12 +233,12 @@ ALTER SEQUENCE public."post_postId_seq" OWNED BY public.post."postId";
 CREATE TABLE public."user" (
     "userId" integer NOT NULL,
     "userName" text NOT NULL,
-    email text NOT NULL,
-    password text NOT NULL,
-    "profileImg" text NOT NULL,
-    "coverImg" text NOT NULL,
-    description text NOT NULL,
-    location text NOT NULL,
+    email text,
+    password text,
+    "profileImg" text,
+    "coverImg" text,
+    description text,
+    location text,
     "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL
 );
 
@@ -428,7 +428,7 @@ SELECT pg_catalog.setval('public."post_postId_seq"', 6, true);
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 6, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 50, true);
 
 
 --

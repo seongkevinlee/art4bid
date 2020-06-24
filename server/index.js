@@ -52,9 +52,9 @@ app.get('/api/post/:location', (req, res, next) => {
      WHERE "sellerId" IN
       (SELECT "userId"
          FROM "user"
-        WHERE "location" = $1)
+        WHERE "location" = ANY($1))
   `;
-  const params = [location];
+  const params = [location.split(',')];
   db.query(sql, params)
     .then(result => {
       const posts = result.rows;

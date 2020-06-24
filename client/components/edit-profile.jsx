@@ -47,7 +47,7 @@ export default class EditProfile extends React.Component {
 
   handleCancel() {
     event.preventDefault();
-    alert('This will return back to the view profile page.');
+    this.props.editModeToggle();
   }
 
   render() {
@@ -59,7 +59,7 @@ export default class EditProfile extends React.Component {
             onClick={this.handleCancel}>
             CANCEL
           </button>
-          <div className='header-title pt-3 pb-3'>PROFILE</div>
+          <div className='header-title pt-3 pb-3'>EDIT</div>
           <button
             className='btn btn-submit-header text-center'
             onClick={this.handleSubmit}>

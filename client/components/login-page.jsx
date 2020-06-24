@@ -16,25 +16,33 @@ export default class LoginPage extends React.Component {
 
   handleSubmit() {
     event.preventDefault();
+    if (!this.state.value) {
+      return;
+    }
     this.props.userInfo(this.state.value);
   }
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
+      <div className="background">
+        <div className="login">
           <h1 className="logo">ART4BID</h1>
-          <h2 className="header-title">THIS IS A HEADER TITLE</h2>
-          <p>This is a social network art bidding website</p>
-          <input
-            type="text"
-            placeholder="Username"
-            value={this.state.value}
-            onChange={this.handleChange}
-          />
-          <button className="btn btn-submit">Submit</button>
-          <button className="btn btn-cancel">Cancel</button>
-        </form>
+          <form onSubmit={this.handleSubmit}>
+            <input
+              type="text"
+              placeholder="username"
+              value={this.state.value}
+              onChange={this.handleChange}
+              className="border-0"
+            />
+            <input
+              type="password"
+              placeholder="password"
+              className="border-0"
+            />
+            <button className="btn btn-submit">sign-in</button>
+          </form>
+        </div>
       </div>
     );
   }
