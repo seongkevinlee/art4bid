@@ -1,5 +1,6 @@
 import React from 'react';
 import ThumbnailColumn from './thumbnail-column';
+import Autocomplete from 'react-google-autocomplete';
 
 export default class SearchPage extends React.Component {
   constructor(props) {
@@ -8,7 +9,9 @@ export default class SearchPage extends React.Component {
       search: '',
       paintings: [],
       photographs: [],
-      other: []
+      other: [],
+      city: '',
+      query: ''
     };
     this.getThumbnails = this.getThumbnails.bind(this);
 
@@ -184,7 +187,9 @@ export default class SearchPage extends React.Component {
   }
 
   handleSearchChange() {
-    event.target.value = event.target.value.trim();
+    if (event.target.value.length < 2) {
+      event.target.value = event.target.value.trim();
+    }
     this.setState({
       search: event.target.value
     });
@@ -223,9 +228,9 @@ export default class SearchPage extends React.Component {
           <div>
             <nav className="text-center mt-3">
               <div className="position-relative">
-                <input
+                <Autocomplete
                   autoFocus
-                  id="search"
+                  types={['(regions)']}
                   className="search-bar text-center w-75 border-0 pt-2 pb-2"
                   type="text"
                   name="search"
