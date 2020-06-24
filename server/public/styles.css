@@ -184,3 +184,22 @@ button {
 .placeholder {
   color: #a4a4a4;
 }
+
+.user-post-grid {
+  /*backgroun*/
+}
+
+
+.fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
