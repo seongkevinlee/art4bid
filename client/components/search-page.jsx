@@ -200,7 +200,7 @@ export default class SearchPage extends React.Component {
     if (search.trim().length > 0) {
       if (isNaN(Number(search))) {
         const city = search.split(',')[0].trim().toUpperCase();
-        const state = search.split(',')[1] ? search.split(',')[1].trim().toUpperCase() : '';
+        const state = search.split(',')[1] ? search.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
         // for now, the api doesn't support search by city, we need to receive city and state together
         this.getZipcodesByCity(city, state);
       } else {
@@ -231,6 +231,12 @@ export default class SearchPage extends React.Component {
                 <Autocomplete
                   autoFocus
                   types={['(regions)']}
+                  onPlaceSelected={place => {
+                    this.setState({
+                      search: place.formatted_address
+                    });
+                  }}
+                  componentRestrictions={{ country: 'us' }}
                   className="search-bar text-center w-75 border-0 pt-2 pb-2"
                   type="text"
                   name="search"
