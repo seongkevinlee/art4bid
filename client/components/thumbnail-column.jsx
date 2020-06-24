@@ -4,18 +4,19 @@ export default class ThumbnailColumn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      postThumbnails: []
+      postThumbnails: this.props.thumbnails
     };
   }
 
   componentDidMount() {
-    this.setState({
-      postThumbnails: this.props.thumbnails
-    });
+    // this.setState({
+    //   postThumbnails: this.props.thumbnails
+    // });
   }
 
   render() {
-    const thumbnails = this.state.postThumbnails.map(thumbnail => {
+    const { postThumbnails } = this.state;
+    const thumbnails = postThumbnails.map(thumbnail => {
       return (
         <img
           key={thumbnail.postId}

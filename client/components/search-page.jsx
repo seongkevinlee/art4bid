@@ -5,11 +5,17 @@ export default class SearchPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      search: '',
       paintings: [],
       photographs: [],
       other: []
     };
     this.getThumbnails = this.getThumbnails.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSearchClick = this.handleSearchClick.bind(this);
+    this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
+    this.getZipcodesByZipcodeWithinRadius = this.getZipcodesByZipcodeWithinRadius.bind(this);
+    this.searchPostsByZipcodes = this.searchPostsByZipcodes.bind(this);
   }
 
   componentDidMount() {
@@ -19,7 +25,7 @@ export default class SearchPage extends React.Component {
   }
 
   getThumbnails(category) {
-    fetch(`./api/posts/${category}`)
+    fetch(`/api/posts/${category}`)
       .then(res => res.json())
       .then(thumbnailInfo => {
         switch (category) {
@@ -42,15 +48,95 @@ export default class SearchPage extends React.Component {
       });
   }
 
+  getZipcodesByCity(city, state) {
+    const host = 'https://www.zipcodeapi.com/rest/';
+    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
+    const param1 = 'city-zips.json';
+    const url = `${host}${key}/${param1}/${city}/${state}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        this.searchPostsByZipcodes(data.zip_codes);
+      })
+      .catch(err => console.error(err.message));
+  }
+
+  getZipcodesByZipcodeWithinRadius(zipcode, mile) {
+    const host = 'https://www.zipcodeapi.com/rest';
+    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
+    const param1 = 'radius.json';
+    const url = `${host}/${key}/${param1}/${zipcode}/${mile}/miles?minimal`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        this.searchPostsByZipcodes(data.zip_codes);
+      })
+      .catch(err => console.error(err.message));
+  }
+
+  searchPostsByZipcodes(zipcodes) {
+    const paintingArr = [];
+    const photographArr = [];
+    const otherArr = [];
+    fetch(`/api/post/${zipcodes.join(',')}`)
+      .then(res => res.json())
+      .then(data => {
+        for (const key in data) {
+          if (data[key].category === 'paintings') {
+            paintingArr.push(data[key]);
+          } else if (data[key].category === 'photographs') {
+            photographArr.push(data[key]);
+          } else if (data[key].category === 'other') {
+            otherArr.push(data[key]);
+          }
+        }
+        this.setState({
+          paintings: paintingArr,
+          photographs: photographArr,
+          other: otherArr
+        });
+      })
+      .catch(err => console.error(err.message));
+  }
+
+  handleSearchChange() {
+    this.setState({
+      search: event.target.value
+    });
+  }
+
+  handleSearchClick() {
+    const { search } = this.state;
+    if (isNaN(Number(search))) {
+      const city = search.split(',')[0].trim().toUpperCase();
+      const state = search.split(',')[1].trim().toUpperCase();
+      // for now, the api doesn't support search by city, we need to receive city and state together
+      this.getZipcodesByCity(city, state);
+    } else {
+      // radius mile is set to 5 as default
+      this.getZipcodesByZipcodeWithinRadius(search, 5);
+    }
+  }
+
   render() {
-    if (this.state.paintings.length > 0 && this.state.photographs.length > 0 && this.state.other.length > 0) {
+    const { handleSearchChange, handleSearchClick } = this;
+    const { paintings, photographs, other } = this.state;
+    if (paintings.length >= 0 && photographs.length >= 0 && other.length >= 0) {
       return (
         <div>
           <div>
             <nav className="text-center mt-3">
               <div className="position-relative">
-                <input className="search-bar text-center w-75 border-0 pt-2 pb-2" type="text" name="search" placeholder="search" />
-                <img className="search-mag position-absolute" src="./images/search-solid.svg"></img>
+                <input
+                  className="search-bar text-center w-75 border-0 pt-2 pb-2"
+                  type="text"
+                  name="search"
+                  placeholder="search"
+                  onChange={handleSearchChange} />
+                <img
+                  className="search-mag position-absolute"
+                  src="./images/search-solid.svg"
+                  onClick={handleSearchClick}></img>
               </div>
             </nav>
           </div>
@@ -66,17 +152,35 @@ export default class SearchPage extends React.Component {
             </div>
           </div>
           <div className="d-flex justify-content-around">
-            <ThumbnailColumn
-              thumbnails={this.state.paintings} />
-            <ThumbnailColumn
-              thumbnails={this.state.photographs} />
-            <ThumbnailColumn
-              thumbnails={this.state.other} />
+            {
+              paintings.length > 0
+                ? (
+                  <ThumbnailColumn
+                    thumbnails={paintings} />
+                )
+                : ''
+            }
+            {
+              photographs.length > 0
+                ? (
+                  <ThumbnailColumn
+                    thumbnails={photographs} />
+                )
+                : ''
+            }
+            {
+              other.length > 0
+                ? (
+                  <ThumbnailColumn
+                    thumbnails={other} />
+                )
+                : ''
+            }
           </div>
         </div>
       );
     } else {
-      return <h1>An error occurred</h1>;
+      return <h3 className="text-center mt-3">An error occurred</h3>;
     }
   }
 }
