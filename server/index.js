@@ -275,7 +275,7 @@ app.patch('/api/post/', (req, res, next) => {
     });
 });
 
-// USER CAN VIEW A SPECIFIC POST
+// USER CAN VIEW A SPECIFIC POST - the post details + username
 app.get('/api/viewpost/:postId', (req, res, next) => {
   const postId = req.params.postId;
   const sql = `
@@ -289,6 +289,28 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
     .then(result => {
       const post = result.rows[0];
       res.json(post);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// USER CAN VIEW A SPECIFIC POST - the watchlist counts
+app.get('/api/watchlistcounts/:postId', (req, res, next) => {
+  const postId = req.params.postId;
+  const sql = `
+    select count(*) as "totalWatchlisters"
+    from "watchlists"
+    where "postId" = $1
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const watchlistCounts = result.rows[0];
+      res.json(watchlistCounts);
     })
     .catch(err => {
       console.error(err);
