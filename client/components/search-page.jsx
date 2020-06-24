@@ -193,7 +193,7 @@ export default class SearchPage extends React.Component {
               <h6>Photographs</h6>
             </div>
             <div className="column-label">
-              <h6 onClick={() => this.addThumbnails('paintings')} >Other</h6>
+              <h6>Other</h6>
             </div>
           </div>
           <div className="d-flex justify-content-around">
@@ -203,7 +203,9 @@ export default class SearchPage extends React.Component {
                   <ThumbnailColumn
                     thumbnails={paintings} />
                 )
-                : ''
+                : <div className="flex-column thumbnail-column">
+                  <p>There are no images</p>
+                </div>
             }
             {
               photographs.length > 0
@@ -211,7 +213,9 @@ export default class SearchPage extends React.Component {
                   <ThumbnailColumn
                     thumbnails={photographs} />
                 )
-                : ''
+                : <div className="flex-column thumbnail-column">
+                  <p>There are no images</p>
+                </div>
             }
             {
               other.length > 0
@@ -219,7 +223,9 @@ export default class SearchPage extends React.Component {
                   <ThumbnailColumn
                     thumbnails={other} />
                 )
-                : ''
+                : <div className="flex-column thumbnail-column">
+                  <p>There are no images</p>
+                </div>
             }
           </div>
         </div>
