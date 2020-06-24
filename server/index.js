@@ -275,6 +275,29 @@ app.patch('/api/post/', (req, res, next) => {
     });
 });
 
+// USER CAN VIEW A SPECIFIC POST
+app.get('/api/viewpost/:postId', (req, res, next) => {
+  const postId = req.params.postId;
+  const sql = `
+    select "post".*,
+           "user"."userName"
+    from "post" join "user" on "post"."sellerId" = "user"."userId"
+    where "post"."postId" = $1
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const post = result.rows[0];
+      res.json(post);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
