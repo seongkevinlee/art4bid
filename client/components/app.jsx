@@ -51,7 +51,7 @@ export default class App extends React.Component {
       pageBody = <SearchPage setView = {this.setView}/>;
     }
     if (this.state.view === 'profile') {
-      pageBody = <Profile setView = {this.setView}/>;
+      pageBody = <Profile setView = {this.setView} userInfo={this.state.userInfo}/>;
 
     }
     return (

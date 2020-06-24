@@ -359,6 +359,22 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
 
 });
 
+// USER CAN VIEW POSTS ON PROFILE
+app.get('/api/posts', (req, res, next) => {
+  const userId = [req.session.userInfo.userId];
+  // const userId = [1];
+
+  const findUserPosts = `
+  SELECT  "postId", "imageUrl"
+  FROM    "post"
+  WHERE   "sellerId" = $1
+  `;
+
+  db.query(findUserPosts, userId)
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
+});
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
