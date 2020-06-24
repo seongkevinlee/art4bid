@@ -284,8 +284,8 @@ app.post('/api/message/', (req, res, next) => {
     message
   } = req.body;
   const sql = `
-    INSERT INTO "message" ("senderId", "recipientId", "postId", "message")
-         VALUES ($1, $2, $3, $4)
+    INSERT INTO "message" ("senderId", "recipientId", "postId", "message", "createdAt")
+         VALUES ($1, $2, $3, $4, now())
       RETURNING "messageId"
   `;
   const params = [
@@ -303,6 +303,86 @@ app.post('/api/message/', (req, res, next) => {
         });
       } else {
         res.status(202).json(message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// USER CAN VIEW THE LISTS OF RECEIVED PRIVATE MESSAGES
+app.get('/api/message/list/', (req, res, next) => {
+  const { recipientId } = req.body;
+  if (!recipientId) {
+    res.status(400).json({
+      error: 'userId is required'
+    });
+  }
+  const sql = `
+      SELECT "me"."senderName", "me"."postId", "me"."message", "me"."createdAt" FROM (
+      SELECT DISTINCT ON ("u"."userName") "u"."userName" AS "senderName", "m"."postId", "m"."message", "m"."createdAt"
+        FROM "message" AS "m"
+        JOIN "user" AS "u"
+          ON "u"."userId" = "m"."senderId"
+       WHERE "m"."recipientId" = $1
+    ORDER BY "u"."userName", "m"."createdAt" DESC) AS "me"
+    ORDER BY "me"."createdAt" DESC
+  `;
+  const params = [recipientId];
+  db.query(sql, params)
+    .then(result => {
+      const message = result.rows;
+      if (!result.rows[0]) {
+        res.status(400).json({
+          error: 'You don\'t have a received message'
+        });
+      } else {
+        res.status(200).json(message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// USER CAN VIEW THE MESSAGES FROM A USER
+app.get('/api/message/detail/', (req, res, next) => {
+  const { recipientId, senderId } = req.body;
+  if (!recipientId) {
+    res.status(400).json({
+      error: 'userId is required'
+    });
+  }
+  if (!senderId) {
+    res.status(400).json({
+      error: 'senderId is required'
+    });
+  }
+  const sql = `
+      SELECT "u"."userName" AS "senderName", "m"."postId", "m"."message", "m"."createdAt"
+        FROM "message" AS "m"
+        JOIN "user" AS "u"
+          ON "u"."userId" = "m"."senderId"
+       WHERE "m"."recipientId" = $1
+         AND "m"."senderId" = $2
+    ORDER BY "m"."createdAt" DESC
+  `;
+  const params = [recipientId, senderId];
+  db.query(sql, params)
+    .then(result => {
+      const message = result.rows;
+      if (!result.rows[0]) {
+        res.status(400).json({
+          error: `You don't have a received message from user ${senderId}`
+        });
+      } else {
+        res.status(200).json(message);
       }
     })
     .catch(err => {
