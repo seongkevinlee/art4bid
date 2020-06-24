@@ -277,7 +277,10 @@ app.patch('/api/post/', (req, res, next) => {
 
 // USER CAN VIEW A SPECIFIC POST - the post details + username
 app.get('/api/viewpost/:postId', (req, res, next) => {
-  const postId = req.params.postId;
+  const postId = Number(req.params.postId);
+  if (!Number.isInteger(postId) || postId < 0) {
+    return res.status(400).json({ error: 'postId must be a positive integer' });
+  }
   const sql = `
     select "post".*,
            "user"."userName"
@@ -288,7 +291,13 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const post = result.rows[0];
-      res.json(post);
+      if (!post) {
+        return res.status(404).json({
+          error: `Cannot find post with "postId" ${postId}`
+        });
+      } else {
+        return res.status(200).json(post);
+      }
     })
     .catch(err => {
       console.error(err);
@@ -300,7 +309,10 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
 
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
-  const postId = req.params.postId;
+  const postId = Number(req.params.postId);
+  if (!Number.isInteger(postId) || postId < 0) {
+    return res.status(400).json({ error: 'postId must be a positive integer' });
+  }
   const sql = `
     select count(*) as "totalWatchlisters"
     from "watchlists"
@@ -322,7 +334,10 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
 
 // USER CAN VIEW A SPECIFIC POST - bid info
 app.get('/api/bidinfo/:postId', (req, res, next) => {
-  const postId = req.params.postId;
+  const postId = Number(req.params.postId);
+  if (!Number.isInteger(postId) || postId < 0) {
+    return res.status(400).json({ error: 'postId must be a positive integer' });
+  }
   const sql = `
     select count(*) as "totalBids",
     max ("currentBid") as "highestBid"
