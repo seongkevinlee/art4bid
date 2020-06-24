@@ -11,6 +11,13 @@ export default class SearchPage extends React.Component {
       other: []
     };
     this.getThumbnails = this.getThumbnails.bind(this);
+
+    // COMMENTED OUT CODE IS FOR INFINITE SCROLL LATER ON
+    // this.addThumbnails = this.addThumbnails.bind(this);
+    // this.paintingOffset = 10;
+    // this.photographOffset = 10;
+    // this.otherOffset = 10;
+
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
     this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
@@ -25,7 +32,7 @@ export default class SearchPage extends React.Component {
   }
 
   getThumbnails(category) {
-    fetch(`/api/posts/${category}`)
+    fetch(`./api/posts/${category}/0`)
       .then(res => res.json())
       .then(thumbnailInfo => {
         switch (category) {
@@ -47,6 +54,44 @@ export default class SearchPage extends React.Component {
         }
       });
   }
+
+  // addThumbnails(category) {
+  //   let offset;
+  //   switch (category) {
+  //     case 'paintings':
+  //       offset = this.paintingOffset;
+  //       break;
+  //     case 'photographs':
+  //       offset = this.photographOffset;
+  //       break;
+  //     case 'other':
+  //       offset = this.otherOffset;
+  //       break;
+  //   }
+  //   fetch(`./api/posts/${category}/${offset}`)
+  //     .then(res => res.json())
+  //     .then(thumbnailInfo => {
+  //       if (category === 'paintings') {
+  //         this.paintingOffset += 10;
+  //         const paintingsArr = this.state.paintings.slice().concat(thumbnailInfo);
+  //         this.setState({
+  //           paintings: paintingsArr
+  //         });
+  //       } else if (category === 'photographs') {
+  //         this.photographOffset += 10;
+  //         const photographsArr = this.state.photographs.slice().concat(thumbnailInfo);
+  //         this.setState({
+  //           photographs: photographsArr
+  //         });
+  //       } else if (category === 'other') {
+  //         this.otherOffset += 10;
+  //         const otherArr = this.state.other.slice().concat(thumbnailInfo);
+  //         this.setState({
+  //           other: otherArr
+  //         });
+  //       }
+  //     });
+  // }
 
   getZipcodesByCity(city, state) {
     const host = 'https://www.zipcodeapi.com/rest/';
@@ -148,7 +193,7 @@ export default class SearchPage extends React.Component {
               <h6>Photographs</h6>
             </div>
             <div className="column-label">
-              <h6>Other</h6>
+              <h6 onClick={() => this.addThumbnails('paintings')} >Other</h6>
             </div>
           </div>
           <div className="d-flex justify-content-around">

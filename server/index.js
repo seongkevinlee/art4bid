@@ -187,9 +187,9 @@ app.post('/api/post/', (req, res, next) => {
 });
 
 // USER CAN VIEW ALL POSTS
-app.get('/api/posts/:category', (req, res, next) => {
+app.get('/api/posts/:category/:offset', (req, res, next) => {
   const category = req.params.category;
-  const offset = req.body.offset;
+  const offset = req.params.offset;
   const sql = `
     select "postId",
            "imageUrl",
@@ -200,16 +200,23 @@ app.get('/api/posts/:category', (req, res, next) => {
     limit 10 offset $2
   `;
   const params = [category, offset];
-  db.query(sql, params).then(result => {
-    const posts = result.rows;
-    if (!posts) {
-      return res.status(404).json({
-        error: `There are no posts with the category ${category}`
+  db.query(sql, params)
+    .then(result => {
+      const posts = result.rows;
+      if (posts.length === 0) {
+        return res.status(404).json({
+          error: `There are no more posts with the category ${category}`
+        });
+      } else {
+        res.status(200).json(posts);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
       });
-    } else {
-      res.status(200).json(posts);
-    }
-  });
+    });
 });
 
 // USER CAN EDIT A POST
