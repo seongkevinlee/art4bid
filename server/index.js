@@ -11,8 +11,8 @@ app.use(staticMiddleware);
 app.use(sessionMiddleware);
 
 // USER CAN LOGIN
-app.get('/api/login/:userName', (req, res, next) => {
-  const { userName } = req.params;
+app.post('/api/login/', (req, res, next) => {
+  const { userName } = req.body;
   const value = [`${userName}`];
 
   const findUserDB = `
@@ -52,9 +52,9 @@ app.get('/api/post/:location', (req, res, next) => {
      WHERE "sellerId" IN
       (SELECT "userId"
          FROM "user"
-        WHERE "location" = $1)
+        WHERE "location" = ANY($1))
   `;
-  const params = [location];
+  const params = [location.split(',')];
   db.query(sql, params)
     .then(result => {
       const posts = result.rows;
@@ -142,13 +142,31 @@ app.post('/api/post/image', (req, res) => {
 
 // USER CAN CREATE A POST
 app.post('/api/post/', (req, res, next) => {
-  const { sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt } = req.body;
+  const {
+    sellerId,
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt
+  } = req.body;
   const sql = `
     INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING "postId"
   `;
-  const params = [sellerId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt];
+  const params = [
+    sellerId,
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt
+  ];
   db.query(sql, params)
     .then(result => {
       const post = result.rows[0];
@@ -171,7 +189,7 @@ app.post('/api/post/', (req, res, next) => {
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category', (req, res, next) => {
   const category = req.params.category;
-  const offset = req.params.offset;
+  const offset = req.body.offset;
   const sql = `
     select "postId",
            "imageUrl",
@@ -182,20 +200,31 @@ app.get('/api/posts/:category', (req, res, next) => {
     limit 10 offset $2
   `;
   const params = [category, offset];
-  db.query(sql, params)
-    .then(result => {
-      const posts = result.rows;
-      if (!posts) {
-        return res.status(404).json({
-          error: `There are no posts with the category ${category}`
-        });
-      } else {
-        res.status(200).json(posts);   
+  db.query(sql, params).then(result => {
+    const posts = result.rows;
+    if (!posts) {
+      return res.status(404).json({
+        error: `There are no posts with the category ${category}`
+      });
+    } else {
+      res.status(200).json(posts);
+    }
+  });
 });
 
 // USER CAN EDIT A POST
 app.patch('/api/post/', (req, res, next) => {
-  const { postId, description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt, category } = req.body;
+  const {
+    postId,
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt,
+    category
+  } = req.body;
   const sql = `
       UPDATE "post"
          SET "description" = $1,
@@ -209,7 +238,17 @@ app.patch('/api/post/', (req, res, next) => {
       WHERE "postId" = $9
       RETURNING *
   `;
-  const params = [description, imageUrl, title, startingBid, biddingEnabled, isDeleted, expiredAt, category, postId];
+  const params = [
+    description,
+    imageUrl,
+    title,
+    startingBid,
+    biddingEnabled,
+    isDeleted,
+    expiredAt,
+    category,
+    postId
+  ];
   db.query(sql, params)
     .then(result => {
       const post = result.rows[0];

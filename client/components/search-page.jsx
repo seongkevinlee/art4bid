@@ -5,58 +5,182 @@ export default class SearchPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      paintingThumbnails: ['https://i.picsum.photos/id/38/500/500.jpg?hmac=P2ck2JJoFY6U4RS1VwfQve2kzwgG-1D_6PwXf-oi5jo', 'https://i.picsum.photos/id/287/500/500.jpg?hmac=_3noAomaHvNHwr4FpelZX-90Cw1OEmo2ovuVn6bAHKk', 'https://i.picsum.photos/id/255/500/500.jpg?hmac=0_gCBQ2wIYM18DMuuWlnanMpoOuVB7AIPbqsyCSLlKg', 'https://i.picsum.photos/id/238/500/500.jpg?hmac=RTqzA8baxtxXgGxGmalGmNvKeLv_ZYq2GA4PKnmJa_Y', 'https://i.picsum.photos/id/38/500/500.jpg?hmac=P2ck2JJoFY6U4RS1VwfQve2kzwgG-1D_6PwXf-oi5jo', 'https://i.picsum.photos/id/287/500/500.jpg?hmac=_3noAomaHvNHwr4FpelZX-90Cw1OEmo2ovuVn6bAHKk', 'https://i.picsum.photos/id/255/500/500.jpg?hmac=0_gCBQ2wIYM18DMuuWlnanMpoOuVB7AIPbqsyCSLlKg', 'https://i.picsum.photos/id/238/500/500.jpg?hmac=RTqzA8baxtxXgGxGmalGmNvKeLv_ZYq2GA4PKnmJa_Y'],
-      photographThumbnails: ['https://i.picsum.photos/id/539/500/500.jpg?hmac=NyE54R8Fm2IqE6Hk3pTEe4DOmo2e_cSgUR8vKTpSofA', 'https://i.picsum.photos/id/658/500/500.jpg?hmac=QNYvBh17etS9gZw_hUNfNg0n_aqI6In00stAX1la6Hs', 'https://i.picsum.photos/id/700/500/500.jpg?hmac=wjNWwfys2n_BG0QY66XIzgzha89OkBDGliKXILUpAG8', 'https://i.picsum.photos/id/1070/500/500.jpg?hmac=fFiEzBh4MVKg9RRd9A3Rdsbvza9QeuqcnNdsKHJzo-8', 'https://i.picsum.photos/id/287/500/500.jpg?hmac=_3noAomaHvNHwr4FpelZX-90Cw1OEmo2ovuVn6bAHKk', 'https://i.picsum.photos/id/255/500/500.jpg?hmac=0_gCBQ2wIYM18DMuuWlnanMpoOuVB7AIPbqsyCSLlKg', 'https://i.picsum.photos/id/238/500/500.jpg?hmac=RTqzA8baxtxXgGxGmalGmNvKeLv_ZYq2GA4PKnmJa_Y'],
-      otherThumbnails: ['https://i.picsum.photos/id/803/500/500.jpg?hmac=Y2YcG9jqYgPVY6i0GmAlqVnCDYTYrB-ihVV2bAmKgko', 'https://i.picsum.photos/id/787/500/500.jpg?hmac=O2YdCkSwNnEfSC7ZZlenRggwtQd_93kSrJfdGLHcusg', 'https://i.picsum.photos/id/504/500/500.jpg?hmac=PwnQSrB9KJk3Wugp9rV3Rrf7epLe6a2NuIELWRyZONk', 'https://i.picsum.photos/id/670/500/500.jpg?hmac=N38FiXBMkkVNLkU8iurtSmZLgBc-wDkQJ5yCaCwJrIk', 'https://i.picsum.photos/id/287/500/500.jpg?hmac=_3noAomaHvNHwr4FpelZX-90Cw1OEmo2ovuVn6bAHKk', 'https://i.picsum.photos/id/255/500/500.jpg?hmac=0_gCBQ2wIYM18DMuuWlnanMpoOuVB7AIPbqsyCSLlKg', 'https://i.picsum.photos/id/238/500/500.jpg?hmac=RTqzA8baxtxXgGxGmalGmNvKeLv_ZYq2GA4PKnmJa_Y']
+      search: '',
+      paintings: [],
+      photographs: [],
+      other: []
     };
-  //   this.getThumbnails() = this.getThumbnails.bind(this);
+    this.getThumbnails = this.getThumbnails.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.handleSearchClick = this.handleSearchClick.bind(this);
+    this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
+    this.getZipcodesByZipcodeWithinRadius = this.getZipcodesByZipcodeWithinRadius.bind(this);
+    this.searchPostsByZipcodes = this.searchPostsByZipcodes.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.getThumbnails(painting)
-  //   this.getThumbnails(photograph)
-  //   this.getThumbnails(other)
-  // }
+  componentDidMount() {
+    this.getThumbnails('paintings');
+    this.getThumbnails('photographs');
+    this.getThumbnails('other');
+  }
 
-  // getThumbnails(category) {
-  //   fetch('./api/thumbnails')
-  //   .then(res => res.json())
-  //   .then()
-  // }
+  getThumbnails(category) {
+    fetch(`/api/posts/${category}`)
+      .then(res => res.json())
+      .then(thumbnailInfo => {
+        switch (category) {
+          case 'paintings':
+            this.setState({
+              paintings: thumbnailInfo
+            });
+            break;
+          case 'photographs':
+            this.setState({
+              photographs: thumbnailInfo
+            });
+            break;
+          case 'other':
+            this.setState({
+              other: thumbnailInfo
+            });
+            break;
+        }
+      });
+  }
+
+  getZipcodesByCity(city, state) {
+    const host = 'https://www.zipcodeapi.com/rest/';
+    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
+    const param1 = 'city-zips.json';
+    const url = `${host}${key}/${param1}/${city}/${state}`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        this.searchPostsByZipcodes(data.zip_codes);
+      })
+      .catch(err => console.error(err.message));
+  }
+
+  getZipcodesByZipcodeWithinRadius(zipcode, mile) {
+    const host = 'https://www.zipcodeapi.com/rest';
+    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
+    const param1 = 'radius.json';
+    const url = `${host}/${key}/${param1}/${zipcode}/${mile}/miles?minimal`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        this.searchPostsByZipcodes(data.zip_codes);
+      })
+      .catch(err => console.error(err.message));
+  }
+
+  searchPostsByZipcodes(zipcodes) {
+    const paintingArr = [];
+    const photographArr = [];
+    const otherArr = [];
+    fetch(`/api/post/${zipcodes.join(',')}`)
+      .then(res => res.json())
+      .then(data => {
+        for (const key in data) {
+          if (data[key].category === 'paintings') {
+            paintingArr.push(data[key]);
+          } else if (data[key].category === 'photographs') {
+            photographArr.push(data[key]);
+          } else if (data[key].category === 'other') {
+            otherArr.push(data[key]);
+          }
+        }
+        this.setState({
+          paintings: paintingArr,
+          photographs: photographArr,
+          other: otherArr
+        });
+      })
+      .catch(err => console.error(err.message));
+  }
+
+  handleSearchChange() {
+    this.setState({
+      search: event.target.value
+    });
+  }
+
+  handleSearchClick() {
+    const { search } = this.state;
+    if (isNaN(Number(search))) {
+      const city = search.split(',')[0].trim().toUpperCase();
+      const state = search.split(',')[1].trim().toUpperCase();
+      // for now, the api doesn't support search by city, we need to receive city and state together
+      this.getZipcodesByCity(city, state);
+    } else {
+      // radius mile is set to 5 as default
+      this.getZipcodesByZipcodeWithinRadius(search, 5);
+    }
+  }
 
   render() {
-    return (
-      <div>
+    const { handleSearchChange, handleSearchClick } = this;
+    const { paintings, photographs, other } = this.state;
+    if (paintings.length >= 0 && photographs.length >= 0 && other.length >= 0) {
+      return (
         <div>
-          <nav className="text-center mt-3">
-            <div className="position-relative">
-              <input className="search-bar text-center w-75 border-0 pt-2 pb-2" type="text" name="search" placeholder="search"/>
-              <img className="search-mag position-absolute" src="./images/search-solid.svg"></img>
+          <div>
+            <nav className="text-center mt-3">
+              <div className="position-relative">
+                <input
+                  className="search-bar text-center w-75 border-0 pt-2 pb-2"
+                  type="text"
+                  name="search"
+                  placeholder="search"
+                  onChange={handleSearchChange} />
+                <img
+                  className="search-mag position-absolute"
+                  src="./images/search-solid.svg"
+                  onClick={handleSearchClick}></img>
+              </div>
+            </nav>
+          </div>
+          <div className="d-flex mt-4 justify-content-around text-center">
+            <div className="column-label align-text-bottom">
+              <h6>Paintings</h6>
             </div>
-          </nav>
-        </div>
-        <div className="d-flex mt-4 justify-content-around text-center">
-          <div className="column-label align-text-bottom">
-            <h6>Paintings</h6>
+            <div className="column-label">
+              <h6>Photographs</h6>
+            </div>
+            <div className="column-label">
+              <h6>Other</h6>
+            </div>
           </div>
-          <div className="column-label">
-            <h6>Photographs</h6>
-          </div>
-          <div className="column-label">
-            <h6>Other</h6>
+          <div className="d-flex justify-content-around">
+            {
+              paintings.length > 0
+                ? (
+                  <ThumbnailColumn
+                    thumbnails={paintings} />
+                )
+                : ''
+            }
+            {
+              photographs.length > 0
+                ? (
+                  <ThumbnailColumn
+                    thumbnails={photographs} />
+                )
+                : ''
+            }
+            {
+              other.length > 0
+                ? (
+                  <ThumbnailColumn
+                    thumbnails={other} />
+                )
+                : ''
+            }
           </div>
         </div>
-        <div className="d-flex justify-content-around">
-          <ThumbnailColumn
-            thumbnails={this.state.paintingThumbnails}/>
-          <ThumbnailColumn
-            thumbnails={this.state.photographThumbnails}/>
-          <ThumbnailColumn
-            thumbnails={this.state.otherThumbnails} />
-        </div>
-      </div>
-
-    );
+      );
+    } else {
+      return <h3 className="text-center mt-3">An error occurred</h3>;
+    }
   }
-
 }

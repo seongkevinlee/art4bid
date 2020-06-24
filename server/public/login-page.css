@@ -1,0 +1,65 @@
+#root{
+  height: 100%;
+}
+
+.header-title {
+  font-family: "Reem Kufi", sans-serif;
+  font-size: 2rem;
+  background-color: white;
+  color: #ca0101;
+  text-shadow: 2px 1px 2px rgba(255, 255, 255, 0.5);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+}
+
+p,
+input {
+  font-family: "Open Sans", "Helvetica Neue", sans-serif;
+  text-align: center;
+}
+
+.btn-submit {
+  background: white;
+  color: black
+}
+
+.btn-cancel {
+  background: #e0dcdc;
+  color: black;
+}
+
+.logo {
+  font-family: "Reem Kufi", sans-serif;
+  text-shadow: 0px 10px 4px rgba(0, 0, 0, 0.25);
+  font-size: 4.5rem;
+  padding-top: 10px;
+}
+
+.background {
+  background: url(images/login-wallpaper-crop1.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100%;
+}
+
+.bgImg{
+  background-size: cover;
+}
+
+.login {
+  height: 90%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form > * {
+  margin: 8.5px;
+}
