@@ -275,6 +275,45 @@ app.patch('/api/post/', (req, res, next) => {
     });
 });
 
+
+// USER CAN SEND A PRIVATE MESSAGE
+app.post('/api/message/', (req, res, next) => {
+  const {
+    senderId,
+    receipientId,
+    postId,
+    message
+  } = req.body;
+  const sql = `
+    INSERT INTO "message" ("senderId", "receipientId", "postId", "message")
+         VALUES ($1, $2, $3, $4)
+      RETURNING "messageId"
+  `;
+  const params = [
+    senderId,
+    receipientId,
+    postId,
+    message
+  ];
+  db.query(sql, params)
+    .then(result => {
+      const message = result.rows[0];
+      if (!message) {
+        res.status(400).json({
+          error: `Failed to send a message ${message}`
+        });
+      } else {
+        res.status(202).json(message);
+              }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 // USER CAN VIEW A SPECIFIC POST - the post details + username
 app.get('/api/viewpost/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -306,6 +345,7 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
+
 
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
@@ -359,6 +399,7 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
 
 });
 
+
 // USER CAN VIEW POSTS ON PROFILE
 app.get('/api/posts', (req, res, next) => {
   const userId = [req.session.userInfo.userId];
@@ -374,6 +415,7 @@ app.get('/api/posts', (req, res, next) => {
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
+
 
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
