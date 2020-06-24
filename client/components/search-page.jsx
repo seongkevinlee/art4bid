@@ -108,8 +108,8 @@ export default class SearchPage extends React.Component {
   handleSearchClick() {
     const { search } = this.state;
     if (isNaN(Number(search))) {
-      const city = search.split(',')[0].trim();
-      const state = search.split(',')[1].trim();
+      const city = search.split(',')[0].trim().toUpperCase();
+      const state = search.split(',')[1].trim().toUpperCase();
       // for now, the api doesn't support search by city, we need to receive city and state together
       this.getZipcodesByCity(city, state);
     } else {
