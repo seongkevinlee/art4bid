@@ -137,11 +137,39 @@ button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.profileImg-container {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-image: url(./images/sample-images/sample-profile-pic.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
 .coverPhotoEdit {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   width: 96%;
   background-color: #e0dcdc;
   border-radius: 9px;
+}
+.coverPhoto {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)),
+  url(./images/sample-images/sample-cover-photo1.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 0;
+}
+
+#profileUserName {
+  font-family: 'Righteous', cursive;
+  color: white;
+  -webkit-text-stroke: 1px black;
+}
+.profile-description {
+  font-size: .8rem;
 }
 
 .description-input,
@@ -155,4 +183,8 @@ button {
 
 .placeholder {
   color: #a4a4a4;
+}
+
+.user-post-grid {
+  backgroun
 }

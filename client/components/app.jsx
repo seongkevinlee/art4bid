@@ -1,7 +1,6 @@
 import React from 'react';
-
+import Profile from './profile';
 import LoginPage from './login-page';
-// import EditProfile from './edit-profile';
 import SearchPage from './search-page';
 import NavBar from './navbar';
 const UserContext = React.createContext('userInfo');
@@ -49,7 +48,11 @@ export default class App extends React.Component {
       return <LoginPage userInfo={this.login} />;
     }
     if (this.state.view === 'search') {
-      pageBody = <SearchPage setView={this.setView} />;
+      pageBody = <SearchPage setView = {this.setView}/>;
+    }
+    if (this.state.view === 'profile') {
+      pageBody = <Profile setView = {this.setView}/>;
+
     }
     return (
       <UserContext.Provider value={this.state.userInfo}>
