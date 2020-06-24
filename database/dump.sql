@@ -342,6 +342,8 @@ ALTER TABLE ONLY public.watchlists ALTER COLUMN "watchlistId" SET DEFAULT nextva
 --
 
 COPY public.bid ("bidId", "bidderId", "postId", "currentBid", "createdAt", "bidEnabled") FROM stdin;
+1	2	1	30	2020-06-22 22:43:37.442217+00	t
+3	3	1	40	2020-06-22 22:43:37.442217+00	t
 \.
 
 
@@ -385,6 +387,17 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 3	TimH	timh@lfz.com	timh1234	/images/timh.png	/images/timh-cover.png	timh best	92604	2020-06-22 22:43:37.442217+00
 5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 22:43:37.442217+00
 6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 22:43:37.442217+00
+51	Uz	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+52	ea	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+53	eaefas	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+54	qwer	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+55	sadf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+56	sdaf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+57	safd	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+58	asdf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+59	saf	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+60	sadfas	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+61	dfas	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
 \.
 
 
@@ -393,6 +406,8 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 --
 
 COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM stdin;
+1	1	3	2020-06-24
+4	1	5	2020-06-24
 \.
 
 
@@ -400,7 +415,7 @@ COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM std
 -- Name: bid_bidId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."bid_bidId_seq"', 1, false);
+SELECT pg_catalog.setval('public."bid_bidId_seq"', 3, true);
 
 
 --
@@ -428,14 +443,14 @@ SELECT pg_catalog.setval('public."post_postId_seq"', 6, true);
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 50, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 61, true);
 
 
 --
 -- Name: watchlists_watchlistId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."watchlists_watchlistId_seq"', 1, false);
+SELECT pg_catalog.setval('public."watchlists_watchlistId_seq"', 4, true);
 
 
 --

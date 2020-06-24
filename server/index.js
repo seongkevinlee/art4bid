@@ -320,6 +320,30 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
     });
 });
 
+// USER CAN VIEW A SPECIFIC POST - bid info
+app.get('/api/bidinfo/:postId', (req, res, next) => {
+  const postId = req.params.postId;
+  const sql = `
+    select count(*) as "totalBids",
+    max ("currentBid") as "highestBid"
+    from "bid"
+    where "postId" = $1
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const bidInfo = result.rows;
+      res.json(bidInfo);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+
+});
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
