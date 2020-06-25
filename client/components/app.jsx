@@ -14,6 +14,7 @@ export default class App extends React.Component {
     this.state = {
       isLoading: false,
       loggedIn: true,
+      // change back to false
       userInfo: {},
       view: 'post'
       // change back to create

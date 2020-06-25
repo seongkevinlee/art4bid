@@ -25,18 +25,18 @@ export default class SpecificPost extends React.Component {
           </div>
           <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
             <img className="header-icon" src="./images/fire-alt-solid.svg"></img>
-            <p className="following m-0"><span>420</span> Watching</p>
+            <p className="following mt-2 mb-0"><span>420</span> Watching</p>
           </div>
         </header>
         <div className="post-body">
           <div className="post-image-container">
             <img src="https://i.pinimg.com/originals/29/46/77/294677fbd23047a3c4096b37999e87df.jpg"></img>
           </div>
-          <div className="post-description m-auto">
+          <div className="post-description d-flex align-items-center">
             <p className="text-left">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis molestie urna euismod tortor tempor, quis vestibulum mauris ultricies. Sed lacus sem, euismod in luctus ac, ornare vitae massa. Etiam ultrices nisl ac ipsum molestie, id mattis metus ultrices. In semper auctor nisi vel rhoncus. Nunc arcu nisl, porttitor vitae lectus ut, convallis lacinia sem. Vestibulum vel euismod ipsum, eget vestibulum felis.</p>
           </div>
         </div>
-        <div className="post-bid-info d-flex align-items-center justify-content-between m-0">
+        <div className="post-bid-info d-flex align-items-center justify-content-between">
           <div className="bid-buttons-container d-flex flex-column">
             <input id="bid-offer" type="text" placeholder="$80.00" />
             <button id="submit-bid" type="button">Submit Bid</button>
