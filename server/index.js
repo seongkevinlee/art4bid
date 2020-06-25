@@ -105,6 +105,7 @@ app.put('/api/user/:userId', (req, res, next) => {
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
+
 // TO UPLOAD AN IMAGE to a path(param)
 app.post('/api/post/image/', (req, res) => {
   const folder = './server/public/images/';
@@ -223,11 +224,13 @@ app.post('/api/post/', (req, res, next) => {
     startingBid,
     biddingEnabled,
     isDeleted,
-    expiredAt
+    expiredAt,
+    notes,
+    category
   } = req.body;
   const sql = `
-    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING "postId"
   `;
   const params = [
@@ -238,7 +241,9 @@ app.post('/api/post/', (req, res, next) => {
     startingBid,
     biddingEnabled,
     isDeleted,
-    expiredAt
+    expiredAt,
+    notes,
+    category
   ];
   db.query(sql, params)
     .then(result => {
