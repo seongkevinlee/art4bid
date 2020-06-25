@@ -105,43 +105,6 @@ app.put('/api/user/:userId', (req, res, next) => {
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
-
-// TO UPLOAD AN IMAGE to a path(param)
-app.post('/api/post/image/', (req, res) => {
-  const folder = './server/public/images/';
-  if (!fs.existsSync(folder)) {
-    fs.mkdirSync(folder);
-  }
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, folder);
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    }
-  });
-  const upload = multer({
-    limits: {
-      fileSize: 1000000
-    },
-    storage: storage,
-    fileFilter(req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
-        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
-      }
-      cb(undefined, true);
-    }
-  }).single('image');
-  upload(req, res, function (err) {
-    if (err) {
-      res.status(400).json({
-        error: 'Failed to upload an image'
-      });
-    } else {
-      res.status(200).json();
-    }
-  });
-});
 // TO UPLOAD AN IMAGE to a path(param)
 app.post('/api/post/image/:path', (req, res) => {
   const folder = `./server/public/images/${req.params.path}`;
@@ -169,99 +132,67 @@ app.post('/api/post/image/:path', (req, res) => {
     }
   }).single('image');
   upload(req, res, function (err) {
-    if (err) {
-      res.status(400).json({
-        error: 'Failed to upload an image'
+    // USER CAN CREATE A POST
+    const {
+      sellerId,
+      description,
+      imageUrl,
+      title,
+      startingBid,
+      biddingEnabled,
+      isDeleted,
+      expiredAt,
+      notes,
+      category
+    } = req.body;
+    if (!sellerId || !description || !imageUrl || !title || !startingBid || !biddingEnabled || !isDeleted || !expiredAt || !notes || !category) {
+      return res.status(404).json({
+        error: 'Some fields are missing!'
       });
-    } else {
-      res.status(200).json();
     }
-  });
-});
-// TO UPLOAD AN IMAGE to a path(param)
-app.post('/api/post/image/:path/:id', (req, res) => {
-  const folder = `./server/public/images/${req.params.path}/${req.params.id}/`;
-  if (!fs.existsSync(folder)) {
-    fs.mkdirSync(folder);
-  }
-  const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, folder);
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.originalname);
-    }
-  });
-  const upload = multer({
-    limits: {
-      fileSize: 1000000
-    },
-    storage: storage,
-    fileFilter(req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
-        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
-      }
-      cb(undefined, true);
-    }
-  }).single('image');
-  upload(req, res, function (err) {
-    if (err) {
-      res.status(400).json({
-        error: 'Failed to upload an image'
-      });
-    } else {
-      res.status(200).json();
-    }
-  });
-});
-// USER CAN CREATE A POST
-app.post('/api/post/', (req, res, next) => {
-  const {
-    sellerId,
-    description,
-    imageUrl,
-    title,
-    startingBid,
-    biddingEnabled,
-    isDeleted,
-    expiredAt,
-    notes,
-    category
-  } = req.body;
-  const sql = `
+    const sql = `
     INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category")
          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING "postId"
   `;
-  const params = [
-    sellerId,
-    description,
-    imageUrl,
-    title,
-    startingBid,
-    biddingEnabled,
-    isDeleted,
-    expiredAt,
-    notes,
-    category
-  ];
-  db.query(sql, params)
-    .then(result => {
-      const post = result.rows[0];
-      if (!post) {
-        res.status(400).json({
-          error: 'Failed to create post'
+    const params = [
+      sellerId,
+      description,
+      imageUrl,
+      title,
+      startingBid,
+      biddingEnabled,
+      isDeleted,
+      expiredAt,
+      notes,
+      category
+    ];
+    db.query(sql, params)
+      .then(result => {
+        const post = result.rows[0];
+        if (!post) {
+          res.status(400).json({
+            error: 'Failed to create post'
+          });
+        } else {
+          res.json(post);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({
+          error: 'An unexpected error occurred.'
         });
-      } else {
-        res.json(post);
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
       });
-    });
+
+    if (err) {
+      res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      res.status(200).json();
+    }
+  });
 });
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category/:offset', (req, res, next) => {
