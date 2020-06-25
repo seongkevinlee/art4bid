@@ -106,7 +106,7 @@ app.put('/api/user/:userId', (req, res, next) => {
 // TO UPLOAD AN IMAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './server/public/images');
+    cb(null, './server/public/images/user-posts');
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -141,11 +141,13 @@ app.post('/api/post/', (req, res, next) => {
     startingBid,
     biddingEnabled,
     isDeleted,
-    expiredAt
+    expiredAt,
+    notes,
+    category
   } = req.body;
   const sql = `
-    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt")
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING "postId"
   `;
   const params = [
@@ -156,7 +158,9 @@ app.post('/api/post/', (req, res, next) => {
     startingBid,
     biddingEnabled,
     isDeleted,
-    expiredAt
+    expiredAt,
+    notes,
+    category
   ];
   db.query(sql, params)
     .then(result => {
