@@ -422,7 +422,7 @@ SELECT pg_catalog.setval('public."message_messageId_seq"', 1, false);
 -- Name: post_postId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."post_postId_seq"', 67, true);
+SELECT pg_catalog.setval('public."post_postId_seq"', 69, true);
 
 
 --
