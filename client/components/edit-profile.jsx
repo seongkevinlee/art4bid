@@ -90,6 +90,7 @@ export default class EditProfile extends React.Component {
             id="profile-img-upload"
             name="profile-img-upload"
             accept=".png, .jpeg, .gif"
+            className="profile-img-upload"
           />
           <h4>{userName}</h4>
         </div>
