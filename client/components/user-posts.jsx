@@ -28,13 +28,17 @@ export default class UserPosts extends React.Component {
 
   renderPosts() {
     const postThumbnails = [...this.state.postThumbnails];
-    const postThumbnailsGrid = postThumbnails.map(thumbnail => {
-      return <img
-        key={thumbnail.postId}
-        className='user-post-thumbnail col-4 p-0 col-4'
-        src={thumbnail.imageUrl}/>;
-    });
-    return postThumbnailsGrid;
+    if (postThumbnails.length === 0) {
+      return <h4>No posts to show...</h4>;
+    } else {
+      const postThumbnailsGrid = postThumbnails.map(thumbnail => {
+        return <img
+          key={thumbnail.postId}
+          className='user-post-thumbnail col-4 p-0 col-4'
+          src={thumbnail.imageUrl}/>;
+      });
+      return postThumbnailsGrid;
+    }
   }
 
   render() {
