@@ -314,7 +314,7 @@ app.post('/api/message/', (req, res, next) => {
 });
 
 // USER CAN VIEW THE LISTS OF RECEIVED PRIVATE MESSAGES
-app.get('/api/message/list/', (req, res, next) => {
+app.post('/api/message/list/', (req, res, next) => {
   const { recipientId } = req.body;
   if (!recipientId) {
     res.status(400).json({
@@ -322,14 +322,14 @@ app.get('/api/message/list/', (req, res, next) => {
     });
   }
   const sql = `
-      SELECT "me"."senderName", "me"."postId", "me"."message", "me"."createdAt" FROM (
-      SELECT DISTINCT ON ("u"."userName") "u"."userName" AS "senderName", "m"."postId", "m"."message", "m"."createdAt"
-        FROM "message" AS "m"
-        JOIN "user" AS "u"
-          ON "u"."userId" = "m"."senderId"
-       WHERE "m"."recipientId" = $1
-    ORDER BY "u"."userName", "m"."createdAt" DESC) AS "me"
-    ORDER BY "me"."createdAt" DESC
+      SELECT "me"."senderName", "me","senderId", "me"."postId", "me"."message", "me"."createdAt" FROM (
+      SELECT DISTINCT ON ("m"."postId", "m"."senderId") "u"."userName" AS "senderName", "m"."senderId", "m"."postId", "m"."message", "m"."createdAt"
+      FROM "message" AS "m"
+      JOIN "user" AS "u"
+      ON "u"."userId" = "m"."senderId"
+      WHERE "m"."recipientId" = $1
+      ORDER BY "m"."postId", "m"."senderId", "m"."createdAt" DESC) AS "me"
+      ORDER BY "me"."createdAt" DESC
   `;
   const params = [recipientId];
   db.query(sql, params)
@@ -352,8 +352,8 @@ app.get('/api/message/list/', (req, res, next) => {
 });
 
 // USER CAN VIEW THE MESSAGES FROM A USER
-app.get('/api/message/detail/', (req, res, next) => {
-  const { recipientId, senderId } = req.body;
+app.post('/api/message/detail/', (req, res, next) => {
+  const { recipientId, senderId, postId } = req.body;
   if (!recipientId) {
     res.status(400).json({
       error: 'userId is required'
@@ -364,6 +364,11 @@ app.get('/api/message/detail/', (req, res, next) => {
       error: 'senderId is required'
     });
   }
+  if (!postId) {
+    res.status(400).json({
+      error: 'postId is required'
+    });
+  }
   const sql = `
       SELECT "u"."userName" AS "senderName", "m"."postId", "m"."message", "m"."createdAt"
         FROM "message" AS "m"
@@ -371,9 +376,10 @@ app.get('/api/message/detail/', (req, res, next) => {
           ON "u"."userId" = "m"."senderId"
        WHERE "m"."recipientId" = $1
          AND "m"."senderId" = $2
+         AND "m"."postId" = $3
     ORDER BY "m"."createdAt" DESC
   `;
-  const params = [recipientId, senderId];
+  const params = [recipientId, senderId, postId];
   db.query(sql, params)
     .then(result => {
       const message = result.rows;
