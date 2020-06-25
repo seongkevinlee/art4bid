@@ -13,7 +13,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      loggedIn: true,
+      loggedIn: false,
       userInfo: {},
       view: 'create'
     };
@@ -57,13 +57,13 @@ export default class App extends React.Component {
     } else if (this.state.view === 'message') {
       pageBody = <Message setView={setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'post') {
-      pageBody = <SpecificPost setView={setView} />;
-    } else if(this.state.view === 'create') {
+      pageBody = <SpecificPost setView ={setView} />;
+    } else if (this.state.view === 'create') {
       pageBody = (
-        <CreatePost setView={this.setView} userInfo={this.state.userInfo} />
+        <CreatePost setView={this.setView} userInfo={this.state} />
       );
     }
-        
+
     return (
       <UserContext.Provider value={this.state.userInfo}>
         <div>
