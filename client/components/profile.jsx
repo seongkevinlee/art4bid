@@ -58,7 +58,7 @@ export default class Profile extends React.Component {
 
   renderEditProfile() {
     return (
-      <EditProfile editModeToggle={this.editModeToggle}/>
+      <EditProfile editModeToggle={this.editModeToggle} userInfo={this.props.userInfo}/>
     );
   }
 
