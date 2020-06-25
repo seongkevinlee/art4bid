@@ -254,7 +254,7 @@ export default class SearchPage extends React.Component {
                     setView={this.props.setView} />
                 )
                 : <div className="flex-column thumbnail-column">
-                  <p>There are no images</p>
+                  <p className="mt-2 px-1 text-secondary">There are no images</p>
                 </div>
             }
             {
@@ -265,7 +265,7 @@ export default class SearchPage extends React.Component {
                     setView={this.props.setView} />
                 )
                 : <div className="flex-column thumbnail-column">
-                  <p>There are no images</p>
+                  <p className="mt-2 px-1 text-secondary">There are no images</p>
                 </div>
             }
             {
@@ -276,7 +276,7 @@ export default class SearchPage extends React.Component {
                     setView={this.props.setView} />
                 )
                 : <div className="flex-column thumbnail-column">
-                  <p>There are no images</p>
+                  <p className="mt-2 px-1 text-secondary">There are no images</p>
                 </div>
             }
           </div>
