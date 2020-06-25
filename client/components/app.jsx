@@ -15,7 +15,8 @@ export default class App extends React.Component {
       isLoading: false,
       loggedIn: true,
       userInfo: {},
-      view: 'create'
+      view: 'post'
+      // change back to create
     };
     this.setView = this.setView.bind(this);
     this.login = this.login.bind(this);
@@ -57,13 +58,13 @@ export default class App extends React.Component {
     } else if (this.state.view === 'message') {
       pageBody = <Message setView={setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'post') {
-      pageBody = <SpecificPost setView={setView} />;
-    } else if(this.state.view === 'create') {
+      pageBody = <SpecificPost setView ={setView} />;
+    } else if (this.state.view === 'create') {
       pageBody = (
-        <CreatePost setView={this.setView} userInfo={this.state.userInfo} />
+        <CreatePost setView={this.setView} userInfo={this.state} />
       );
     }
-        
+
     return (
       <UserContext.Provider value={this.state.userInfo}>
         <div>
