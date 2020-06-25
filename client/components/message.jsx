@@ -1,4 +1,7 @@
 import React from 'react';
+import MessageHeader from './message-header';
+import MessageList from './message-list';
+import MessageDetail from './message-detail';
 
 export default class Message extends React.Component {
   constructor(props) {
@@ -128,35 +131,16 @@ export default class Message extends React.Component {
 
   render() {
     // const { userInfo } = this.props;
-    const { handleBackClick, handleSearchClick, handleViewMessageClick } = this;
+    const { handleBackClick, getTimeMsg, handleSearchClick, handleViewMessageClick } = this;
     const { messages, isMessageDetail, detailMessages, postId } = this.state;
     return (
       <div>
-        <div className='d-flex flex-column align-items-center'>
-          <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
-            <div className="my-auto icon-custom">
-              {isMessageDetail
-                ? (
-                  <i
-                    className="fas fa-chevron-left"
-                    onClick={handleBackClick}>
-                  </i>
-                )
-                : ('')
-              }
-            </div>
-            <div className='header-title pt-3 pb-3 mx-auto'>MESSAGE</div>
-            <div className="my-auto icon-custom">
-              <i
-                className="fas fa-search"
-                onClick={handleSearchClick}>
-              </i>
-            </div>
-          </div>
-          <div>
-            <p className="text-primary postid-custom">{isMessageDetail ? `postID: ${postId}` : '' }</p>
-          </div>
-        </div>
+        <MessageHeader
+          postId={postId}
+          isMessageDetail={isMessageDetail}
+          handleBackClick={handleBackClick}
+          handleSearchClick={handleSearchClick}
+        />
         {messages.length === undefined || messages.length === 0
           ? (
             <div className='d-flex flex-column align-items-center'>
@@ -166,71 +150,16 @@ export default class Message extends React.Component {
             </div>
           )
           : isMessageDetail
-            ? (
-              <div>
-                {
-                  detailMessages.map((message, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className="fadeIn mx-auto message-box">
-                        <div className="row">
-                          <span className="col-3 mt-1 ml-3 message-sender">
-                            {message.senderName}
-                          </span>
-                          <span className="col mt-2 text-right text-secondary message-time">
-                            {this.getTimeMsg(message.createdAt)}
-                          </span>
-                          <span className="col mr-2 mt-2 text-right text-dark message-date">
-                            {new Date(message.createdAt).toLocaleString().split(',')[0] + ' |' + new Date(message.createdAt).toLocaleString().split(',')[1]}
-                          </span>
-                        </div>
-                        <div className="row">
-                          <div className="col text-dark mb-1 message-content">
-                            <span className="ml-3 text-left">{message.message}</span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                }
-              </div>
+            ? (<MessageDetail
+              detailMessages={detailMessages}
+              getTimeMsg={getTimeMsg}
+            />
             )
-            : (
-              <div className='align-items-center'>
-                <div className='mb-2 mt-1'>
-                  {
-                    messages.map((message, index) => {
-                      return (
-                        <div
-                          key={index}
-                          className="fadeIn mx-auto message-box"
-                          onClick={handleViewMessageClick}>
-                          <div className="row">
-                            <span className="col-3 mt-1 ml-3 message-sender">
-                              {message.senderName}
-                            </span>
-                            <span className="col mt-2 text-right text-secondary message-postid">
-                              {'postId:' + message.postId}
-                            </span>
-                            <span className="col mt-2 text-right text-secondary message-time">
-                              {this.getTimeMsg(message.createdAt)}
-                            </span>
-                            <span className="col mr-2 mt-2 text-right text-dark message-date">
-                              {new Date(message.createdAt).toLocaleString().split(',')[0] + ' |' + new Date(message.createdAt).toLocaleString().split(',')[1]}
-                            </span>
-                          </div>
-                          <div className="row">
-                            <div className="col text-dark mb-1 message-content">
-                              <span className="ml-3 text-left" id={message.senderId + ',' + message.postId}>{message.message}</span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })
-                  }
-                </div>
-              </div>
+            : (<MessageList
+              messages={messages}
+              getTimeMsg={getTimeMsg}
+              handleViewMessageClick={handleViewMessageClick}
+            />
             )
         }
       </div>

@@ -1,11 +1,13 @@
 require('dotenv/config');
 const express = require('express');
 const db = require('./database');
+const fs = require('fs');
 const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 const multer = require('multer');
 const app = express();
+
 app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
@@ -103,32 +105,112 @@ app.put('/api/user/:userId', (req, res, next) => {
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
-// TO UPLOAD AN IMAGE
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, './server/public/images');
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
+// TO UPLOAD AN IMAGE to a path(param)
+app.post('/api/post/image/', (req, res) => {
+  const folder = './server/public/images/';
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder);
   }
-});
-// TO UPLOAD AN IMAGE
-app.post('/api/post/image', (req, res) => {
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
   const upload = multer({
     limits: {
       fileSize: 1000000
     },
     storage: storage,
     fileFilter(req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
         return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
       }
       cb(undefined, true);
     }
   }).single('image');
   upload(req, res, function (err) {
-    console.error(err);
-    res.end('File is successfully uploaded');
+    if (err) {
+      res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      res.status(200).json();
+    }
+  });
+});
+// TO UPLOAD AN IMAGE to a path(param)
+app.post('/api/post/image/:path', (req, res) => {
+  const folder = `./server/public/images/${req.params.path}`;
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+  const upload = multer({
+    limits: {
+      fileSize: 1000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    if (err) {
+      res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      res.status(200).json();
+    }
+  });
+});
+// TO UPLOAD AN IMAGE to a path(param)
+app.post('/api/post/image/:path/:id', (req, res) => {
+  const folder = `./server/public/images/${req.params.path}/${req.params.id}/`;
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+  const upload = multer({
+    limits: {
+      fileSize: 1000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    if (err) {
+      res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      res.status(200).json();
+    }
   });
 });
 // USER CAN CREATE A POST
@@ -356,12 +438,12 @@ app.post('/api/message/detail/', (req, res, next) => {
     });
   }
   const sql = `
-      SELECT "u"."userName" AS "senderName", "m"."postId", "m"."message", "m"."createdAt"
+      SELECT "u"."userName" AS "senderName", "m"."recipientId", "m"."senderId", "m"."postId", "m"."message", "m"."createdAt"
         FROM "message" AS "m"
         JOIN "user" AS "u"
           ON "u"."userId" = "m"."senderId"
-       WHERE "m"."recipientId" = $1
-         AND "m"."senderId" = $2
+       WHERE "m"."recipientId" IN ($1,$2)
+         AND "m"."senderId" IN ($1,$2)
          AND "m"."postId" = $3
     ORDER BY "m"."createdAt" DESC
   `;
