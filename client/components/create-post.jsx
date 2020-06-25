@@ -1,4 +1,5 @@
 import React from 'react';
+import ToggleButton from 'react-toggle-button';
 
 export default class CreatePost extends React.Component {
   constructor(props) {
@@ -15,22 +16,41 @@ export default class CreatePost extends React.Component {
       isDeleted: false,
       expiredAt: '',
       notes: '',
-      category: ''
+      category: '',
+      selectedFile: null,
+      filePathImageURL: null
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.dummyFunction = this.dummyFunction.bind(this);
   }
 
+  dummyFunction() {
+    // eslint-disable-next-line no-console
+    console.log('does nothing');
+  }
+
+  // setting state for each form input
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
+  }
+
+  // setting state for image input
+  handleFileChange(event) {
+    this.setState({
+      selectedFile: event.target.files[0],
+      [event.target.name]: event.target.value,
+      filePathImageURL: event.target.files[0].name
+    });
   }
 
   handleSubmit() {
     const {
       sellerId,
       description,
-      imageUrl,
+      filePathImageURL,
       title,
       startingBid,
       biddingEnabled,
@@ -41,6 +61,25 @@ export default class CreatePost extends React.Component {
     } = this.state;
 
     event.preventDefault();
+
+    const formData = new FormData();
+
+    // Update the formData object
+    formData.append('image', this.state.selectedFile, this.state.imageUrl.name);
+
+    fetch('/api/post/image', {
+      method: 'POST',
+      body: formData
+    })
+      .then(res => {
+        res.json();
+      })
+      .then(data => {
+        // eslint-disable-next-line no-console
+        console.log('it works');
+      })
+      .catch(error => console.error('image error', error));
+
     fetch('/api/post/', {
       method: 'POST',
       headers: {
@@ -49,7 +88,7 @@ export default class CreatePost extends React.Component {
       body: JSON.stringify({
         sellerId,
         description,
-        imageUrl,
+        imageUrl: `/server/public/images/user-post/${filePathImageURL}`,
         title,
         startingBid,
         biddingEnabled,
@@ -62,14 +101,8 @@ export default class CreatePost extends React.Component {
       .then(res => res.json())
       .then(data => {
         // eslint-disable-next-line no-console
-        console.log(data, 'data');
+        console.log('data', data);
       });
-  }
-
-  ToggleButton() {
-    this.setState(currentState => ({
-      textDisplay: currentState.textDisplay
-    }));
   }
 
   render() {
@@ -82,7 +115,6 @@ export default class CreatePost extends React.Component {
             SAVE
           </button>
         </div>
-
         <form form="new-post" onSubmit={this.handleSubmit}>
           {/* add picture */}
           <label htmlFor="imageUrl">Choose an image:</label>
@@ -95,7 +127,7 @@ export default class CreatePost extends React.Component {
             className="newPostPicture"
             title=" "
             value={this.state.imageUrl}
-            onChange={this.handleChange}
+            onChange={this.handleFileChange}
             required
           />
 
@@ -139,10 +171,19 @@ export default class CreatePost extends React.Component {
             <option value="other">Other</option>
           </select>
 
-          {/* toggle bidding */}
+          {/* toggle bidding button */}
           <div>
-            <button onClick={() => this.ToggleButton()}>Toggle</button>
-            {!this.state.textDisplay && this.props.text}
+            Bidding{' '}
+            <ToggleButton
+              className="big"
+              onChange={this.dummyFunction}
+              value={this.state.biddingEnabled || false}
+              onToggle={value => {
+                this.setState({
+                  biddingEnabled: !this.state.biddingEnabled
+                });
+              }}
+            />
           </div>
 
           {/* notes */}
@@ -174,6 +215,8 @@ export default class CreatePost extends React.Component {
             value={this.state.expiredAt}
             onChange={this.handleChange}
           />
+
+          <button type="Submit">SAVE</button>
         </form>
       </div>
     );

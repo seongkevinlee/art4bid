@@ -113,7 +113,7 @@ app.put('/api/user/:userId', (req, res, next) => {
 // TO UPLOAD AN IMAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './server/public/images');
+    cb(null, './server/public/images/user-posts');
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
