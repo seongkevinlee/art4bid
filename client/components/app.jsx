@@ -11,9 +11,9 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      loggedIn: false,
+      loggedIn: true,
       userInfo: {},
-      view: 'search'
+      view: 'create'
     };
     this.setView = this.setView.bind(this);
     this.login = this.login.bind(this);

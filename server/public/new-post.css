@@ -1,0 +1,9 @@
+.newPostPicture {
+
+}
+
+select, option {
+    text-align-last: center;
+    /* padding-right: 29px; */
+    /* direction: rtl; */
+}
