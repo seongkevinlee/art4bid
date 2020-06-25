@@ -48,16 +48,15 @@ export default class App extends React.Component {
     const { login, setView } = this;
     let pageBody;
     if (this.state.loggedIn === false) {
-      return <LoginPage userInfo={this.login} />;
-    }
-    if (this.state.view === 'search') {
-      pageBody = <SearchPage setView = {this.setView}/>;
-    }
-    if (this.state.view === 'profile') {
-      pageBody = <Profile setView = {this.setView}/>;
-    }
-    if (this.state.view === 'post') {
-      pageBody = <SpecificPost setView={this.setView}/>;
+      return <LoginPage userInfo={login} />;
+    } else if (this.state.view === 'search') {
+      pageBody = <SearchPage setView={setView} />;
+    } else if (this.state.view === 'profile') {
+      pageBody = <Profile setView={setView} userInfo={this.state.userInfo} />;
+    } else if (this.state.view === 'message') {
+      pageBody = <Message setView={setView} userInfo={this.state.userInfo} />;
+    } else if (this.state.view === 'post') {
+      pageBody = <SpecificPost setView={setView} />;
     }
     return (
       <UserContext.Provider value={this.state.userInfo}>

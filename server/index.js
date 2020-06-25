@@ -9,17 +9,14 @@ const app = express();
 app.use(express.json());
 app.use(staticMiddleware);
 app.use(sessionMiddleware);
-
 // USER CAN LOGIN
 app.post('/api/login/', (req, res, next) => {
   const { userName } = req.body;
   const value = [`${userName}`];
-
   const findUserDB = `
   select *
   from "user"
   where "userName" = $1;`;
-
   db.query(findUserDB, value)
     .then(result => {
       const userObject = result && result.rows && result.rows[0];
@@ -42,7 +39,6 @@ app.post('/api/login/', (req, res, next) => {
       return res.send({ message: err });
     });
 });
-
 // USER CAN SEARCH POST BY LOCATION (ZIPCODE)
 app.get('/api/post/:location', (req, res, next) => {
   const { location } = req.params;
@@ -73,7 +69,6 @@ app.get('/api/post/:location', (req, res, next) => {
       });
     });
 });
-
 // USER CAN EDIT PROFILE
 app.put('/api/user/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId);
@@ -104,12 +99,10 @@ app.put('/api/user/:userId', (req, res, next) => {
   RETURNING  *
   `;
   const params = [email, profileImg, coverImg, description, location, userId];
-
   db.query(sql, params)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
-
 // TO UPLOAD AN IMAGE
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -119,7 +112,6 @@ const storage = multer.diskStorage({
     cb(null, file.originalname);
   }
 });
-
 // TO UPLOAD AN IMAGE
 app.post('/api/post/image', (req, res) => {
   const upload = multer({
@@ -139,7 +131,6 @@ app.post('/api/post/image', (req, res) => {
     res.end('File is successfully uploaded');
   });
 });
-
 // USER CAN CREATE A POST
 app.post('/api/post/', (req, res, next) => {
   const {
@@ -185,7 +176,6 @@ app.post('/api/post/', (req, res, next) => {
       });
     });
 });
-
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category/:offset', (req, res, next) => {
   const category = req.params.category;
@@ -218,7 +208,6 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
       });
     });
 });
-
 // USER CAN EDIT A POST
 app.patch('/api/post/', (req, res, next) => {
   const {
@@ -274,7 +263,6 @@ app.patch('/api/post/', (req, res, next) => {
       });
     });
 });
-
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
   const {
@@ -312,7 +300,6 @@ app.post('/api/message/', (req, res, next) => {
       });
     });
 });
-
 // USER CAN VIEW THE LISTS OF RECEIVED PRIVATE MESSAGES
 app.post('/api/message/list/', (req, res, next) => {
   const { recipientId } = req.body;
@@ -350,7 +337,6 @@ app.post('/api/message/list/', (req, res, next) => {
       });
     });
 });
-
 // USER CAN VIEW THE MESSAGES FROM A USER
 app.post('/api/message/detail/', (req, res, next) => {
   const { recipientId, senderId, postId } = req.body;
@@ -398,7 +384,6 @@ app.post('/api/message/detail/', (req, res, next) => {
       });
     });
 });
-
 // USER CAN VIEW A SPECIFIC POST - the post details + username
 app.get('/api/viewpost/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -430,7 +415,6 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
-
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -455,7 +439,6 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
       });
     });
 });
-
 // USER CAN VIEW A SPECIFIC POST - bid info
 app.get('/api/bidinfo/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -480,35 +463,28 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
         error: 'An unexpected error occurred.'
       });
     });
-
 });
-
 // USER CAN VIEW POSTS ON PROFILE
 app.get('/api/posts', (req, res, next) => {
   const userId = [req.session.userInfo.userId];
-
   const findUserPosts = `
   SELECT  "postId", "imageUrl"
   FROM    "post"
   WHERE   "sellerId" = $1
   `;
-
   db.query(findUserPosts, userId)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
-
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
     .then(result => res.json(result.rows[0]))
     .catch(err => next(err));
 });
-
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });
-
 app.use((err, req, res, next) => {
   if (err instanceof ClientError) {
     res.status(err.status).json({ error: err.message });
@@ -519,7 +495,6 @@ app.use((err, req, res, next) => {
     });
   }
 });
-
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
   console.log('[http] Server listening on port', process.env.PORT);
