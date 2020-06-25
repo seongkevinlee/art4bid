@@ -279,18 +279,18 @@ app.patch('/api/post/', (req, res, next) => {
 app.post('/api/message/', (req, res, next) => {
   const {
     senderId,
-    receipientId,
+    recipientId,
     postId,
     message
   } = req.body;
   const sql = `
-    INSERT INTO "message" ("senderId", "receipientId", "postId", "message")
-         VALUES ($1, $2, $3, $4)
+    INSERT INTO "message" ("senderId", "recipientId", "postId", "message", "createdAt")
+         VALUES ($1, $2, $3, $4, now())
       RETURNING "messageId"
   `;
   const params = [
     senderId,
-    receipientId,
+    recipientId,
     postId,
     message
   ];
@@ -303,6 +303,92 @@ app.post('/api/message/', (req, res, next) => {
         });
       } else {
         res.status(202).json(message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// USER CAN VIEW THE LISTS OF RECEIVED PRIVATE MESSAGES
+app.post('/api/message/list/', (req, res, next) => {
+  const { recipientId } = req.body;
+  if (!recipientId) {
+    res.status(400).json({
+      error: 'userId is required'
+    });
+  }
+  const sql = `
+      SELECT "me"."senderName", "me","senderId", "me"."postId", "me"."message", "me"."createdAt" FROM (
+      SELECT DISTINCT ON ("m"."postId", "m"."senderId") "u"."userName" AS "senderName", "m"."senderId", "m"."postId", "m"."message", "m"."createdAt"
+      FROM "message" AS "m"
+      JOIN "user" AS "u"
+      ON "u"."userId" = "m"."senderId"
+      WHERE "m"."recipientId" = $1
+      ORDER BY "m"."postId", "m"."senderId", "m"."createdAt" DESC) AS "me"
+      ORDER BY "me"."createdAt" DESC
+  `;
+  const params = [recipientId];
+  db.query(sql, params)
+    .then(result => {
+      const message = result.rows;
+      if (!result.rows[0]) {
+        res.status(400).json({
+          error: 'You don\'t have a received message'
+        });
+      } else {
+        res.status(200).json(message);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+// USER CAN VIEW THE MESSAGES FROM A USER
+app.post('/api/message/detail/', (req, res, next) => {
+  const { recipientId, senderId, postId } = req.body;
+  if (!recipientId) {
+    res.status(400).json({
+      error: 'userId is required'
+    });
+  }
+  if (!senderId) {
+    res.status(400).json({
+      error: 'senderId is required'
+    });
+  }
+  if (!postId) {
+    res.status(400).json({
+      error: 'postId is required'
+    });
+  }
+  const sql = `
+      SELECT "u"."userName" AS "senderName", "m"."postId", "m"."message", "m"."createdAt"
+        FROM "message" AS "m"
+        JOIN "user" AS "u"
+          ON "u"."userId" = "m"."senderId"
+       WHERE "m"."recipientId" = $1
+         AND "m"."senderId" = $2
+         AND "m"."postId" = $3
+    ORDER BY "m"."createdAt" DESC
+  `;
+  const params = [recipientId, senderId, postId];
+  db.query(sql, params)
+    .then(result => {
+      const message = result.rows;
+      if (!result.rows[0]) {
+        res.status(400).json({
+          error: `You don't have a received message from user ${senderId}`
+        });
+      } else {
+        res.status(200).json(message);
       }
     })
     .catch(err => {
@@ -395,6 +481,21 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
       });
     });
 
+});
+
+// USER CAN VIEW POSTS ON PROFILE
+app.get('/api/posts', (req, res, next) => {
+  const userId = [req.session.userInfo.userId];
+
+  const findUserPosts = `
+  SELECT  "postId", "imageUrl"
+  FROM    "post"
+  WHERE   "sellerId" = $1
+  `;
+
+  db.query(findUserPosts, userId)
+    .then(result => res.json(result.rows))
+    .catch(err => next(err));
 });
 
 // HEALTH CHECK
