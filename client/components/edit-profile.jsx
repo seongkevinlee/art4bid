@@ -85,6 +85,12 @@ export default class EditProfile extends React.Component {
             style={profileImg && { backgroundImage: `url(${profileImg})` } }>
             {!profileImg ? <i className="fas fa-plus fa-3x"></i> : null}
           </button>
+          <input
+            type="file"
+            id="profile-img-upload"
+            name="profile-img-upload"
+            accept=".png, .jpeg, .gif"
+          />
           <h4>{userName}</h4>
         </div>
         <textarea
