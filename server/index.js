@@ -530,7 +530,7 @@ app.post('/api/bid', (req, res, next) => {
     });
   }
   const sql = `
-  select *
+  select "postId", "currentBid"
   from "bid"
   where "postId" = $1
   and "currentBid" >= $2
