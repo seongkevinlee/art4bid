@@ -8,7 +8,7 @@ export default class PostBody extends React.Component {
       submittedBid: ''
     };
     this.handleChange = this.handleChange.bind(this);
-    // this.handleSubmit = this.handleSubmid.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
@@ -18,7 +18,32 @@ export default class PostBody extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // console.log('it works');
+    const { submittedBid } = this.state;
+    if (submittedBid[0] === '0') {
+      alert(`${submittedBid} is not a valid number`);
+    } else {
+      const reqBody = {
+        bidderId: this.props.userId,
+        postId: this.props.postId,
+        currentBid: submittedBid
+      };
+      const req = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reqBody)
+      };
+      fetch('/api/bid', req)
+        .then(res => res.json())
+        .then(bidInfo => {
+          if (bidInfo.error) {
+            alert(bidInfo.error);
+          } else {
+            this.props.getBidInfo(this.props.postId);
+            alert('Bid has been successfully submitted');
+          }
+        })
+        .catch(err => console.error(err.message));
+    }
   }
 
   render() {
@@ -38,11 +63,11 @@ export default class PostBody extends React.Component {
         <div className="post-bid-info d-flex align-items-center justify-content-between">
           <div className="bid-buttons-container d-flex flex-column">
 
-            <form>
+            <form onSubmit={this.handleSubmit}>
               <input
                 name="bid-offer"
                 id="bid-offer"
-                type="text"
+                type="number"
                 placeholder="$0"
                 value={this.state.submittedBid}
                 onChange={this.handleChange}

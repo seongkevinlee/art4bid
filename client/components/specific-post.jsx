@@ -85,6 +85,7 @@ export default class SpecificPost extends React.Component {
       let bodyview;
       if (this.state.bidHistory === 'off') {
         bodyview = <PostBody
+          postId= {postInfo.postId}
           description={postInfo.description}
           highestBid={highestBid}
           totalBids={bidInfo.totalBids}
@@ -93,6 +94,7 @@ export default class SpecificPost extends React.Component {
           sellerId={postInfo.sellerId}
           toggleBidHistory={toggleBidHistory}
           messageBtnClick={messageBtnClick}
+          getBidInfo={this.getBidInfo}
         />;
       } else if (this.state.bidHistory === 'on') {
         bodyview = <BidHistory
