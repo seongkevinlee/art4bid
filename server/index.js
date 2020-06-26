@@ -151,8 +151,8 @@ app.post('/api/post/image/:path', (req, res) => {
       });
     }
     const sql = `
-    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category")
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category", "createdAt")
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now())
       RETURNING "postId"
   `;
     const params = [
@@ -381,7 +381,7 @@ app.post('/api/message/detail/', (req, res, next) => {
        WHERE "m"."recipientId" IN ($1,$2)
          AND "m"."senderId" IN ($1,$2)
          AND "m"."postId" = $3
-    ORDER BY "m"."createdAt" DESC
+    ORDER BY "m"."createdAt" ASC
   `;
   const params = [recipientId, senderId, postId];
   db.query(sql, params)
