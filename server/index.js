@@ -292,7 +292,7 @@ app.post('/api/message/', (req, res, next) => {
   const sql = `
     INSERT INTO "message" ("senderId", "recipientId", "postId", "message", "createdAt")
          VALUES ($1, $2, $3, $4, now())
-      RETURNING "messageId"
+      RETURNING *
   `;
   const params = [
     senderId,

@@ -4,7 +4,7 @@ export default class MessageList extends React.Component {
   render() {
     const { messages, getTimeMsg, handleViewMessageClick } = this.props;
     return (
-      <div className='align-items-center'>
+      <div className='align-items-center message-list-box'>
         <div className='mb-2 mt-1'>
           {
             messages.map((message, index) => {
@@ -13,7 +13,7 @@ export default class MessageList extends React.Component {
                   key={index}
                   className="fadeIn mx-auto message-box">
                   <div>
-                    <span className="col mt-1 ml-1 message-sender">
+                    <span className="col mt-2 ml-1 message-sender">
                       {message.senderName}
                     </span>
                     <span className="col mt-2 text-right text-secondary message-postid">

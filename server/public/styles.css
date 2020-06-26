@@ -194,7 +194,7 @@ button {
 }
 
 .message-sender {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .message-postid, .message-time, .message-date {
@@ -202,7 +202,7 @@ button {
 }
 
 .message-content {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .message-box {
@@ -214,7 +214,7 @@ button {
 .message-box-sender {
   width: 80%;
   margin-left: 2%;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: #e0dcdc;
   border-radius: 6px;
 }
@@ -222,7 +222,7 @@ button {
 .message-box-me {
   width: 80%;
   margin-left: 18%;
-  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: white;
   border-radius: 6px;
 }
@@ -231,27 +231,58 @@ button {
   font-size: 30px;
   width: 50px;
   filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
+  text-align: center;
 }
 
 .postid-custom {
   font-size: 12px;
 }
 
+.message-list-box{
+  position: relative;
+  top: 65px;
+}
+
+.message-detail-box {
+  position: relative;
+  top: 65px;
+}
+
+.message-header {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
 .send-message-custom {
-  position: fixed;
-  bottom: 2.9%;
+  width: 95%;
+  bottom: 3%;
 }
 
 .textarea-custom {
   resize: none;
+  border-radius: 6px;
 }
 
 .message-padding {
-  height: 150px;
+  height: 160px;
+}
+
+.message-btn-custom {
+  bottom: 11%;
+  left: 82%;
 }
 
 .fade-in {
   animation: fadeIn 1s ease-in;
+}
+
+.size-up-down {
+  animation: sizeUpDown 0.2s ease-in;
+}
+
+@keyframes sizeUpDown {
+  0%   {transform: scale(1); }
+  50%  {transform: scale(1.02);}
+  100% {transform: scale(1);}
 }
 
 @keyframes fadeIn {
@@ -261,6 +292,33 @@ button {
   to {
     opacity: 1;
   }
+}
+
+/* modal */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.modal-content {
+  background-color: rgba(255, 255, 255, 1);
+  margin: 30% auto;
+  width: 90%;
+  border-radius: 15px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.modal-textarea-custom {
+  width: 95%;
+  resize: none;
+  border: none;
 }
 
 /* View Specific Post */
