@@ -517,7 +517,7 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const watchlistCounts = result.rows[0];
-      res.json(watchlistCounts);
+      return res.status(200).json(watchlistCounts);
     })
     .catch(err => {
       console.error(err);
@@ -541,8 +541,8 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
   const params = [postId];
   db.query(sql, params)
     .then(result => {
-      const bidInfo = result.rows;
-      res.json(bidInfo);
+      const bidInfo = result.rows[0];
+      res.status(200).json(bidInfo);
     })
     .catch(err => {
       console.error(err);

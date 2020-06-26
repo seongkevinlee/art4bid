@@ -67,7 +67,7 @@ export default class CreatePost extends React.Component {
     // Update the formData object
     formData.append('image', this.state.selectedFile, this.state.imageUrl.name);
 
-    fetch('/api/post/image', {
+    fetch(`/api/post/image/${'user-posts'}`, {
       method: 'POST',
       body: formData
     })
