@@ -528,9 +528,9 @@ app.post('/api/bid', (req, res, next) => {
     return res.status(400).json({
       error: 'bidderId, postId, currentBid are all required fields'
     });
-  } else if (isNaN(Number(currentBid))) {
+  } else if (isNaN(Number(currentBid)) || Number(currentBid) < 0) {
     return res.status(400).json({
-      error: 'currentBid must be a number'
+      error: 'currentBid must be a postive number'
     });
   }
   const sql = `
