@@ -498,6 +498,30 @@ app.get('/api/bidhistory/:postId', (req, res, next) => {
     });
 });
 
+// USER CAN VIEW A SPECIFIC POST - notes
+app.get('/api/notes/:postId', (req, res, next) => {
+  const postId = Number(req.params.postId);
+  if (!Number.isInteger(postId) || postId < 0) {
+    return res.status(400).json({ error: 'postId must be a positive integer' });
+  }
+  const sql = `
+  select "notes"
+  from "post"
+  where "postId" = $1
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const notes = result.rows;
+      return res.status(200).json(notes);
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
+      });
+    });
+});
+
 // USER CAN VIEW POSTS ON PROFILE
 app.get('/api/posts', (req, res, next) => {
   const userId = [req.session.userInfo.userId];
