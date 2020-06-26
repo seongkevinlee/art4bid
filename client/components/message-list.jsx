@@ -2,19 +2,20 @@ import React from 'react';
 
 export default class MessageList extends React.Component {
   render() {
-    const { messages, getTimeMsg, handleViewMessageClick } = this.props;
+    const { messages, userInfo, getTimeMsg, handleViewMessageClick } = this.props;
     return (
       <div className='align-items-center message-list-box'>
         <div className='mb-2 mt-1'>
           {
             messages.map((message, index) => {
+              const isMe = userInfo.userName === message.senderName;
               return (
                 <div
                   key={index}
-                  className="fadeIn mx-auto message-box">
+                  className={`fadeIn mx-auto ${isMe ? 'message-box-list-me' : 'message-box-list-sender'}`}>
                   <div>
                     <span className="col mt-2 ml-1 message-sender">
-                      {message.senderName}
+                      {isMe ? 'Me' : message.senderName}
                     </span>
                     <span className="col mt-2 text-right text-secondary message-postid">
                       {'postID:' + message.postId}
@@ -30,7 +31,7 @@ export default class MessageList extends React.Component {
                     <div className="col text-dark pb-1 message-content">
                       <span
                         className="ml-1 text-left"
-                        id={message.senderId + ',' + message.postId}
+                        id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.recipientId}
                         onClick={handleViewMessageClick}>{message.message}</span>
                     </div>
                   </div>

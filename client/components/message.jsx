@@ -11,9 +11,12 @@ export default class Message extends React.Component {
       detailMessages: [],
       isMessageDetail: false,
       postId: null,
-      senderId: null
+      senderId: null,
+      isReceived: true,
+      recipientId: null
     };
     this.getMessageList = this.getMessageList.bind(this);
+    this.getSentMessageList = this.getSentMessageList.bind(this);
     this.getTimeMsg = this.getTimeMsg.bind(this);
     this.handleBackClick = this.handleBackClick.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
@@ -26,7 +29,30 @@ export default class Message extends React.Component {
   }
 
   getMessageList(userId) {
+    this.setState({
+      isReceived: true
+    });
     const body = { recipientId: userId };
+    fetch('/api/message/list/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(messages => {
+        this.setState({
+          messages
+        });
+      });
+  }
+
+  getSentMessageList(userId) {
+    this.setState({
+      isReceived: false
+    });
+    const body = { senderId: userId };
     fetch('/api/message/list/', {
       method: 'POST',
       headers: {
@@ -54,10 +80,14 @@ export default class Message extends React.Component {
 
   handleViewMessageClick() {
     const senderId = event.target.id.split(',')[0];
-    const postId = event.target.id.split(',')[1];
+    const senderName = event.target.id.split(',')[1];
+    const postId = event.target.id.split(',')[2];
+    const recipientId = event.target.id.split(',')[3];
     this.setState({
       postId: postId,
-      senderId: senderId
+      senderId: senderId,
+      senderName: senderName,
+      recipientId: recipientId
     });
     this.setState({
       isMessageDetail: true
@@ -109,15 +139,25 @@ export default class Message extends React.Component {
 
   render() {
     const { userInfo } = this.props;
-    const { handleBackClick, getTimeMsg, handleSearchClick, handleViewMessageClick } = this;
-    const { messages, isMessageDetail, postId, senderId } = this.state;
+    const {
+      handleBackClick,
+      getTimeMsg,
+      handleSearchClick,
+      handleViewMessageClick,
+      getMessageList
+    } = this;
+    const { messages, isMessageDetail, senderId, senderName, postId, recipientId } = this.state;
     return (
       <div>
         <MessageHeader
           postId={postId}
+          userInfo={userInfo}
+          senderId={senderId}
+          senderName={senderName}
           isMessageDetail={isMessageDetail}
           handleBackClick={handleBackClick}
           handleSearchClick={handleSearchClick}
+          getMessageList={getMessageList}
         />
         {messages.length === undefined || messages.length === 0
           ? (
@@ -133,10 +173,12 @@ export default class Message extends React.Component {
               userInfo={userInfo}
               postId={postId}
               senderId={senderId}
+              recipientId={recipientId}
             />
             )
             : (<MessageList
               messages={messages}
+              userInfo={userInfo}
               getTimeMsg={getTimeMsg}
               handleViewMessageClick={handleViewMessageClick}
             />
