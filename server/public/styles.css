@@ -330,8 +330,8 @@ button {
 
 .post-image-container {
   height: 32vh;
-  background-color: lightgray;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: lightgray
 }
 
 .post-description {
@@ -430,4 +430,64 @@ button#message {
 
 .bid-numbers > p {
     font-size: 0.8rem;
+}
+
+.red-underline {
+  text-decoration: underline;
+  color: #CA0101;
+}
+
+/* Bid History */
+.bid-history {
+  height: 42vh;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 1vh 1%;
+  padding: 1vh 1rem;
+  border-radius: 9px;
+  position: relative
+}
+
+.bid-back-icon-container {
+  width: 10%;
+  height: 7%;
+  position: absolute;
+  left: 2%;
+  top: 3%
+}
+
+.bid-back-icon {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+#bid-history {
+  font-size: 1.2rem;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 300;
+}
+
+.bid-table {
+  border-radius: 9px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  padding: 2% 0;
+}
+
+.bid-table > table {
+  margin: auto;
+  font-weight: 300;
+  font-size: 0.9rem;
+  width: 90%;
+}
+
+th {
+  font-weight: 300;
+  font-style: normal;
+}
+
+#no-bid {
+  font-size: 0.9rem;
+  font-weight: 300;
+  margin-bottom: 0;
 }

@@ -251,7 +251,8 @@ export default class SearchPage extends React.Component {
                 ? (
                   <ThumbnailColumn
                     thumbnails={paintings}
-                    setView={this.props.setView} />
+                    setView={this.props.setView}
+                    getPostInfo={this.props.getPostInfo} />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="mt-2 px-1 text-secondary">There are no images</p>
@@ -262,7 +263,8 @@ export default class SearchPage extends React.Component {
                 ? (
                   <ThumbnailColumn
                     thumbnails={photographs}
-                    setView={this.props.setView} />
+                    setView={this.props.setView}
+                    getPostInfo={this.props.getPostInfo} />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="mt-2 px-1 text-secondary">There are no images</p>
@@ -273,7 +275,8 @@ export default class SearchPage extends React.Component {
                 ? (
                   <ThumbnailColumn
                     thumbnails={other}
-                    setView={this.props.setView} />
+                    setView={this.props.setView}
+                    getPostInfo={this.props.getPostInfo} />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="mt-2 px-1 text-secondary">There are no images</p>
