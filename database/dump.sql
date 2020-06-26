@@ -30,7 +30,6 @@ ALTER TABLE ONLY public.watchlists DROP CONSTRAINT watchlists_pk;
 ALTER TABLE ONLY public."user" DROP CONSTRAINT user_pk;
 ALTER TABLE ONLY public."user" DROP CONSTRAINT user_email_key;
 ALTER TABLE ONLY public.post DROP CONSTRAINT post_pk;
-ALTER TABLE ONLY public.post DROP CONSTRAINT "post_imageUrl_key";
 ALTER TABLE ONLY public.message DROP CONSTRAINT message_pk;
 ALTER TABLE ONLY public.comments DROP CONSTRAINT comments_pk;
 ALTER TABLE ONLY public.bid DROP CONSTRAINT bid_pk;
@@ -160,7 +159,7 @@ ALTER SEQUENCE public."comments_commentId_seq" OWNED BY public.comments."comment
 CREATE TABLE public.message (
     "messageId" integer NOT NULL,
     "senderId" integer NOT NULL,
-    "receipientId" integer NOT NULL,
+    "recipientId" integer NOT NULL,
     message text NOT NULL,
     "createdAt" timestamp with time zone DEFAULT '2020-06-22 22:43:37.442217+00'::timestamp with time zone NOT NULL,
     "postId" integer NOT NULL
@@ -343,6 +342,8 @@ ALTER TABLE ONLY public.watchlists ALTER COLUMN "watchlistId" SET DEFAULT nextva
 --
 
 COPY public.bid ("bidId", "bidderId", "postId", "currentBid", "createdAt", "bidEnabled") FROM stdin;
+1	2	1	30	2020-06-22 22:43:37.442217+00	t
+2	3	1	40	2020-06-22 22:43:37.442217+00	t
 \.
 
 
@@ -358,7 +359,7 @@ COPY public.comments ("commentId", "userId", comment, "postId", "createdAt") FRO
 -- Data for Name: message; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-COPY public.message ("messageId", "senderId", "receipientId", message, "createdAt", "postId") FROM stdin;
+COPY public.message ("messageId", "senderId", "recipientId", message, "createdAt", "postId") FROM stdin;
 \.
 
 
@@ -373,6 +374,8 @@ COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startin
 4	2	example4 description	https://i.picsum.photos/id/306/200/200.jpg?hmac=_MA2OQbvCf09ghW0BrkSYh9mOhP-xpHqg2c5joDIRFg	exampleFour	100	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs	\N
 5	3	example5 description	https://i.picsum.photos/id/121/200/200.jpg?hmac=0aiR--xgWy1aIM85HCFMySsuQ7DJJBE6XW_Yv4nqU6s	exampleFive	110	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other	\N
 6	3	example6 description	https://i.picsum.photos/id/460/200/200.jpg?hmac=hL3I5G2p0p6vDGPyV9hergug-KipbUJVxqnnGIEBXg4	exampleSix	510	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other	\N
+70	1	asdf	/images/user-posts/Screen Shot 2020-05-24 at 12.43.59 PM.png	Grim Reaper	10	t	f	2020-06-22 22:43:37.442217+00	2020-06-17	paintings	asef
+71	1	asdf	/images/user-posts/Screen Shot 2020-05-24 at 12.43.59 PM.png	asdf	6	t	f	2020-06-22 22:43:37.442217+00	2020-06-11	paintings	asdf
 \.
 
 
@@ -386,6 +389,8 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 22:43:37.442217+00
 6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 22:43:37.442217+00
 1	Uzair	uzair@lfz.com	uzair1234	//i.imgur.com/Xe4ahew.png	https://i.pinimg.com/originals/91/e0/07/91e00767ce57b0979d8b4c7a2f2ae3b2.jpg	ANIME SIRENS GO UWU UWU UWU UWUUUUU WUUUUU WUUUU	92620	2020-06-22 22:43:37.442217+00
+53	UZair	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
+54	Sarah	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
 \.
 
 
@@ -394,6 +399,7 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 --
 
 COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM stdin;
+1	1	2	2020-06-22
 \.
 
 
@@ -401,7 +407,7 @@ COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM std
 -- Name: bid_bidId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."bid_bidId_seq"', 1, false);
+SELECT pg_catalog.setval('public."bid_bidId_seq"', 2, true);
 
 
 --
@@ -422,21 +428,21 @@ SELECT pg_catalog.setval('public."message_messageId_seq"', 1, false);
 -- Name: post_postId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."post_postId_seq"', 69, true);
+SELECT pg_catalog.setval('public."post_postId_seq"', 71, true);
 
 
 --
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 52, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 54, true);
 
 
 --
 -- Name: watchlists_watchlistId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."watchlists_watchlistId_seq"', 1, false);
+SELECT pg_catalog.setval('public."watchlists_watchlistId_seq"', 1, true);
 
 
 --
@@ -461,14 +467,6 @@ ALTER TABLE ONLY public.comments
 
 ALTER TABLE ONLY public.message
     ADD CONSTRAINT message_pk PRIMARY KEY ("messageId");
-
-
---
--- Name: post post_imageUrl_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.post
-    ADD CONSTRAINT "post_imageUrl_key" UNIQUE ("imageUrl");
 
 
 --
@@ -548,7 +546,7 @@ ALTER TABLE ONLY public.message
 --
 
 ALTER TABLE ONLY public.message
-    ADD CONSTRAINT message_fk1 FOREIGN KEY ("receipientId") REFERENCES public."user"("userId");
+    ADD CONSTRAINT message_fk1 FOREIGN KEY ("recipientId") REFERENCES public."user"("userId");
 
 
 --
