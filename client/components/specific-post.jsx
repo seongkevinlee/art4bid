@@ -1,4 +1,5 @@
 import React from 'react';
+import PostHeader from './post-header';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -57,7 +58,12 @@ export default class SpecificPost extends React.Component {
       }
       return (
         <div className="indiv-post">
-          <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
+          <PostHeader
+            title={postInfo.title}
+            userName={postInfo.userName}
+            watchlist={watchlistInfo}
+          />
+          {/* <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
             <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
               <img
                 onClick={() => this.props.setView('search')}
@@ -73,7 +79,7 @@ export default class SpecificPost extends React.Component {
               <img className="header-icon" src="./images/fire-alt-solid.svg"></img>
               <p className="following mt-2 mb-0"><span>{watchlistInfo}</span> Watching</p>
             </div>
-          </header>
+          </header> */}
           <div className="post-body">
             <div className="post-image-container">
               <img src={postInfo.imageUrl}></img>
