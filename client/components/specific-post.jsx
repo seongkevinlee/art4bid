@@ -1,14 +1,39 @@
 import React from 'react';
+import Modal from './modal';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      profileInfo: null
+      profileInfo: null,
+      isModalOpen: false,
+      userId: null,
+      postId: null,
+      recipientId: null
     };
+    this.handleMessageClick = this.handleMessageClick.bind(this);
+    this.handleModalCloseClick = this.handleModalCloseClick.bind(this);
+  }
+
+  handleMessageClick() {
+    this.setState({
+      isModalOpen: true
+    });
+  }
+
+  handleModalCloseClick() {
+    this.setState({
+      isModalOpen: false
+    });
   }
 
   render() {
+    const { handleMessageClick, handleModalCloseClick } = this;
+    const { isModalOpen } = this.state;
+    // this is for testing
+    const recipientId = this.state.recipientId || 2;
+    const userId = this.state.userId || 1;
+    const postId = this.state.postId || 1;
     return (
       <div className="indiv-post">
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
@@ -40,7 +65,7 @@ export default class SpecificPost extends React.Component {
           <div className="bid-buttons-container d-flex flex-column">
             <input id="bid-offer" type="text" placeholder="$80.00" />
             <button id="submit-bid" type="button">Submit Bid</button>
-            <button id="message" type="button"> Message</button>
+            <button id="message" type="button" onClick={handleMessageClick}> Message</button>
           </div>
           <div className="bid-stats p-3">
             <p id="expire-disclaimer" className="text-center">All bids expire at 12AM PST on expiration date</p>
@@ -58,6 +83,15 @@ export default class SpecificPost extends React.Component {
             </div>
           </div>
         </div>
+        { isModalOpen
+          ? <Modal
+            recipientId={recipientId}
+            userId={userId}
+            postId={postId}
+            handleModalCloseClick={handleModalCloseClick}
+          />
+          : ('')
+        }
       </div>
     );
   }

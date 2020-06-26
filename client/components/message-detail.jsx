@@ -12,6 +12,7 @@ export default class MessageDetail extends React.Component {
     this.handleMessageSend = this.handleMessageSend.bind(this);
     this.sendMessage = this.sendMessage.bind(this);
     this.viewMessageDetail = this.viewMessageDetail.bind(this);
+    this.showMessage = this.showMessage.bind(this);
   }
 
   componentDidMount() {
@@ -65,6 +66,17 @@ export default class MessageDetail extends React.Component {
       });
   }
 
+  showMessage(message, time) {
+    setTimeout(() => {
+      this.setState({
+        message: ''
+      });
+    }, time);
+    this.setState({
+      message: message
+    });
+  }
+
   sendMessage() {
     const { userName, userId } = this.props.userInfo;
     const { message } = this.state;
@@ -76,20 +88,24 @@ export default class MessageDetail extends React.Component {
       postId: postId,
       message: message
     };
-    fetch('/api/message/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(sendMsg)
-    })
-      .then(res => res.json())
-      .then(data => {
-        this.setState({
-          detailMessages: [...this.state.detailMessages, sendMsg]
-        });
+    if (message.length < 1) {
+      this.showMessage('please type your message', 1000);
+    } else {
+      fetch('/api/message/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(sendMsg)
       })
-      .catch(err => console.error(err.message));
+        .then(res => res.json())
+        .then(data => {
+          this.setState({
+            detailMessages: [...this.state.detailMessages, sendMsg]
+          });
+        })
+        .catch(err => console.error(err.message));
+    }
   }
 
   render() {
@@ -97,7 +113,7 @@ export default class MessageDetail extends React.Component {
     const { getTimeMsg, userInfo } = this.props;
     const { handleMessageChange, handleMessageSend } = this;
     return (
-      <div ref={element => { this.element = element; }}>
+      <div ref={element => { this.element = element; }} className="message-detail-box">
         <div>
           {
             detailMessages.map((message, index) => {
@@ -106,9 +122,9 @@ export default class MessageDetail extends React.Component {
               return (
                 <div
                   key={index}
-                  className={`fadeIn ${msgClass}`}>
+                  className={`size-up-down fadeIn ${msgClass}`}>
                   <div>
-                    <span className="col-3 mt-1 ml-1 message-sender">
+                    <span className="col-3 mt-2 ml-1 message-sender">
                       {isMe ? 'Me' : message.senderName}
                     </span>
                     <span className="col mt-2 text-right text-secondary message-time">
@@ -127,21 +143,20 @@ export default class MessageDetail extends React.Component {
         </div>
         <div className="message-padding"></div>
         <div>
-          <div className="input-group mb-5 send-message-custom">
+          <div className="input-group mb-5 fixed-bottom mx-auto send-message-custom">
             <textarea
               autoFocus
-              rows="2"
+              rows="3"
               className="form-control textarea-custom"
-              aria-label="With textarea"
               value={message}
               onChange={handleMessageChange}
               placeholder='type your message'
             ></textarea>
-            <div className="input-group-append">
-              <button
-                className="input-group-text"
-                onClick={handleMessageSend}>SEND</button>
-            </div>
+          </div>
+          <div>
+            <button
+              className="fixed-bottom btn btn-sm btn-danger message-btn-custom"
+              onClick={handleMessageSend}>SEND</button>
           </div>
         </div>
       </div>
