@@ -76,7 +76,9 @@ export default class SpecificPost extends React.Component {
           toggleBidHistory={this.toggleBidHistory}
         />;
       } else if (this.state.bidHistory === 'on') {
-        bodyview = <BidHistory toggleBidHistory={this.toggleBidHistory}/>;
+        bodyview = <BidHistory
+          postId = {this.props.postId}
+          toggleBidHistory={this.toggleBidHistory}/>;
       }
       return (
         <div className="indiv-post">

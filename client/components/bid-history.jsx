@@ -6,18 +6,39 @@ export default class BidHistory extends React.Component {
     this.state = {
       bids: []
     };
-    // this.getBids = this.getBids.bind(this)
+    this.getBids = this.getBids.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.getBids(this.props.bidId)
-  // }
+  componentDidMount() {
+    this.getBids(this.props.postId);
+  }
 
-  // getBids(bidId) {
-
-  // }
+  getBids(postId) {
+    fetch(`/api/bidhistory/${postId}`)
+      .then(res => res.json())
+      .then(bids => this.setState({ bids }));
+  }
 
   render() {
+    const { bids } = this.state;
+    let bidRow;
+    let noBid;
+    if (bids.length > 0) {
+      bidRow = (
+        bids.map(bid => {
+          return (
+            <tr key={bid.bidId}>
+              <td>{bid.bidId}</td>
+              <td>{bid.userName}</td>
+              <td>{new Date(bid.createdAt).toLocaleString().split(',')[0] + ' |' + new Date(bid.createdAt).toLocaleString().split(',')[1]}</td>
+              <td>{`$${bid.currentBid}`}</td>
+            </tr>
+          );
+        })
+      );
+    } else {
+      noBid = <p id="no-bid">There are no bids.</p>;
+    }
     return (
       <div className="bid-history text-center">
         <header>
@@ -37,14 +58,10 @@ export default class BidHistory extends React.Component {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>spout</td>
-                <td>4/20/20 | 120PM</td>
-                <td>$20</td>
-              </tr>
+              {bidRow}
             </tbody>
           </table>
+          {noBid}
         </div>
       </div>
 
