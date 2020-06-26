@@ -420,6 +420,7 @@ button {
   padding: 5%;
   width: 100%;
   margin: 0;
+  height: 30%
 }
 
 button#submit-bid {
@@ -431,6 +432,7 @@ button#submit-bid {
   font-size: 1rem;
   border: 0;
   padding: 5%;
+   height: 30%
 }
 
 button#message {
@@ -440,6 +442,7 @@ button#message {
   font-size: 1rem;
   border: 0;
   padding: 5%;
+   height: 30%
 }
 
 #expire-disclaimer {
