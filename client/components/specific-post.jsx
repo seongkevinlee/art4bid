@@ -1,6 +1,6 @@
 import React from 'react';
 import PostHeader from './post-header';
-import PostBody from './post-bid';
+import PostBody from './post-body';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -8,11 +8,13 @@ export default class SpecificPost extends React.Component {
     this.state = {
       postInfo: null,
       watchlistInfo: null,
-      bidInfo: null
+      bidInfo: null,
+      bidHistory: 'off'
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
     this.getBidInfo = this.getBidInfo.bind(this);
+    this.toggleBidHistory = this.toggleBidHistory.bind(this);
   }
 
   componentDidMount() {
@@ -48,6 +50,10 @@ export default class SpecificPost extends React.Component {
       });
   }
 
+  toggleBidHistory(bidHistoryView) {
+    this.setState({ bidHistory: bidHistoryView });
+  }
+
   render() {
     const { postInfo, watchlistInfo, bidInfo } = this.state;
     if (postInfo && watchlistInfo && bidInfo) {
@@ -56,6 +62,20 @@ export default class SpecificPost extends React.Component {
         highestBid = postInfo.startingBid;
       } else {
         highestBid = bidInfo.highestBid;
+      }
+      let bodyview;
+      if (this.state.bidHistory === 'off') {
+        bodyview = <PostBody
+          description={postInfo.description}
+          highestBid={highestBid}
+          totalBids={bidInfo.totalBids}
+          bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
+          userId={this.props.userId}
+          sellerId={postInfo.sellerId}
+          toggleBidHistory={this.toggleBidHistory}
+        />;
+      } else if (this.state.bidHistory === 'on') {
+        bodyview = <h1>hi</h1>;
       }
       return (
         <div className="indiv-post">
@@ -68,12 +88,7 @@ export default class SpecificPost extends React.Component {
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>
           </div>
-          <PostBody
-            description = {postInfo.description}
-            highestBid = {highestBid}
-            totalBids = {bidInfo.totalBids}
-            bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
-          />
+          {bodyview}
         </div>
       );
     } else {

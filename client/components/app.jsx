@@ -7,6 +7,7 @@ import NavBar from './navbar';
 import CreatePost from './create-post';
 import SpecificPost from './specific-post';
 const UserContext = React.createContext('userInfo');
+export { UserContext };
 
 export default class App extends React.Component {
   constructor(props) {
@@ -63,7 +64,7 @@ export default class App extends React.Component {
     } else if (this.state.view === 'message') {
       pageBody = <Message setView={setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'post') {
-      pageBody = <SpecificPost setView ={setView} postId={this.state.postInfo}/>;
+      pageBody = <SpecificPost setView ={setView} postId={this.state.postInfo} userId={this.state.userInfo.userId}/>;
     } else if (this.state.view === 'create') {
       pageBody = (
         <CreatePost setView={this.setView} userInfo={this.state.userInfo} />

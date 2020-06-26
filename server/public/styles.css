@@ -373,3 +373,8 @@ button#message {
 .bid-numbers > p {
     font-size: 0.8rem;
 }
+
+.red-underline {
+  text-decoration: underline;
+  color: #CA0101;
+}

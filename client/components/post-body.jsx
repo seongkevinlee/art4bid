@@ -1,6 +1,14 @@
 import React from 'react';
 
 export default function PostBody(props) {
+  const userId = props.userId;
+  const sellerId = props.sellerId;
+  let totalBids = <p className="text-right m-0">Total Bids:</p>;
+  let totalBidsNumber = <p className="m-0">{props.totalBids}</p>;
+  if (userId === sellerId) {
+    totalBids = <p onClick={() => props.toggleBidHistory('on')}className="red-underline text-right m-0">Total Bids:</p>;
+    totalBidsNumber = <p onClick={() => props.toggleBidHistory('on')} className="red-underline m-0">{props.totalBids}</p>;
+  }
   return (
     <div>
       <div className="post-description">
@@ -17,12 +25,12 @@ export default function PostBody(props) {
           <div className="bid-numbers d-flex justify-content-between">
             <div className="text-right bid-numbers">
               <p className="text-right m-0">Highest Bid:</p>
-              <p className="text-right m-0">Total Bids:</p>
+              {totalBids}
               <p className="text-right m-0">Expires:</p>
             </div>
             <div className="bid-numbers">
               <p className="m-0">${props.highestBid}</p>
-              <p className="m-0">{props.totalBids}</p>
+              {totalBidsNumber}
               <p className="m-0">{props.bidEnd}</p>
             </div>
           </div>
