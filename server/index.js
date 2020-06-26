@@ -482,6 +482,32 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
       });
     });
 });
+// USER CAN VIEW A SPECIFIC POST - bid history
+app.get('/api/bidhistory/:postId', (req, res, next) => {
+  const postId = Number(req.params.postId);
+  if (!Number.isInteger(postId) || postId < 0) {
+    return res.status(400).json({ error: 'postId must be a positive integer' });
+  }
+  const sql = `
+    select "bid"."bidId", "bid"."bidderId", "bid"."currentBid", "bid"."createdAt","user"."userName"
+    from "bid" join "user" on "bid"."bidderId" = "user"."userId"
+    where "bid"."postId" = $1
+    order by "bidId" asc
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const bidInfo = result.rows;
+      res.status(200).json(bidInfo);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 // USER CAN VIEW POSTS ON PROFILE
 app.get('/api/posts', (req, res, next) => {
   const userId = [req.session.userInfo.userId];

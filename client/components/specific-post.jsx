@@ -1,4 +1,7 @@
 import React from 'react';
+import PostHeader from './post-header';
+import PostBody from './post-body';
+import BidHistory from './bid-history';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -6,11 +9,13 @@ export default class SpecificPost extends React.Component {
     this.state = {
       postInfo: null,
       watchlistInfo: null,
-      bidInfo: null
+      bidInfo: null,
+      bidHistory: 'off'
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
     this.getBidInfo = this.getBidInfo.bind(this);
+    this.toggleBidHistory = this.toggleBidHistory.bind(this);
   }
 
   componentDidMount() {
@@ -46,6 +51,10 @@ export default class SpecificPost extends React.Component {
       });
   }
 
+  toggleBidHistory(bidHistoryView) {
+    this.setState({ bidHistory: bidHistoryView });
+  }
+
   render() {
     const { postInfo, watchlistInfo, bidInfo } = this.state;
     if (postInfo && watchlistInfo && bidInfo) {
@@ -55,55 +64,34 @@ export default class SpecificPost extends React.Component {
       } else {
         highestBid = bidInfo.highestBid;
       }
+      let bodyview;
+      if (this.state.bidHistory === 'off') {
+        bodyview = <PostBody
+          description={postInfo.description}
+          highestBid={highestBid}
+          totalBids={bidInfo.totalBids}
+          bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
+          userId={this.props.userId}
+          sellerId={postInfo.sellerId}
+          toggleBidHistory={this.toggleBidHistory}
+        />;
+      } else if (this.state.bidHistory === 'on') {
+        bodyview = <BidHistory
+          postId = {this.props.postId}
+          toggleBidHistory={this.toggleBidHistory}/>;
+      }
       return (
         <div className="indiv-post">
-          <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
-            <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
-              <img
-                onClick={() => this.props.setView('search')}
-                className="header-icon" src="./images/kindpng.png"></img>
-              <p className="following m-0 invisible">go back</p>
-            </div>
-            <div className="post-header-text">
-              <p id="post-name" className="mb-1">&ldquo;{postInfo.title}&rdquo;</p>
-              <p id="by" className="mb-1">by</p>
-              <p className="m-0">{postInfo.userName}</p>
-            </div>
-            <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
-              <img className="header-icon" src="./images/fire-alt-solid.svg"></img>
-              <p className="following mt-2 mb-0"><span>{watchlistInfo}</span> Watching</p>
-            </div>
-          </header>
-          <div className="post-body">
-            <div className="post-image-container">
-              <img src={postInfo.imageUrl}></img>
-            </div>
-            <div className="post-description">
-              <p className="text-left">{postInfo.description}</p>
-            </div>
+          <PostHeader
+            setView={this.props.setView}
+            title={postInfo.title}
+            userName={postInfo.userName}
+            watchlist={watchlistInfo}
+          />
+          <div className="post-image-container">
+            <img src={postInfo.imageUrl}></img>
           </div>
-          <div className="post-bid-info d-flex align-items-center justify-content-between">
-            <div className="bid-buttons-container d-flex flex-column">
-              <input id="bid-offer" type="text" placeholder="$0" />
-              <button id="submit-bid" type="button">Submit Bid</button>
-              <button id="message" type="button"> Message</button>
-            </div>
-            <div className="bid-stats p-3">
-              <p id="expire-disclaimer" className="text-center">All bids expire at 12AM PST on expiration date</p>
-              <div className="bid-numbers d-flex justify-content-between">
-                <div className="text-right bid-numbers">
-                  <p className="text-right m-0">Highest Bid:</p>
-                  <p className="text-right m-0">Total Bids:</p>
-                  <p className="text-right m-0">Expires:</p>
-                </div>
-                <div className="bid-numbers">
-                  <p className="m-0">${highestBid}</p>
-                  <p className="m-0">{bidInfo.totalBids}</p>
-                  <p className="m-0">{new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          {bodyview}
         </div>
       );
     } else {
