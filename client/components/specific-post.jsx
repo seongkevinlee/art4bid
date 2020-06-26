@@ -65,15 +65,11 @@ export default class SpecificPost extends React.Component {
             userName={postInfo.userName}
             watchlist={watchlistInfo}
           />
-          <div className="post-body">
-            <div className="post-image-container">
-              <img src={postInfo.imageUrl}></img>
-            </div>
-            <div className="post-description">
-              <p className="text-left">{postInfo.description}</p>
-            </div>
+          <div className="post-image-container">
+            <img src={postInfo.imageUrl}></img>
           </div>
           <PostBody
+            description = {postInfo.description}
             highestBid = {highestBid}
             totalBids = {bidInfo.totalBids}
             bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
