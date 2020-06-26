@@ -530,15 +530,33 @@ app.post('/api/bid', (req, res, next) => {
     });
   }
   const sql = `
-    insert into "bid" ("bidderId", "postId", "currentBid")
-    values ($1, $2, $3)
-    RETURNING *
+  select *
+  from "bid"
+  where "postId" = $1
+  and "currentBid" >= $2
+  order by "currentBid" desc
   `;
-  const params = [bidderId, postId, currentBid];
+  const params = [postId, currentBid];
   db.query(sql, params)
     .then(result => {
-      const bid = result.rows[0];
-      res.status(200).json(bid);
+      const higherBid = result.rows[0];
+      if (higherBid) {
+        return res.status(403).json({
+          error: `bid placed must be higher than current highest bid: ${higherBid.currentBid}`
+        });
+      } else if (!higherBid) {
+        const sql = `
+          insert into "bid" ("bidderId", "postId", "currentBid")
+          values ($1, $2, $3)
+          RETURNING *
+        `;
+        const params = [bidderId, postId, currentBid];
+        db.query(sql, params)
+          .then(result => {
+            const bid = result.rows[0];
+            res.status(200).json(bid);
+          });
+      }
     })
     .catch(err => {
       console.error(err);
