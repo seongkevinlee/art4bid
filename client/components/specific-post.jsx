@@ -2,6 +2,7 @@ import React from 'react';
 import PostHeader from './post-header';
 import PostBody from './post-body';
 import BidHistory from './bid-history';
+import Modal from './modal';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -10,12 +11,15 @@ export default class SpecificPost extends React.Component {
       postInfo: null,
       watchlistInfo: null,
       bidInfo: null,
-      bidHistory: 'off'
+      bidHistory: 'off',
+      isModalOpen: false
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
     this.getBidInfo = this.getBidInfo.bind(this);
     this.toggleBidHistory = this.toggleBidHistory.bind(this);
+    this.messageBtnClick = this.messageBtnClick.bind(this);
+    this.handleModalCloseClick = this.handleModalCloseClick.bind(this);
   }
 
   componentDidMount() {
@@ -55,8 +59,22 @@ export default class SpecificPost extends React.Component {
     this.setState({ bidHistory: bidHistoryView });
   }
 
+  messageBtnClick() {
+    this.setState({
+      isModalOpen: true
+    });
+  }
+
+  handleModalCloseClick() {
+    this.setState({
+      isModalOpen: false
+    });
+  }
+
   render() {
-    const { postInfo, watchlistInfo, bidInfo } = this.state;
+    const { postInfo, watchlistInfo, bidInfo, isModalOpen } = this.state;
+    const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
+    const { userId, postId, setView } = this.props;
     if (postInfo && watchlistInfo && bidInfo) {
       let highestBid;
       if (bidInfo.highestBid === null) {
@@ -71,19 +89,20 @@ export default class SpecificPost extends React.Component {
           highestBid={highestBid}
           totalBids={bidInfo.totalBids}
           bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
-          userId={this.props.userId}
+          userId={userId}
           sellerId={postInfo.sellerId}
-          toggleBidHistory={this.toggleBidHistory}
+          toggleBidHistory={toggleBidHistory}
+          messageBtnClick={messageBtnClick}
         />;
       } else if (this.state.bidHistory === 'on') {
         bodyview = <BidHistory
-          postId={this.props.postId}
+          postId={postId}
           toggleBidHistory={this.toggleBidHistory} />;
       }
       return (
         <div className="indiv-post">
           <PostHeader
-            setView={this.props.setView}
+            setView={setView}
             title={postInfo.title}
             userName={postInfo.userName}
             watchlist={watchlistInfo}
@@ -91,7 +110,21 @@ export default class SpecificPost extends React.Component {
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>
           </div>
-          {bodyview}
+          <div>
+            {bodyview}
+          </div>
+          <div>
+            {
+              isModalOpen
+                ? <Modal
+                  userId={userId}
+                  postId={postId}
+                  recipientId={postInfo.sellerId}
+                  handleModalCloseClick={handleModalCloseClick}
+                />
+                : ('')
+            }
+          </div>
         </div>
       );
     } else {
