@@ -15,14 +15,20 @@ export default class App extends React.Component {
       isLoading: false,
       loggedIn: false,
       userInfo: {},
-      view: 'create'
+      view: 'search',
+      postInfo: null
     };
     this.setView = this.setView.bind(this);
     this.login = this.login.bind(this);
+    this.getPostInfo = this.getPostInfo.bind(this);
   }
 
   setView(currentView) {
     this.setState({ view: currentView });
+  }
+
+  getPostInfo(postId) {
+    this.setState({ postInfo: postId });
   }
 
   componentDidMount() {}
@@ -46,18 +52,18 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { login, setView } = this;
+    const { login, setView, getPostInfo } = this;
     let pageBody;
     if (this.state.loggedIn === false) {
       return <LoginPage userInfo={login} />;
     } else if (this.state.view === 'search') {
-      pageBody = <SearchPage setView={setView} />;
+      pageBody = <SearchPage setView={setView} getPostInfo={getPostInfo}/>;
     } else if (this.state.view === 'profile') {
       pageBody = <Profile setView={setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'message') {
       pageBody = <Message setView={setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'post') {
-      pageBody = <SpecificPost setView ={setView} />;
+      pageBody = <SpecificPost setView ={setView} postId={this.state.postInfo}/>;
     } else if (this.state.view === 'create') {
       pageBody = (
         <CreatePost setView={this.setView} userInfo={this.state.userInfo} />
