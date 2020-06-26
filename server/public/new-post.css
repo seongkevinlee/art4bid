@@ -1,9 +1,71 @@
-.newPostPicture {
+.new-post-input {
+  position: absolute;
+  height: 210px;
+  width: 360px;
+  opacity: 0;
+}
+
+select,
+option {
+  text-align-last: center;
+}
+
+.create-new-post-image {
+  background-image: url("./images/create-new-post.png");
+  height: 210px;
+  width: 360px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.title-description {
+  box-shadow: 1px 1px 5px #555 inset;
+  border-radius: 9px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-top: -20px;
+}
+
+.title-description > * {
+  border: none;
+  box-shadow: 0px 0px 0px;
+}
+
+.enter-description {
+  width: 315px;
+  height: 90px;
+  overflow: auto;
+  text-align: center;
+}
+
+.second-half {
+  display: flex;
+  height: 130px;
+}
+
+.category-notes {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 1px 1px 5px #555 inset;
+  border-radius: 9px;
+  width: 65%;
+  align-items: center;
+}
+
+.category-notes > * {
+    border: none;
+  box-shadow: 0px 0px 0px;
+  width: 90%;
+  text-align: center;
 
 }
 
-select, option {
-    text-align-last: center;
-    /* padding-right: 29px; */
-    /* direction: rtl; */
+.bidding-content {
+    width: 28%;
+}
+
+.bidding-content > * {
+    width: 100%;
 }
