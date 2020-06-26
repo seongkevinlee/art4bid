@@ -489,10 +489,10 @@ app.get('/api/bidhistory/:postId', (req, res, next) => {
     return res.status(400).json({ error: 'postId must be a positive integer' });
   }
   const sql = `
-    select "bid".*,
-          "user"."userName"
+    select "bid"."bidId", "bid"."bidderId", "bid"."currentBid", "bid"."createdAt","user"."userName"
     from "bid" join "user" on "bid"."bidderId" = "user"."userId"
     where "bid"."postId" = $1
+    order by "bidId" asc
   `;
   const params = [postId];
   db.query(sql, params)
