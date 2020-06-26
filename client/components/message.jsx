@@ -10,14 +10,14 @@ export default class Message extends React.Component {
       messages: [],
       detailMessages: [],
       isMessageDetail: false,
-      postId: null
+      postId: null,
+      senderId: null
     };
     this.getMessageList = this.getMessageList.bind(this);
     this.getTimeMsg = this.getTimeMsg.bind(this);
     this.handleBackClick = this.handleBackClick.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
     this.handleViewMessageClick = this.handleViewMessageClick.bind(this);
-    this.viewMessageDetail = this.viewMessageDetail.bind(this);
   }
 
   componentDidMount() {
@@ -53,37 +53,15 @@ export default class Message extends React.Component {
   }
 
   handleViewMessageClick() {
-    const { userInfo } = this.props;
-    this.setState({
-      isMessageDetail: true
-    });
     const senderId = event.target.id.split(',')[0];
     const postId = event.target.id.split(',')[1];
     this.setState({
-      postId: postId
+      postId: postId,
+      senderId: senderId
     });
-    this.viewMessageDetail(userInfo.userId, senderId, postId);
-  }
-
-  viewMessageDetail(userId, senderId, postId) {
-    const body = {
-      recipientId: userId,
-      senderId: senderId,
-      postId: postId
-    };
-    fetch('/api/message/detail/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-      .then(res => res.json())
-      .then(messages => {
-        this.setState({
-          detailMessages: messages
-        });
-      });
+    this.setState({
+      isMessageDetail: true
+    });
   }
 
   getTimeMsg(createdAt) {
@@ -130,9 +108,9 @@ export default class Message extends React.Component {
   }
 
   render() {
-    // const { userInfo } = this.props;
+    const { userInfo } = this.props;
     const { handleBackClick, getTimeMsg, handleSearchClick, handleViewMessageClick } = this;
-    const { messages, isMessageDetail, detailMessages, postId } = this.state;
+    const { messages, isMessageDetail, postId, senderId } = this.state;
     return (
       <div>
         <MessageHeader
@@ -151,8 +129,10 @@ export default class Message extends React.Component {
           )
           : isMessageDetail
             ? (<MessageDetail
-              detailMessages={detailMessages}
               getTimeMsg={getTimeMsg}
+              userInfo={userInfo}
+              postId={postId}
+              senderId={senderId}
             />
             )
             : (<MessageList
