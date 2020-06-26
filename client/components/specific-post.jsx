@@ -1,6 +1,7 @@
 import React from 'react';
 import PostHeader from './post-header';
 import PostBody from './post-body';
+import BidHistory from './bid-history';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -75,7 +76,7 @@ export default class SpecificPost extends React.Component {
           toggleBidHistory={this.toggleBidHistory}
         />;
       } else if (this.state.bidHistory === 'on') {
-        bodyview = <h1>hi</h1>;
+        bodyview = <BidHistory toggleBidHistory={this.toggleBidHistory}/>;
       }
       return (
         <div className="indiv-post">
