@@ -108,7 +108,7 @@ export default class SpecificPost extends React.Component {
       );
     } else {
       return (
-        <h1>Loading</h1>
+        <div></div>
       );
     }
 
