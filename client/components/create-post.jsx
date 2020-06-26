@@ -60,12 +60,20 @@ export default class CreatePost extends React.Component {
       category
     } = this.state;
 
-    event.preventDefault();
-
     const formData = new FormData();
 
     // Update the formData object
     formData.append('image', this.state.selectedFile, this.state.imageUrl.name);
+    formData.append('sellerId', sellerId);
+    formData.append('description', description);
+    formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
+    formData.append('title', title);
+    formData.append('startingBid', startingBid);
+    formData.append('biddingEnabled', biddingEnabled);
+    formData.append('isDeleted', isDeleted);
+    formData.append('expiredAt', expiredAt);
+    formData.append('notes', notes);
+    formData.append('category', category);
 
     fetch(`/api/post/image/${'user-posts'}`, {
       method: 'POST',
@@ -78,31 +86,20 @@ export default class CreatePost extends React.Component {
         // eslint-disable-next-line no-console
         console.log('it works');
       })
-      .catch(error => console.error('image error', error));
+      .catch(error => console.error('image uploading error', error));
 
-    fetch('/api/post/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        sellerId,
-        description,
-        imageUrl: `/images/user-posts/${filePathImageURL}`,
-        title,
-        startingBid,
-        biddingEnabled,
-        isDeleted,
-        expiredAt,
-        notes,
-        category
-      })
-    })
-      .then(res => res.json())
-      .then(data => {
-        // eslint-disable-next-line no-console
-        console.log('data', data);
-      });
+    // fetch('/api/post/', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify(json)
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     // eslint-disable-next-line no-console
+    //     console.log('data', data);
+    //   });
   }
 
   render() {

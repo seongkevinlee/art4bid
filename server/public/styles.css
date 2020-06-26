@@ -211,6 +211,22 @@ button {
   border-radius: 6px;
 }
 
+.message-box-sender {
+  width: 80%;
+  margin-left: 2%;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: #e0dcdc;
+  border-radius: 6px;
+}
+
+.message-box-me {
+  width: 80%;
+  margin-left: 18%;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  border-radius: 6px;
+}
+
 .icon-custom {
   font-size: 30px;
   width: 50px;
@@ -219,6 +235,19 @@ button {
 
 .postid-custom {
   font-size: 12px;
+}
+
+.send-message-custom {
+  position: fixed;
+  bottom: 2.9%;
+}
+
+.textarea-custom {
+  resize: none;
+}
+
+.message-padding {
+  height: 150px;
 }
 
 .fade-in {
