@@ -16,8 +16,8 @@ export default class MessageDetail extends React.Component {
   }
 
   componentDidMount() {
-    const { userInfo, senderId, postId } = this.props;
-    this.viewMessageDetail(userInfo.userId, senderId, postId);
+    const { senderId, postId, recipientId } = this.props;
+    this.viewMessageDetail(recipientId, senderId, postId);
     this.scrollToBottom();
   }
 
@@ -86,7 +86,8 @@ export default class MessageDetail extends React.Component {
       senderId: userId,
       recipientId: senderId,
       postId: postId,
-      message: message
+      message: message,
+      createdAt: new Date()
     };
     if (message.length < 1) {
       this.showMessage('please type your message', 1000);

@@ -205,9 +205,15 @@ button {
   font-size: 14px;
 }
 
-.message-box {
+.message-box-list-sender {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: #e0dcdc;
+  border-radius: 6px;
+}
+
+.message-box-list-me {
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
   border-radius: 6px;
 }
 
@@ -240,7 +246,7 @@ button {
 
 .message-list-box{
   position: relative;
-  top: 65px;
+  top: 85px;
 }
 
 .message-detail-box {

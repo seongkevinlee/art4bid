@@ -2,7 +2,16 @@ import React from 'react';
 
 export default class MessageHeader extends React.Component {
   render() {
-    const { postId, isMessageDetail, handleBackClick, handleSearchClick } = this.props;
+    const {
+      postId,
+      senderId,
+      senderName,
+      userInfo,
+      isMessageDetail,
+      handleBackClick,
+      handleSearchClick
+    } = this.props;
+    const displayName = Number(senderId) === Number(userInfo.userId) ? 'Me' : senderName;
     return (
       <div className='message-header bg-white fixed-top'>
         <div className='d-flex justify-content-between col-12 mt-1'>
@@ -27,7 +36,16 @@ export default class MessageHeader extends React.Component {
             </i>
           </div>
         </div>
-        <p className="text-primary postid-custom text-center mb-1">{isMessageDetail ? `postID: ${postId}` : ' '}</p>
+        <div>
+          {isMessageDetail
+            ? (
+              <p className="text-primary postid-custom text-center mb-1">{`Sender: ${displayName} | postID: ${postId}`}</p>
+            )
+            : (
+              <p className="text-secondary postid-custom text-center mb-1">{'click message to view details'}</p>
+            )
+          }
+        </div>
       </div>
     );
   }
