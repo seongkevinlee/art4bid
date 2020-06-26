@@ -7,6 +7,18 @@ export default class PostBody extends React.Component {
       highestBid: null,
       submittedBid: ''
     };
+    this.handleChange = this.handleChange.bind(this);
+    // this.handleSubmit = this.handleSubmid.bind(this);
+  }
+
+  handleChange(event) {
+    const value = event.target.value;
+    this.setState({ submittedBid: value });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    // console.log('it works');
   }
 
   render() {
@@ -25,10 +37,22 @@ export default class PostBody extends React.Component {
         </div>
         <div className="post-bid-info d-flex align-items-center justify-content-between">
           <div className="bid-buttons-container d-flex flex-column">
+
             <form>
-              <input id="bid-offer" type="text" placeholder="$0" />
-              <button id="submit-bid" type="button">Submit Bid</button>
+              <input
+                name="bid-offer"
+                id="bid-offer"
+                type="text"
+                placeholder="$0"
+                value={this.state.submittedBid}
+                onChange={this.handleChange}
+              />
+              <button
+                id="submit-bid"
+                type="submit"
+              >Submit Bid</button>
             </form>
+
             <button id="message" type="button" onClick={() => this.props.messageBtnClick()}> Message</button>
           </div>
           <div className="bid-stats p-3">

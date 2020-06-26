@@ -388,6 +388,10 @@ button {
   width: 35%;
 }
 
+.bid-buttons-container > form {
+  width: 100%;
+}
+
 .bid-stats {
   width: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -404,7 +408,24 @@ button {
   font-size: 0.7rem;
 }
 
-.bid-buttons-container > * {
+.bid-buttons-container > form {
+  padding: 0;
+}
+
+#bid-offer {
+  border: 0;
+  font-weight: 300;
+  font-size: 1rem;
+  border: 0;
+  padding: 5%;
+  width: 100%;
+  margin: 0;
+}
+
+button#submit-bid {
+  background-color: #CA0101;
+  color: white;
+  margin: 5% 0;
   border: 0;
   font-weight: 300;
   font-size: 1rem;
@@ -412,14 +433,13 @@ button {
   padding: 5%;
 }
 
-button#submit-bid {
-  background-color: #CA0101;
-  color: white;
-  margin: 5% 0;
-}
-
 button#message {
   background-color: #C4C4C4;
+  border: 0;
+  font-weight: 300;
+  font-size: 1rem;
+  border: 0;
+  padding: 5%;
 }
 
 #expire-disclaimer {
