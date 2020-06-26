@@ -6,9 +6,10 @@ export default function PostBody(props) {
   let totalBids = <p className="text-right m-0">Total Bids:</p>;
   let totalBidsNumber = <p className="m-0">{props.totalBids}</p>;
   if (userId === sellerId) {
-    totalBids = <p onClick={() => props.toggleBidHistory('on')}className="red-underline text-right m-0">Total Bids:</p>;
+    totalBids = <p onClick={() => props.toggleBidHistory('on')} className="red-underline text-right m-0">Total Bids:</p>;
     totalBidsNumber = <p onClick={() => props.toggleBidHistory('on')} className="red-underline m-0">{props.totalBids}</p>;
   }
+
   return (
     <div>
       <div className="post-description">
@@ -18,7 +19,7 @@ export default function PostBody(props) {
         <div className="bid-buttons-container d-flex flex-column">
           <input id="bid-offer" type="text" placeholder="$0" />
           <button id="submit-bid" type="button">Submit Bid</button>
-          <button id="message" type="button"> Message</button>
+          <button id="message" type="button" onClick={() => props.messageBtnClick()}> Message</button>
         </div>
         <div className="bid-stats p-3">
           <p id="expire-disclaimer" className="text-center">All bids expire at 12AM PST on expiration date</p>

@@ -62,7 +62,6 @@ export default class Modal extends React.Component {
       })
         .then(res => res.json())
         .then(data => {
-          this.showMessage('successfully sent', 1000);
           this.handleModalCancelClick();
         })
         .catch(err => console.error(err.message));
