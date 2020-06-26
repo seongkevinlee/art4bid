@@ -525,8 +525,12 @@ app.get('/api/posts', (req, res, next) => {
 app.post('/api/bid', (req, res, next) => {
   const { bidderId, postId, currentBid } = req.body;
   if (!bidderId || !postId || !currentBid) {
-    res.status(400).json({
+    return res.status(400).json({
       error: 'bidderId, postId, currentBid are all required fields'
+    });
+  } else if (isNaN(Number(currentBid))) {
+    return res.status(400).json({
+      error: 'currentBid must be a number'
     });
   }
   const sql = `
@@ -554,7 +558,7 @@ app.post('/api/bid', (req, res, next) => {
         db.query(sql, params)
           .then(result => {
             const bid = result.rows[0];
-            res.status(200).json(bid);
+            res.status(202).json(bid);
           });
       }
     })
