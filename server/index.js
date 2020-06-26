@@ -520,6 +520,34 @@ app.get('/api/posts', (req, res, next) => {
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
+
+// USER CAN BID ON ART
+app.post('/api/bid', (req, res, next) => {
+  const { bidderId, postId, currentBid } = req.body;
+  if (!bidderId || !postId || !currentBid) {
+    res.status(400).json({
+      error: 'bidderId, postId, currentBid are all required fields'
+    });
+  }
+  const sql = `
+    insert into "bid" ("bidderId", "postId", "currentBid")
+    values ($1, $2, $3)
+    RETURNING *
+  `;
+  const params = [bidderId, postId, currentBid];
+  db.query(sql, params)
+    .then(result => {
+      const bid = result.rows[0];
+      res.status(200).json(bid);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
