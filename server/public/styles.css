@@ -412,37 +412,30 @@ button {
   padding: 0;
 }
 
-#bid-offer {
+#bid-offer,
+button#submit-bid,
+button#message {
   border: 0;
   font-weight: 300;
   font-size: 1rem;
-  border: 0;
   padding: 5%;
+  height: 30%
+}
+
+#bid-offer {
+  border: 0;
   width: 100%;
   margin: 0;
-  height: 30%
 }
 
 button#submit-bid {
   background-color: #CA0101;
   color: white;
   margin: 5% 0;
-  border: 0;
-  font-weight: 300;
-  font-size: 1rem;
-  border: 0;
-  padding: 5%;
-   height: 30%
 }
 
 button#message {
   background-color: #C4C4C4;
-  border: 0;
-  font-weight: 300;
-  font-size: 1rem;
-  border: 0;
-  padding: 5%;
-   height: 30%
 }
 
 #expire-disclaimer {
