@@ -14,7 +14,7 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      loggedIn: false,
+      loggedIn: true,
       userInfo: {},
       view: 'search',
       postInfo: null
@@ -67,7 +67,7 @@ export default class App extends React.Component {
       pageBody = <SpecificPost setView ={setView} postId={this.state.postInfo} userId={this.state.userInfo.userId}/>;
     } else if (this.state.view === 'create') {
       pageBody = (
-        <CreatePost setView={this.setView} userInfo={this.state.userInfo} />
+        <CreatePost setView={this.setView} userInfo={this.state.userInfo}/>
       );
     }
 
