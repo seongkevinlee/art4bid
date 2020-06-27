@@ -568,19 +568,14 @@ app.post('/api/bid', (req, res, next) => {
 });
 
 // USER CAN ADD TO WATCHLISTS
-app.post('/api/watchlists', (req, res, err) => {
-  const { postId, sessionUserId } = req.body;
+app.post('/api/watchlists/:postId', (req, res, err) => {
+  const { postId } = req.params;
 
-  const params = [`${Number(postId)}`, `${Number(sessionUserId)}`];
+  const params = [`${Number(postId)}`, `${req.session.userInfo.userId}`];
 
   const sql = `select *
           from "watchlists"
           where "userId" = $2 and "postId" = $1;`;
-
-  // const sql = `
-  // INSERT INTO "watchlists" ("watchlistId,"postId","userId")
-  //             values ($2, $1, $2)
-  //             returning *`;
 
   db.query(sql, params)
     .then(result => {
@@ -588,14 +583,21 @@ app.post('/api/watchlists', (req, res, err) => {
       const watchlistObject = result && result.rows && result.rows[0];
       if (!watchlistObject) {
         const sql2 = `
-        INSERT INTO "watchlists" ("watchlistId,"postId","userId")
-             values ($2, $1, $2)
+        INSERT INTO "watchlists" ("postId","userId")
+             values ($1, $2)
              returning *`;
         db.query(sql2, params).then(data => {
-          return res.json('added');
+          // console.log('hit');
+          return res.json({ status: 'red' });
         });
       } else {
-        return res.json('exists');
+        const sql3 = `
+        delete from "watchlists"
+        where "userId"= $2 and "postId" = $1`;
+        db.query(sql3, params).then(data => {
+          // console.log('hit2');
+          return res.json({ status: 'black' });
+        });
       }
     })
     .catch(err => {

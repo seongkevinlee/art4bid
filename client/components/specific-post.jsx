@@ -12,7 +12,8 @@ export default class SpecificPost extends React.Component {
       watchlistInfo: null,
       bidInfo: null,
       bidHistory: 'off',
-      isModalOpen: false
+      isModalOpen: false,
+      isWatchlisted: 'bacon'
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
@@ -28,6 +29,7 @@ export default class SpecificPost extends React.Component {
     this.getPostInfo(postId);
     this.getWatchlistInfo(postId);
     this.getBidInfo(postId);
+    // this.addToWatchlist();
   }
 
   getPostInfo(postId) {
@@ -44,8 +46,7 @@ export default class SpecificPost extends React.Component {
       .then(info => {
         const watchlistInfo = info.totalWatchlisters;
         this.setState({ watchlistInfo });
-      }
-      );
+      });
   }
 
   getBidInfo(postId) {
@@ -73,7 +74,21 @@ export default class SpecificPost extends React.Component {
   }
 
   addToWatchlist() {
-
+    // fetch(`/api/watchlists/${Number(this.props.postId)}`, {
+    //   method: 'POST'
+    // })
+    //   .then(res => res.json())
+    //   .then(data => {
+    //     if (data.status === 'red') {
+    //       console.log(this.state.isWatchlisted);
+    //       return this.setState({ isWatchlisted: 'red' });
+    //     } else {
+    //       console.log(this.state.isWatchlisted);
+    //       return this.setState({
+    //         isWatchlisted: 'black'
+    //       });
+    //     }
+    //   });
   }
 
   render() {
@@ -89,20 +104,25 @@ export default class SpecificPost extends React.Component {
       }
       let bodyview;
       if (this.state.bidHistory === 'off') {
-        bodyview = <PostBody
-          description={postInfo.description}
-          highestBid={highestBid}
-          totalBids={bidInfo.totalBids}
-          bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
-          userId={userId}
-          sellerId={postInfo.sellerId}
-          toggleBidHistory={toggleBidHistory}
-          messageBtnClick={messageBtnClick}
-        />;
+        bodyview = (
+          <PostBody
+            description={postInfo.description}
+            highestBid={highestBid}
+            totalBids={bidInfo.totalBids}
+            bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
+            userId={userId}
+            sellerId={postInfo.sellerId}
+            toggleBidHistory={toggleBidHistory}
+            messageBtnClick={messageBtnClick}
+          />
+        );
       } else if (this.state.bidHistory === 'on') {
-        bodyview = <BidHistory
-          postId={postId}
-          toggleBidHistory={this.toggleBidHistory} />;
+        bodyview = (
+          <BidHistory
+            postId={postId}
+            toggleBidHistory={this.toggleBidHistory}
+          />
+        );
       }
       return (
         <div className="indiv-post">
@@ -111,33 +131,29 @@ export default class SpecificPost extends React.Component {
             title={postInfo.title}
             userName={postInfo.userName}
             watchlist={watchlistInfo}
-
+            addToWatchlist={this.addToWatchlist}
+            isWatchlisted={this.isWatchlisted}
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>
           </div>
+          <div>{bodyview}</div>
           <div>
-            {bodyview}
-          </div>
-          <div>
-            {
-              isModalOpen
-                ? <Modal
-                  userId={userId}
-                  postId={postId}
-                  recipientId={postInfo.sellerId}
-                  handleModalCloseClick={handleModalCloseClick}
-                />
-                : ('')
-            }
+            {isModalOpen ? (
+              <Modal
+                userId={userId}
+                postId={postId}
+                recipientId={postInfo.sellerId}
+                handleModalCloseClick={handleModalCloseClick}
+              />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       );
     } else {
-      return (
-        <div></div>
-      );
+      return <div></div>;
     }
-
   }
 }
