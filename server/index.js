@@ -540,7 +540,7 @@ app.post('/api/bid', (req, res, next) => {
   const { bidderId, postId, currentBid } = req.body;
   if (!bidderId || !postId || !currentBid) {
     return res.status(400).json({
-      error: 'bidderId, postId, currentBid are all required fields'
+      error: 'Must be logged in and submit a bid price'
     });
   } else if (isNaN(Number(currentBid)) || Number(currentBid) < 0) {
     return res.status(400).json({
