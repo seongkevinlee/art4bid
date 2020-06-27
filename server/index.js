@@ -512,7 +512,7 @@ app.get('/api/notes/:postId', (req, res, next) => {
   const params = [postId];
   db.query(sql, params)
     .then(result => {
-      const notes = result.rows;
+      const notes = result.rows[0].notes;
       return res.status(200).json(notes);
     })
     .catch(err => {

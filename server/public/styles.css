@@ -427,7 +427,8 @@ button {
 
 #bid-offer,
 button#submit-bid,
-button#message {
+button#message,
+button#edit-post {
   border: 0;
   font-weight: 300;
   font-size: 1rem;
@@ -441,7 +442,8 @@ button#message {
   margin: 0;
 }
 
-button#submit-bid {
+button#submit-bid,
+button#edit-post {
   background-color: #CA0101;
   color: white;
   margin: 5% 0;
@@ -519,4 +521,27 @@ th {
   font-size: 0.9rem;
   font-weight: 300;
   margin-bottom: 0;
+}
+
+/* Notes */
+.notes-container {
+  width: 50%;
+  text-align: center;
+  height: 100%;
+}
+
+.notes-text {
+  height: 57%;
+  overflow: auto;
+}
+
+button#edit-post {
+  width: 75%;
+  margin: 3% 0 0;
+}
+
+.notes-text > p{
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 300;
 }
