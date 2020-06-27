@@ -20,6 +20,7 @@ export default class SpecificPost extends React.Component {
     this.toggleBidHistory = this.toggleBidHistory.bind(this);
     this.messageBtnClick = this.messageBtnClick.bind(this);
     this.handleModalCloseClick = this.handleModalCloseClick.bind(this);
+    this.addToWatchlist = this.addToWatchlist.bind(this);
   }
 
   componentDidMount() {
@@ -71,6 +72,10 @@ export default class SpecificPost extends React.Component {
     });
   }
 
+  addToWatchlist() {
+
+  }
+
   render() {
     const { postInfo, watchlistInfo, bidInfo, isModalOpen } = this.state;
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
@@ -106,6 +111,7 @@ export default class SpecificPost extends React.Component {
             title={postInfo.title}
             userName={postInfo.userName}
             watchlist={watchlistInfo}
+
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>

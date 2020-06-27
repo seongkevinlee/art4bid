@@ -6,6 +6,7 @@ const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 const multer = require('multer');
+// const { Server } = require('http');
 const app = express();
 
 app.use(express.json());
@@ -145,7 +146,18 @@ app.post('/api/post/image/:path', (req, res) => {
       notes,
       category
     } = req.body;
-    if (!sellerId || !description || !imageUrl || !title || !startingBid || !biddingEnabled || !isDeleted || !expiredAt || !notes || !category) {
+    if (
+      !sellerId ||
+      !description ||
+      !imageUrl ||
+      !title ||
+      !startingBid ||
+      !biddingEnabled ||
+      !isDeleted ||
+      !expiredAt ||
+      !notes ||
+      !category
+    ) {
       return res.status(404).json({
         error: 'Some fields are missing!'
       });
@@ -283,23 +295,13 @@ app.patch('/api/post/', (req, res, next) => {
 });
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
-  const {
-    senderId,
-    recipientId,
-    postId,
-    message
-  } = req.body;
+  const { senderId, recipientId, postId, message } = req.body;
   const sql = `
     INSERT INTO "message" ("senderId", "recipientId", "postId", "message", "createdAt")
          VALUES ($1, $2, $3, $4, now())
       RETURNING *
   `;
-  const params = [
-    senderId,
-    recipientId,
-    postId,
-    message
-  ];
+  const params = [senderId, recipientId, postId, message];
   db.query(sql, params)
     .then(result => {
       const message = result.rows[0];
@@ -342,7 +344,7 @@ app.post('/api/message/list/', (req, res, next) => {
       const message = result.rows;
       if (!result.rows[0]) {
         res.status(400).json({
-          error: 'You don\'t have a received message'
+          error: "You don't have a received message"
         });
       } else {
         res.status(200).json(message);
@@ -548,14 +550,13 @@ app.post('/api/bid', (req, res, next) => {
         const sql = `
           insert into "bid" ("bidderId", "postId", "currentBid")
           values ($1, $2, $3)
-          RETURNING *
+          returning *;
         `;
         const params = [bidderId, postId, currentBid];
-        db.query(sql, params)
-          .then(result => {
-            const bid = result.rows[0];
-            res.status(200).json(bid);
-          });
+        db.query(sql, params).then(result => {
+          const bid = result.rows[0];
+          res.status(200).json(bid);
+        });
       }
     })
     .catch(err => {
@@ -563,6 +564,44 @@ app.post('/api/bid', (req, res, next) => {
       res.status(500).json({
         error: 'An unexpected error occurred.'
       });
+    });
+});
+
+// USER CAN ADD TO WATCHLISTS
+app.post('/api/watchlists', (req, res, err) => {
+  const { postId, sessionUserId } = req.body;
+
+  const params = [`${Number(postId)}`, `${Number(sessionUserId)}`];
+
+  const sql = `select *
+          from "watchlists"
+          where "userId" = $2 and "postId" = $1;`;
+
+  // const sql = `
+  // INSERT INTO "watchlists" ("watchlistId,"postId","userId")
+  //             values ($2, $1, $2)
+  //             returning *`;
+
+  db.query(sql, params)
+    .then(result => {
+      // eslint-disable-next-line no-console
+      const watchlistObject = result && result.rows && result.rows[0];
+      if (!watchlistObject) {
+        const sql2 = `
+        INSERT INTO "watchlists" ("watchlistId,"postId","userId")
+             values ($2, $1, $2)
+             returning *`;
+        db.query(sql2, params).then(data => {
+          return res.json('added');
+        });
+      } else {
+        return res.json('exists');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.send({ message: err });
+      // res.status(500).json({ error: 'An unexpected error occurred' });
     });
 });
 
