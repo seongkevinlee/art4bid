@@ -4,9 +4,9 @@ export default class PostBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highestBid: null,
       submittedBid: '',
-      notes: null
+      notes: null,
+      bidAlert: null
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,7 +22,8 @@ export default class PostBody extends React.Component {
     event.preventDefault();
     const { submittedBid } = this.state;
     if (submittedBid[0] === '0') {
-      alert(`${submittedBid} is not a valid number`);
+      const error = `${submittedBid} is not a valid number`;
+      this.setState({ bidAlert: error });
     } else {
       const reqBody = {
         bidderId: this.props.userId,
@@ -38,10 +39,10 @@ export default class PostBody extends React.Component {
         .then(res => res.json())
         .then(bidInfo => {
           if (bidInfo.error) {
-            alert(bidInfo.error);
+            this.setState({ bidAlert: bidInfo.error });
           } else {
             this.props.getBidInfo(this.props.postId);
-            alert('Bid has been successfully submitted');
+            this.setState({ bidAlert: 'Bid has been successfully submitted' });
           }
         })
         .catch(err => console.error(err.message));
@@ -65,8 +66,7 @@ export default class PostBody extends React.Component {
   }
 
   render() {
-    const userId = this.props.userId;
-    const sellerId = this.props.sellerId;
+    const { userId, sellerId } = this.props;
 
     let notesOrBid =
       <div className="bid-buttons-container d-flex flex-column">
@@ -106,6 +106,11 @@ export default class PostBody extends React.Component {
       totalBids = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline text-right m-0">Total Bids:</p>;
       totalBidsNumber = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline m-0">{this.props.totalBids}</p>;
     }
+
+    let modalDisplay = { display: 'none' };
+    if (this.state.bidAlert) {
+      modalDisplay = null;
+    }
     return (
       <div>
         <div className="post-description">
@@ -129,6 +134,19 @@ export default class PostBody extends React.Component {
             </div>
           </div>
         </div>
+        {/* Modal */}
+        <div
+          className="new-post-modal"
+          style={modalDisplay}
+        >
+          <div className="new-post-modal-content">
+            {this.state.bidAlert}
+            <div>
+              <button onClick={() => { this.setState({ bidAlert: null }); }}>Ok</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     );
   }
