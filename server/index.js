@@ -323,13 +323,13 @@ app.post('/api/message/list/', (req, res, next) => {
     });
   }
   const sql = `
-      SELECT "me"."senderName", "me","senderId", "me"."recipientId", "me"."postId", "me"."message", "me"."createdAt" FROM (
-      SELECT DISTINCT ON ("m"."postId", "m"."senderId") "u"."userName" AS "senderName", "m"."senderId", "m"."recipientId", "m"."postId", "m"."message", "m"."createdAt"
+      SELECT "me"."senderName", "me"."senderId", "me"."recipientId", "me"."postId", "me"."message", "me"."createdAt" FROM (
+      SELECT DISTINCT ON ("m"."senderId", "m"."recipientId", "m"."postId") "u"."userName" AS "senderName", "m"."senderId", "m"."recipientId", "m"."postId", "m"."message", "m"."createdAt"
       FROM "message" AS "m"
       JOIN "user" AS "u"
       ON "u"."userId" = "m"."senderId"
       WHERE "m"."recipientId" = $1 OR "m"."senderId" = $1
-      ORDER BY "m"."postId", "m"."senderId", "m"."createdAt" DESC) AS "me"
+      ORDER BY "m"."senderId", "m"."recipientId", "m"."postId" DESC) AS "me"
       ORDER BY "me"."createdAt" DESC
   `;
   const params = [recipientId];
@@ -373,8 +373,8 @@ app.post('/api/message/detail/', (req, res, next) => {
         FROM "message" AS "m"
         JOIN "user" AS "u"
           ON "u"."userId" = "m"."senderId"
-       WHERE "m"."recipientId" IN ($1,$2)
-         AND "m"."senderId" IN ($1,$2)
+       WHERE (("m"."recipientId" = $1 AND "m"."senderId" = $2)
+         OR ("m"."recipientId" = $2 AND "m"."senderId" = $1))
          AND "m"."postId" = $3
     ORDER BY "m"."createdAt" ASC
   `;

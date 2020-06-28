@@ -4,20 +4,15 @@ export default class MessageDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: '',
-      detailMessages: []
+      message: ''
     };
     this.scrollToBottom = this.scrollToBottom.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleMessageSend = this.handleMessageSend.bind(this);
-    this.sendMessage = this.sendMessage.bind(this);
-    this.viewMessageDetail = this.viewMessageDetail.bind(this);
     this.showMessage = this.showMessage.bind(this);
   }
 
   componentDidMount() {
-    const { senderId, postId, recipientId } = this.props;
-    this.viewMessageDetail(recipientId, senderId, postId);
     this.scrollToBottom();
   }
 
@@ -39,31 +34,11 @@ export default class MessageDetail extends React.Component {
   }
 
   handleMessageSend() {
+    const { message } = this.state;
     this.setState({
       message: ''
     });
-    this.sendMessage();
-  }
-
-  viewMessageDetail(userId, senderId, postId) {
-    const body = {
-      recipientId: userId,
-      senderId: senderId,
-      postId: postId
-    };
-    fetch('/api/message/detail/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    })
-      .then(res => res.json())
-      .then(messages => {
-        this.setState({
-          detailMessages: messages
-        });
-      });
+    this.props.sendMessage(message);
   }
 
   showMessage(message, time) {
@@ -77,74 +52,61 @@ export default class MessageDetail extends React.Component {
     });
   }
 
-  sendMessage() {
-    const { userName, userId } = this.props.userInfo;
-    const { message } = this.state;
-    const { postId, senderId } = this.props;
-    const sendMsg = {
-      senderName: userName,
-      senderId: userId,
-      recipientId: senderId,
-      postId: postId,
-      message: message,
-      createdAt: new Date()
-    };
-    if (message.length < 1) {
-      this.showMessage('please type your message', 1000);
-    } else {
-      fetch('/api/message/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(sendMsg)
-      })
-        .then(res => res.json())
-        .then(data => {
-          this.setState({
-            detailMessages: [...this.state.detailMessages, sendMsg]
-          });
-        })
-        .catch(err => console.error(err.message));
-    }
-  }
-
   render() {
-    const { detailMessages, message } = this.state;
-    const { getTimeMsg, userInfo } = this.props;
+    const { message } = this.state;
+    const { detailMessages, getTimeMsg, userInfo, keyword, textBolder } = this.props;
     const { handleMessageChange, handleMessageSend } = this;
     return (
       <div ref={element => { this.element = element; }} className="message-detail-box">
         <div>
-          {
-            detailMessages.map((message, index) => {
-              const isMe = message.senderName === userInfo.userName;
-              const msgClass = isMe ? 'message-box-me' : 'message-box-sender';
-              return (
-                <div
-                  key={index}
-                  className={`size-up-down fadeIn ${msgClass}`}>
-                  <div>
-                    <span className="col-3 mt-2 ml-1 message-sender">
-                      {isMe ? 'Me' : message.senderName}
-                    </span>
-                    <span className="col mt-2 text-right text-secondary message-time">
-                      {getTimeMsg(message.createdAt)}
-                    </span>
-                  </div>
-                  <div>
-                    <div className="col text-dark mb-1 message-content">
-                      <span className="ml-1 text-left">{message.message}</span>
+          {detailMessages.length > 0
+            ? (
+              detailMessages.map((message, index) => {
+                const isMe = message.senderName === userInfo.userName;
+                const msgClass = isMe ? 'message-box-me' : 'message-box-sender';
+                let newMsg = null;
+                if (keyword) {
+                  newMsg = textBolder(message.message, keyword);
+                } else {
+                  newMsg = (
+                    <>
+                      {message.message}
+                    </>
+                  );
+                }
+                return (
+                  <div
+                    key={index}
+                    className={`size-up-down fadeIn ${msgClass}`}>
+                    <div className="d-flex justify-space-between">
+                      <span className="col-3 mt-2 ml-1 message-sender">
+                        {isMe ? 'Me' : message.senderName}
+                      </span>
+                      <span className="col mt-2 text-right text-secondary message-time">
+                        {getTimeMsg(message.createdAt)}
+                      </span>
+                    </div>
+                    <div>
+                      <div className="col text-dark mb-1 message-content">
+                        <span className="ml-1 text-left">{newMsg}</span>
+                      </div>
                     </div>
                   </div>
+                );
+              })
+            )
+            : (
+              <div className='d-flex flex-column align-items-center message-list-box'>
+                <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
+                  <div className='pt-3 pb-3 mx-auto'>You have no messages.</div>
                 </div>
-              );
-            })
+              </div>
+            )
           }
         </div>
         <div className="message-padding"></div>
-        <div>
-          <div className="input-group mb-5 fixed-bottom mx-auto send-message-custom">
+        <div className="mb-5 fixed-bottom send-message-custom mx-auto">
+          <div className="mx-auto">
             <textarea
               autoFocus
               rows="3"
@@ -152,11 +114,9 @@ export default class MessageDetail extends React.Component {
               value={message}
               onChange={handleMessageChange}
               placeholder='type your message'
-            ></textarea>
-          </div>
-          <div>
+            />
             <button
-              className="fixed-bottom btn btn-sm btn-danger message-btn-custom"
+              className="btn btn-sm btn-danger message-btn-custom"
               onClick={handleMessageSend}>SEND</button>
           </div>
         </div>

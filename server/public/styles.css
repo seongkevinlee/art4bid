@@ -51,12 +51,13 @@ input, button {
 /* navbar */
 .navbar {
   height: 10vh;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   width: 375px;
   margin: auto;
+  z-index: 1;
 }
 
 .navbar > div {
@@ -251,7 +252,7 @@ button {
   font-size: 12px;
 }
 
-.message-list-box{
+.message-list-box {
   position: relative;
   top: 85px;
 }
@@ -262,11 +263,12 @@ button {
 }
 
 .message-header {
+  width: 375px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .send-message-custom {
-  width: 95%;
+  width: 375px;
   bottom: 3%;
 }
 
@@ -279,9 +281,41 @@ button {
   height: 160px;
 }
 
+.btn-custom-send {
+  background-color:#CA0303;
+}
+
+.btn-custom {
+  width: 100px;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 9px;
+}
+
 .message-btn-custom {
+  width: 70px;
+  font-size: 18px;
+  background-color:#CA0303;
+  border-radius: 9px;
   bottom: 11%;
-  left: 82%;
+  position: absolute;
+  left: 80%;
+}
+
+.message-search-input {
+  z-index: 1;
+  width: 350px;
+  top: 55px;
+  animation: wide 0.5s ease-in;
+}
+
+@keyframes wide {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 350px;
+  }
 }
 
 .fade-in {
