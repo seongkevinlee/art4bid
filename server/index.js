@@ -666,6 +666,31 @@ app.post('/api/watchlists/:postId', (req, res, err) => {
     });
 });
 
+// USER CAN VIEW A WATCHLIST
+app.get('/api/watchlist/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+  if (!Number.isInteger(userId) || userId < 0) {
+    return res.status(400).json({ error: 'userId must be a positive integer' });
+  }
+  const sql = `
+    SELECT "p".*
+    FROM "post" AS "p"
+    JOIN "watchlists" AS "w"
+    ON "p"."postId" =  "w"."postId"
+    WHERE "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => {
+      return res.status(500).json({
+        error: `An unexpected error occurred ${err.message}`
+      });
+    });
+});
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
