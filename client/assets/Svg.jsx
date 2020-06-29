@@ -7,7 +7,7 @@ export const FireAltIcon = props => {
       focusable="false"
       dataprefix="fas"
       dataicon="fire-alt"
-      className="svg-inline--fa fa-fire-alt fa-w-14"
+      className="svg-inline--fa fa-fire-alt fa-w-14 header-icon"
       role="img"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 448 512"
