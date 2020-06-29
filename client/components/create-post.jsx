@@ -47,6 +47,7 @@ export default class CreatePost extends React.Component {
   }
 
   handleSubmit() {
+    event.preventDefault();
     const {
       sellerId,
       description,
