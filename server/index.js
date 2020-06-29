@@ -566,15 +566,6 @@ app.post('/api/bid', (req, res, next) => {
         });
       } else if (!higherBid) {
         const sql = `
-          insert into "bid" ("bidderId", "postId", "currentBid")
-          values ($1, $2, $3)
-          returning *;
-        `;
-        const params = [bidderId, postId, currentBid];
-        db.query(sql, params).then(result => {
-          const bid = result.rows[0];
-          res.status(200).json(bid);
-        });
         select "startingBid"
         from "post"
         where "postId" = $1
