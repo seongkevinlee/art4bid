@@ -306,7 +306,19 @@ button {
   z-index: 1;
   width: 350px;
   top: 55px;
-  animation: wide 0.5s ease-in;
+  animation: wide 0.2s ease-in;
+}
+
+.message-search-input-cancel-btn {
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  top: 57px;
+  left: 345px;
+  border: none;
+  background-color: none;
+  border-radius: 9px;
+  cursor: pointer;
 }
 
 @keyframes wide {
