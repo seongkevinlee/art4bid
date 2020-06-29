@@ -24,9 +24,11 @@ export default function PostHeader(props) {
       </div>
       <div
         className="header-icon-container d-flex flex-column justify-content-center mt-2"
-        onClick={props.addToWatchlist}
+        onClick={() => { props.addToWatchlist(); }}
       >
-        <FireAltIcon isWatchlisted={props.isWatchlisted}/>
+        <FireAltIcon
+          isWatchlisted={props.isWatchlisted}
+        />
         <p className="following mt-2 mb-0">
           <span>{props.watchlist}</span> Watching
         </p>
