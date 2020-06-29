@@ -143,10 +143,20 @@ button {
   background-color: white;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
 }
 
 .profileImgEdit:active {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.back-container{
+  width: 20%;
+}
+.back-arrow {
+  width: 20px;
+  height: 34px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.7));
 }
 
 .profileImg-container {
@@ -158,6 +168,20 @@ button {
   height: 150px;
   border-radius: 50%;
 }
+#profile-img-upload {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+#cover-img-upload {
+  position: absolute;
+  width: 94%;
+  height: 34%;
+  opacity: 0;
+}
 
 .coverPhotoEdit {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -167,6 +191,7 @@ button {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 
 .coverPhoto {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -206,7 +231,7 @@ button {
 }
 
 .message-postid, .message-time, .message-date {
-  font-size: 8px;
+  font-size: 9px;
 }
 
 .message-content {
@@ -243,7 +268,6 @@ button {
 
 .icon-custom {
   font-size: 30px;
-  width: 50px;
   filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
   text-align: center;
 }
@@ -381,11 +405,11 @@ button {
 }
 
 /* View Specific Post */
-
 .post-header {
   height: 12vh;
   box-sizing: border-box;
 }
+
 
 .post-image-container {
   height: 32vh;
@@ -411,16 +435,16 @@ button {
   margin: 1vh 1%;
 }
 
+
 .header-icon-container {
   width: 20%;
-  height: 90%;
+  height: 100%;
 }
 
 .header-icon {
   width: 100%;
   height: 50%;
   object-fit: contain;
-  filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
 }
 
 .post-header-text > p {
@@ -431,6 +455,15 @@ button {
   font-size: 0.65rem;
 }
 
+.art-info {
+  height: 65vh;
+}
+
+.post-image-container {
+  height: 50%;
+  background-color: lightgray;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 .post-image-container > img {
   width: 100%;
   height: 100%;
@@ -454,6 +487,8 @@ button {
 .bid-stats {
   width: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 1%;
+  padding: 1px;
   border-radius: 9px;
 }
 
@@ -505,8 +540,7 @@ button#message {
   color: #A0A0A0;
 }
 
-.bid-numbers > p {
-    font-size: 0.8rem;
+
 }
 
 .red-underline {
