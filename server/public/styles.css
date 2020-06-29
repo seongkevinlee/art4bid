@@ -2,6 +2,7 @@ body {
   margin: auto;
   width: 375px;
   height: 667px;
+  display: relative;
 }
 
 input, button {
@@ -50,6 +51,13 @@ input, button {
 /* navbar */
 .navbar {
   height: 10vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 375px;
+  margin: auto;
+  z-index: 1;
 }
 
 .navbar > div {
@@ -205,9 +213,15 @@ button {
   font-size: 14px;
 }
 
-.message-box {
+.message-box-list-sender {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: #e0dcdc;
+  border-radius: 6px;
+}
+
+.message-box-list-me {
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
   border-radius: 6px;
 }
 
@@ -238,9 +252,9 @@ button {
   font-size: 12px;
 }
 
-.message-list-box{
+.message-list-box {
   position: relative;
-  top: 65px;
+  top: 85px;
 }
 
 .message-detail-box {
@@ -249,11 +263,12 @@ button {
 }
 
 .message-header {
+  width: 375px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .send-message-custom {
-  width: 95%;
+  width: 375px;
   bottom: 3%;
 }
 
@@ -266,9 +281,41 @@ button {
   height: 160px;
 }
 
+.btn-custom-send {
+  background-color:#CA0303;
+}
+
+.btn-custom {
+  width: 100px;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 9px;
+}
+
 .message-btn-custom {
+  width: 70px;
+  font-size: 18px;
+  background-color:#CA0303;
+  border-radius: 9px;
   bottom: 11%;
-  left: 82%;
+  position: absolute;
+  left: 80%;
+}
+
+.message-search-input {
+  z-index: 1;
+  width: 350px;
+  top: 55px;
+  animation: wide 0.5s ease-in;
+}
+
+@keyframes wide {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 350px;
+  }
 }
 
 .fade-in {
@@ -388,6 +435,10 @@ button {
   width: 35%;
 }
 
+.bid-buttons-container > form {
+  width: 100%;
+}
+
 .bid-stats {
   width: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -404,15 +455,29 @@ button {
   font-size: 0.7rem;
 }
 
-.bid-buttons-container > * {
+.bid-buttons-container > form {
+  padding: 0;
+}
+
+#bid-offer,
+button#submit-bid,
+button#message,
+button#edit-post {
   border: 0;
   font-weight: 300;
   font-size: 1rem;
-  border: 0;
   padding: 5%;
+  height: 30%
 }
 
-button#submit-bid {
+#bid-offer {
+  border: 0;
+  width: 100%;
+  margin: 0;
+}
+
+button#submit-bid,
+button#edit-post {
   background-color: #CA0101;
   color: white;
   margin: 5% 0;
@@ -490,4 +555,30 @@ th {
   font-size: 0.9rem;
   font-weight: 300;
   margin-bottom: 0;
+}
+
+/* Notes */
+.notes-container {
+  width: 50%;
+  text-align: center;
+  height: 85%;
+}
+
+.notes-text {
+  height: 70%;
+  overflow: auto;
+  padding-right: 3%;
+}
+
+button#edit-post {
+  width: 60%;
+  margin: 3% 0 0;
+  padding: 1%;
+  height: 25%
+}
+
+.notes-text > p{
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 300;
 }

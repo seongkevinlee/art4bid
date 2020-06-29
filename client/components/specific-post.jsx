@@ -123,14 +123,16 @@ export default class SpecificPost extends React.Component {
       if (this.state.bidHistory === 'off') {
         bodyview = (
           <PostBody
-            description={postInfo.description}
-            highestBid={highestBid}
-            totalBids={bidInfo.totalBids}
-            bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
-            userId={userId}
-            sellerId={postInfo.sellerId}
-            toggleBidHistory={toggleBidHistory}
-            messageBtnClick={messageBtnClick}
+          postId= {postInfo.postId}
+          description={postInfo.description}
+          highestBid={highestBid}
+          totalBids={bidInfo.totalBids}
+          bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
+          userId={userId}
+          sellerId={postInfo.sellerId}
+          toggleBidHistory={toggleBidHistory}
+          messageBtnClick={messageBtnClick}
+          getBidInfo={this.getBidInfo}
           />
         );
       } else if (this.state.bidHistory === 'on') {

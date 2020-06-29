@@ -4,7 +4,8 @@ export default class Modal extends React.Component {
   constructor() {
     super();
     this.state = {
-      message: ''
+      message: '',
+      isSent: false
     };
     this.handleMessageChange = this.handleMessageChange.bind(this);
     this.handleModalCancelClick = this.handleModalCancelClick.bind(this);
@@ -62,7 +63,13 @@ export default class Modal extends React.Component {
       })
         .then(res => res.json())
         .then(data => {
-          this.handleModalCancelClick();
+          setTimeout(() => {
+            this.handleModalCancelClick();
+          }, 1000);
+          this.setState({
+            message: 'Message is successfully sent.',
+            isSent: true
+          });
         })
         .catch(err => console.error(err.message));
     }
@@ -70,7 +77,7 @@ export default class Modal extends React.Component {
 
   render() {
     const { handleMessageChange, handleModalCancelClick, handleModalSendMessageClick } = this;
-    const { message } = this.state;
+    const { message, isSent } = this.state;
     return (
       <div className="modal fade-in">
         <div className="modal-content">
@@ -78,19 +85,22 @@ export default class Modal extends React.Component {
             <textarea
               autoFocus
               rows="4"
-              className="form-control modal-textarea-custom mx-auto"
+              disabled={isSent}
+              className={`form-control modal-textarea-custom mx-auto ${isSent ? 'text-center bg-white' : ''}`}
               value={message}
               onChange={handleMessageChange}
-              placeholder='type your message'/>
+              placeholder='type your message' />
           </div>
           <div className="text-center mb-3">
             <div>
               <button
                 type="button"
-                className="btn btn-sm btn-danger mx-2 btn-custom"
+                disabled={isSent}
+                className="btn btn-sm mx-2 btn-custom btn-custom-send text-white"
                 onClick={handleModalSendMessageClick}>Send</button>
               <button
                 type="button"
+                disabled={isSent}
                 className="btn btn-sm btn-secondary mx-2 btn-custom"
                 onClick={handleModalCancelClick}>Cancel</button>
             </div>

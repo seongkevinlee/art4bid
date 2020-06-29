@@ -58,17 +58,16 @@ app.get('/api/post/:location', (req, res, next) => {
     .then(result => {
       const posts = result.rows;
       if (!posts.length) {
-        res.status(400).json({
+        return res.status(400).json({
           error: `Cannot find posts in area ${location}`
         });
       } else {
-        res.json(posts);
+        return res.json(posts);
       }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -183,26 +182,25 @@ app.post('/api/post/image/:path', (req, res) => {
       .then(result => {
         const post = result.rows[0];
         if (!post) {
-          res.status(400).json({
+          return res.status(400).json({
             error: 'Failed to create post'
           });
         } else {
-          res.json(post);
+          return res.json(post);
         }
       })
       .catch(err => {
-        console.error(err);
-        res.status(500).json({
-          error: 'An unexpected error occurred.'
+        return res.status(500).json({
+          error: `An unexpected error occurred. ${err.message}`
         });
       });
 
     if (err) {
-      res.status(400).json({
+      return res.status(400).json({
         error: 'Failed to upload an image'
       });
     } else {
-      res.status(200).json();
+      return res.status(200).json();
     }
   });
 });
@@ -232,9 +230,8 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
       }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -279,17 +276,16 @@ app.patch('/api/post/', (req, res, next) => {
     .then(result => {
       const post = result.rows[0];
       if (!post) {
-        res.status(400).json({
+        return res.status(400).json({
           error: 'Failed to update post'
         });
       } else {
-        res.status(202).json(post);
+        return res.status(202).json(post);
       }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -306,36 +302,36 @@ app.post('/api/message/', (req, res, next) => {
     .then(result => {
       const message = result.rows[0];
       if (!message) {
-        res.status(400).json({
+        return res.status(400).json({
           error: `Failed to send a message ${message}`
         });
       } else {
-        res.status(202).json(message);
+        return res.status(202).json(message);
       }
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
 // USER CAN VIEW THE LISTS OF RECEIVED PRIVATE MESSAGES
 app.post('/api/message/list/', (req, res, next) => {
-  const { recipientId } = req.body;
-  if (!recipientId) {
-    res.status(400).json({
+  const { recipientId, senderId } = req.body;
+  if (!recipientId && !senderId) {
+    return res.status(400).json({
       error: 'userId is required'
     });
   }
   const sql = `
-      SELECT "me"."senderName", "me","senderId", "me"."postId", "me"."message", "me"."createdAt" FROM (
-      SELECT DISTINCT ON ("m"."postId", "m"."senderId") "u"."userName" AS "senderName", "m"."senderId", "m"."postId", "m"."message", "m"."createdAt"
+      SELECT "me"."senderName", "me"."senderId", "me"."recipientId", "me"."postId", "me"."message", "me"."createdAt" FROM (
+      SELECT DISTINCT ON ("m"."senderId", "m"."recipientId", "m"."postId") "u"."userName" AS "senderName", "m"."senderId", "m"."recipientId", "m"."postId", "m"."message", "m"."createdAt"
       FROM "message" AS "m"
       JOIN "user" AS "u"
       ON "u"."userId" = "m"."senderId"
-      WHERE "m"."recipientId" = $1
-      ORDER BY "m"."postId", "m"."senderId", "m"."createdAt" DESC) AS "me"
+      WHERE "m"."recipientId" = $1 OR "m"."senderId" = $1
+      ORDER BY "m"."senderId", "m"."recipientId", "m"."postId" DESC) AS "me"
       ORDER BY "me"."createdAt" DESC
   `;
   const params = [recipientId];
@@ -343,17 +339,16 @@ app.post('/api/message/list/', (req, res, next) => {
     .then(result => {
       const message = result.rows;
       if (!result.rows[0]) {
-        res.status(400).json({
-          error: "You don't have a received message"
+        return res.status(400).json({
+          error: 'You don\'t have a received message'
         });
       } else {
-        res.status(200).json(message);
+        return res.status(200).json(message);
       }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).send({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -361,17 +356,17 @@ app.post('/api/message/list/', (req, res, next) => {
 app.post('/api/message/detail/', (req, res, next) => {
   const { recipientId, senderId, postId } = req.body;
   if (!recipientId) {
-    res.status(400).json({
+    return res.status(400).json({
       error: 'userId is required'
     });
   }
   if (!senderId) {
-    res.status(400).json({
+    return res.status(400).json({
       error: 'senderId is required'
     });
   }
   if (!postId) {
-    res.status(400).json({
+    return res.status(400).json({
       error: 'postId is required'
     });
   }
@@ -380,8 +375,8 @@ app.post('/api/message/detail/', (req, res, next) => {
         FROM "message" AS "m"
         JOIN "user" AS "u"
           ON "u"."userId" = "m"."senderId"
-       WHERE "m"."recipientId" IN ($1,$2)
-         AND "m"."senderId" IN ($1,$2)
+       WHERE (("m"."recipientId" = $1 AND "m"."senderId" = $2)
+         OR ("m"."recipientId" = $2 AND "m"."senderId" = $1))
          AND "m"."postId" = $3
     ORDER BY "m"."createdAt" ASC
   `;
@@ -390,17 +385,16 @@ app.post('/api/message/detail/', (req, res, next) => {
     .then(result => {
       const message = result.rows;
       if (!result.rows[0]) {
-        res.status(400).json({
+        return res.status(404).json({
           error: `You don't have a received message from user ${senderId}`
         });
       } else {
-        res.status(200).json(message);
+        return res.status(200).json(message);
       }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -429,9 +423,8 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       }
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -453,9 +446,8 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
       return res.status(200).json(watchlistCounts);
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred ${err.message}`
       });
     });
 });
@@ -475,12 +467,11 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const bidInfo = result.rows[0];
-      res.status(200).json(bidInfo);
+      return res.status(200).json(bidInfo);
     })
     .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'An unexpected error occurred.'
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -500,12 +491,35 @@ app.get('/api/bidhistory/:postId', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const bidInfo = result.rows;
-      res.status(200).json(bidInfo);
+      return res.status(200).json(bidInfo);
     })
     .catch(err => {
-      console.error(err);
       res.status(500).json({
-        error: 'An unexpected error occurred.'
+        error: `An unexpected error occurred. ${err.message}`
+      });
+    });
+});
+
+// USER CAN VIEW A SPECIFIC POST - notes
+app.get('/api/notes/:postId', (req, res, next) => {
+  const postId = Number(req.params.postId);
+  if (!Number.isInteger(postId) || postId < 0) {
+    return res.status(400).json({ error: 'postId must be a positive integer' });
+  }
+  const sql = `
+  select "notes"
+  from "post"
+  where "postId" = $1
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const notes = result.rows[0].notes;
+      return res.status(200).json(notes);
+    })
+    .catch(err => {
+      res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
       });
     });
 });
@@ -527,12 +541,16 @@ app.get('/api/posts', (req, res, next) => {
 app.post('/api/bid', (req, res, next) => {
   const { bidderId, postId, currentBid } = req.body;
   if (!bidderId || !postId || !currentBid) {
-    res.status(400).json({
-      error: 'bidderId, postId, currentBid are all required fields'
+    return res.status(400).json({
+      error: 'Must be logged in and submit a bid price'
+    });
+  } else if (isNaN(Number(currentBid)) || Number(currentBid) < 0) {
+    return res.status(400).json({
+      error: 'currentBid must be a postive number'
     });
   }
   const sql = `
-  select "postId", "currentBid"
+  select "postId", "currentBid", "bidderId"
   from "bid"
   where "postId" = $1
   and "currentBid" >= $2
@@ -544,7 +562,7 @@ app.post('/api/bid', (req, res, next) => {
       const higherBid = result.rows[0];
       if (higherBid) {
         return res.status(403).json({
-          error: `bid placed must be higher than current highest bid: ${higherBid.currentBid}`
+          error: `Bid placed must be higher than current highest bid: $${higherBid.currentBid}`
         });
       } else if (!higherBid) {
         const sql = `
@@ -557,6 +575,32 @@ app.post('/api/bid', (req, res, next) => {
           const bid = result.rows[0];
           res.status(200).json(bid);
         });
+        select "startingBid"
+        from "post"
+        where "postId" = $1
+        `;
+        const params = [postId];
+        db.query(sql, params)
+          .then(result => {
+            const post = result.rows[0];
+            if (currentBid < post.startingBid) {
+              return res.status(403).json({
+                error: `Bid placed must be higher than current highest bid: $${post.startingBid}`
+              });
+            } else {
+              const sql = `
+                insert into "bid" ("bidderId", "postId", "currentBid")
+                values ($1, $2, $3)
+                RETURNING *
+              `;
+              const params = [bidderId, postId, currentBid];
+              db.query(sql, params)
+                .then(result => {
+                  const bid = result.rows[0];
+                  res.status(202).json(bid);
+                });
+            }
+          });
       }
     })
     .catch(err => {
@@ -642,11 +686,10 @@ app.use('/api', (req, res, next) => {
 });
 app.use((err, req, res, next) => {
   if (err instanceof ClientError) {
-    res.status(err.status).json({ error: err.message });
+    return res.status(err.status).json({ error: err.message });
   } else {
-    console.error(err);
-    res.status(500).json({
-      error: 'an unexpected error occurred'
+    return res.status(500).json({
+      error: `An unexpected error occurred. ${err.message}`
     });
   }
 });
