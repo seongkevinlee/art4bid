@@ -10,6 +10,7 @@ export default function NavBar(props) {
 
   switch (view) {
     case 'search':
+    case 'post':
       searchIcon = './images/search-red.png';
       break;
     case 'message':
@@ -27,7 +28,7 @@ export default function NavBar(props) {
   }
 
   return (
-    <div className="navbar bg-white fixed-bottom p-0">
+    <div className="navbar bg-white p-0">
       <div>
         <img id="search" className="nav-icon" src={searchIcon} onClick={() => props.setView('search')}></img>
       </div>

@@ -2,6 +2,7 @@ body {
   margin: auto;
   width: 375px;
   height: 667px;
+  display: relative;
 }
 
 input, button {
@@ -50,6 +51,13 @@ input, button {
 /* navbar */
 .navbar {
   height: 10vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 375px;
+  margin: auto;
+  z-index: 1;
 }
 
 .navbar > div {
@@ -219,7 +227,7 @@ button {
 }
 
 .message-sender {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .message-postid, .message-time, .message-date {
@@ -227,26 +235,137 @@ button {
 }
 
 .message-content {
-  font-size: 16px;
+  font-size: 14px;
 }
 
-.message-box {
+.message-box-list-sender {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: #e0dcdc;
+  border-radius: 6px;
+}
+
+.message-box-list-me {
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
+  border-radius: 6px;
+}
+
+.message-box-sender {
+  width: 80%;
+  margin-left: 2%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: #e0dcdc;
+  border-radius: 6px;
+}
+
+.message-box-me {
+  width: 80%;
+  margin-left: 18%;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: white;
   border-radius: 6px;
 }
 
 .icon-custom {
   font-size: 30px;
   filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
+  text-align: center;
 }
 
 .postid-custom {
   font-size: 12px;
 }
 
+.message-list-box {
+  position: relative;
+  top: 85px;
+}
+
+.message-detail-box {
+  position: relative;
+  top: 85px;
+}
+
+.message-header {
+  width: 375px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.send-message-custom {
+  width: 375px;
+  bottom: 3%;
+}
+
+.textarea-custom {
+  resize: none;
+  border-radius: 6px;
+}
+
+.message-padding {
+  height: 160px;
+}
+
+.btn-custom-send {
+  background-color:#CA0303;
+}
+
+.btn-custom {
+  width: 100px;
+  height: 40px;
+  font-size: 18px;
+  border-radius: 9px;
+}
+
+.message-btn-custom {
+  width: 70px;
+  font-size: 18px;
+  background-color:#CA0303;
+  border-radius: 9px;
+  bottom: 11%;
+  position: absolute;
+  left: 80%;
+}
+
+.message-search-input {
+  z-index: 1;
+  width: 350px;
+  top: 55px;
+  animation: wide 0.2s ease-in;
+}
+
+.message-search-input-cancel-btn {
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  top: 57px;
+  left: 345px;
+  border: none;
+  background-color: none;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+@keyframes wide {
+  from {
+    width: 0px;
+  }
+  to {
+    width: 350px;
+  }
+}
+
 .fade-in {
   animation: fadeIn 1s ease-in;
+}
+
+.size-up-down {
+  animation: sizeUpDown 0.2s ease-in;
+}
+
+@keyframes sizeUpDown {
+  0%   {transform: scale(1); }
+  50%  {transform: scale(1.02);}
+  100% {transform: scale(1);}
 }
 
 @keyframes fadeIn {
@@ -258,12 +377,64 @@ button {
   }
 }
 
-/* Specific Post */
+/* modal */
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.3);
+}
 
+.modal-content {
+  background-color: rgba(255, 255, 255, 1);
+  margin: 30% auto;
+  width: 90%;
+  border-radius: 15px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.modal-textarea-custom {
+  width: 95%;
+  resize: none;
+  border: none;
+}
+
+/* View Specific Post */
 .post-header {
   height: 12vh;
   box-sizing: border-box;
 }
+
+
+.post-image-container {
+  height: 32vh;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background-color: lightgray
+}
+
+.post-description {
+  height: 21vh;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 1vh 1%;
+  padding: 0 1rem;
+  border-radius: 9px;
+  overflow: auto;
+  text-align: center;
+}
+
+.post-bid-info {
+  height: 22vh;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  padding: 0 5%;
+  border-radius: 9px;
+  margin: 1vh 1%;
+}
+
 
 .header-icon-container {
   width: 20%;
@@ -299,10 +470,161 @@ button {
   object-fit: contain;
 }
 
-.post-description {
+.post-description > p {
+  font-size: 0.78rem;
+  margin-bottom: 0;
+  font-weight: 300;
+}
+
+.bid-buttons-container {
+  width: 35%;
+}
+
+.bid-buttons-container > form {
+  width: 100%;
+}
+
+.bid-stats {
+  width: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin: 1%;
   padding: 1px;
   border-radius: 9px;
+}
 
+#post-name {
+  font-weight: 300;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+#by {
+  font-weight: 300;
+  font-size: 0.7rem;
+}
+
+.bid-buttons-container > form {
+  padding: 0;
+}
+
+#bid-offer,
+button#submit-bid,
+button#message,
+button#edit-post {
+  border: 0;
+  font-weight: 300;
+  font-size: 1rem;
+  padding: 5%;
+  height: 30%
+}
+
+#bid-offer {
+  border: 0;
+  width: 100%;
+  margin: 0;
+}
+
+button#submit-bid,
+button#edit-post {
+  background-color: #CA0101;
+  color: white;
+  margin: 5% 0;
+}
+
+button#message {
+  background-color: #C4C4C4;
+}
+
+#expire-disclaimer {
+  font-size: 0.6rem;
+  margin-bottom: 0.5vh;
+  color: #A0A0A0;
+}
+
+
+}
+
+.red-underline {
+  text-decoration: underline;
+  color: #CA0101;
+}
+
+/* Bid History */
+.bid-history {
+  height: 42vh;
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 1vh 1%;
+  padding: 1vh 1rem;
+  border-radius: 9px;
+  position: relative
+}
+
+.bid-back-icon-container {
+  width: 10%;
+  height: 7%;
+  position: absolute;
+  left: 2%;
+  top: 3%
+}
+
+.bid-back-icon {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+#bid-history {
+  font-size: 1.2rem;
+  font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 300;
+}
+
+.bid-table {
+  border-radius: 9px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  overflow-y: auto;
+  padding: 2% 0;
+}
+
+.bid-table > table {
+  margin: auto;
+  font-weight: 300;
+  font-size: 0.9rem;
+  width: 90%;
+}
+
+th {
+  font-weight: 300;
+  font-style: normal;
+}
+
+#no-bid {
+  font-size: 0.9rem;
+  font-weight: 300;
+  margin-bottom: 0;
+}
+
+/* Notes */
+.notes-container {
+  width: 50%;
+  text-align: center;
+  height: 85%;
+}
+
+.notes-text {
+  height: 70%;
+  overflow: auto;
+  padding-right: 3%;
+}
+
+button#edit-post {
+  width: 60%;
+  margin: 3% 0 0;
+  padding: 1%;
+  height: 25%
+}
+
+.notes-text > p{
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 300;
 }

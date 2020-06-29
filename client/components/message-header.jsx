@@ -1,31 +1,101 @@
 import React from 'react';
 
 export default class MessageHeader extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      search: ''
+    };
+    this.handleSearchClick = this.handleSearchClick.bind(this);
+    this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
+    this.handleBackBtnClick = this.handleBackBtnClick.bind(this);
+  }
+
+  handleSearchClick() {
+    this.setState({
+      search: ''
+    });
+    this.props.searchKeyword('');
+    this.props.searchToggle();
+  }
+
+  handleSearchInputChange() {
+    if (event.target.value.length < 2) {
+      event.target.value = event.target.value.trim();
+    }
+    this.setState({
+      search: event.target.value.trim()
+    });
+    this.props.searchKeyword(event.target.value.trim());
+  }
+
+  handleBackBtnClick() {
+    this.handleSearchClick();
+    this.props.handleBackClick();
+  }
+
   render() {
-    const { postId, isMessageDetail, handleBackClick, handleSearchClick } = this.props;
+    const {
+      postId,
+      senderId,
+      senderName,
+      userInfo,
+      isMessageDetail,
+      isSearch
+    } = this.props;
+    const { handleBackBtnClick } = this;
+    const { handleSearchClick, handleSearchInputChange } = this;
+    const { search } = this.state;
+    const displayName = Number(senderId) === Number(userInfo.userId) ? 'Me' : senderName;
     return (
-      <div className='d-flex flex-column align-items-center'>
-        <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
+      <div className={`mx-auto message-header fixed-top ${isSearch ? 'bg-light' : 'bg-white'}`}>
+        <div className='d-flex justify-content-between col-12 mt-1'>
           <div className="my-auto icon-custom">
             {isMessageDetail
               ? (
                 <i
                   className="fas fa-chevron-left"
-                  onClick={handleBackClick}>
+                  onClick={handleBackBtnClick}>
                 </i>
               )
               : ('')
             }
           </div>
           <div>
-            <div className='header-title pt-3 mb-1 mx-auto'>MESSAGE</div>
-            <p className="text-primary postid-custom">{isMessageDetail ? `postID: ${postId}` : ' '}</p>
+            <div className='header-title pt-2 mx-auto'>MESSAGE</div>
           </div>
           <div className="my-auto icon-custom">
             <i
+              style={{ display: isSearch ? 'none' : 'block' }}
               className="fas fa-search"
               onClick={handleSearchClick}>
             </i>
+          </div>
+        </div>
+        <div>
+          {isMessageDetail
+            ? (
+              <p className="text-primary postid-custom text-center mb-1">{`Sender: ${displayName} | postID: ${postId}`}</p>
+            )
+            : (
+              <p className="text-secondary postid-custom text-center mb-1">{'click message to view details'}</p>
+            )
+          }
+        </div>
+        <div>
+          <div style={{ display: isSearch ? 'block' : 'none' }} >
+            <input
+              autoFocus
+              type="text"
+              className="mx-auto border-0 fixed-top message-search-input"
+              placeholder={`${isMessageDetail ? 'search message' : 'search sender'}`}
+              onChange={handleSearchInputChange}
+              value={search}
+            />
+            <div
+              className="message-search-input-cancel-btn"
+              onClick={handleSearchClick}
+            ><i className="fas fa-times"></i></div>
           </div>
         </div>
       </div>
