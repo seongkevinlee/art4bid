@@ -89,14 +89,14 @@ export default class Modal extends React.Component {
               className={`form-control modal-textarea-custom mx-auto ${isSent ? 'text-center bg-white' : ''}`}
               value={message}
               onChange={handleMessageChange}
-              placeholder='type your message'/>
+              placeholder='type your message' />
           </div>
           <div className="text-center mb-3">
             <div>
               <button
                 type="button"
                 disabled={isSent}
-                className="btn btn-sm btn-danger mx-2 btn-custom"
+                className="btn btn-sm mx-2 btn-custom btn-custom-send text-white"
                 onClick={handleModalSendMessageClick}>Send</button>
               <button
                 type="button"

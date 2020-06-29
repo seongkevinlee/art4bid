@@ -8,19 +8,27 @@ export default class Message extends React.Component {
     super(props);
     this.state = {
       messages: [],
+      originalMessages: [],
+      isFirstSearch: true,
       detailMessages: [],
       isMessageDetail: false,
       postId: null,
       senderId: null,
       isReceived: true,
-      recipientId: null
+      recipientId: null,
+      isSearch: false,
+      keyword: null
     };
     this.getMessageList = this.getMessageList.bind(this);
     this.getSentMessageList = this.getSentMessageList.bind(this);
     this.getTimeMsg = this.getTimeMsg.bind(this);
     this.handleBackClick = this.handleBackClick.bind(this);
-    this.handleSearchClick = this.handleSearchClick.bind(this);
     this.handleViewMessageClick = this.handleViewMessageClick.bind(this);
+    this.searchKeyword = this.searchKeyword.bind(this);
+    this.viewMessageDetail = this.viewMessageDetail.bind(this);
+    this.searchToggle = this.searchToggle.bind(this);
+    this.textBolder = this.textBolder.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +50,10 @@ export default class Message extends React.Component {
     })
       .then(res => res.json())
       .then(messages => {
+        if (messages.error) {
+          // eslint-disable-next-line no-console
+          console.log(messages.error);
+        }
         this.setState({
           messages
         });
@@ -62,20 +74,120 @@ export default class Message extends React.Component {
     })
       .then(res => res.json())
       .then(messages => {
+        if (messages.error) {
+          // eslint-disable-next-line no-console
+          console.log(messages.error);
+        }
         this.setState({
-          messages
+          messages: messages
         });
       });
   }
 
+  viewMessageDetail(senderId, postId, recipientId) {
+    const body = {
+      recipientId: recipientId,
+      senderId: senderId,
+      postId: postId
+    };
+    fetch('/api/message/detail/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+      .then(res => res.json())
+      .then(messages => {
+        if (messages.error) {
+          // eslint-disable-next-line no-console
+          console.log(messages.error);
+        }
+        this.setState({
+          detailMessages: messages
+        });
+      });
+  }
+
+  sendMessage(message) {
+    const { postId, senderId } = this.state;
+    const { userInfo } = this.props;
+    const { userName, userId } = userInfo;
+    const sendMsg = {
+      senderName: userName,
+      senderId: userId,
+      recipientId: senderId,
+      postId: postId,
+      message: message,
+      createdAt: new Date()
+    };
+    if (message.length < 1) {
+      this.showMessage('please type your message', 1000);
+    } else {
+      fetch('/api/message/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(sendMsg)
+      })
+        .then(res => res.json())
+        .then(data => {
+          this.setState({
+            detailMessages: [...this.state.detailMessages, sendMsg]
+          });
+        })
+        .catch(err => console.error(err.message));
+    }
+  }
+
   handleBackClick() {
     this.setState({
-      isMessageDetail: false
+      isMessageDetail: false,
+      isFirstSearch: true,
+      isSearch: false,
+      messages: this.state.originalMessages
+    });
+    const { userInfo } = this.props;
+    this.getMessageList(userInfo.userId);
+  }
+
+  searchToggle() {
+    this.setState({
+      isSearch: !this.state.isSearch
     });
   }
 
-  handleSearchClick() {
-
+  searchKeyword(keyword) {
+    let arr = [];
+    const { isFirstSearch, isMessageDetail } = this.state;
+    if (isFirstSearch) {
+      arr = isMessageDetail ? [...this.state.detailMessages] : [...this.state.messages];
+      this.setState({
+        originalMessages: arr,
+        isFirstSearch: false
+      });
+    } else {
+      arr = [...this.state.originalMessages];
+    }
+    const newArr = arr.filter(obj => {
+      if (isMessageDetail) {
+        return obj.message.toLowerCase().includes(keyword.toLowerCase());
+      } else {
+        return obj.senderName.toLowerCase().includes(keyword.toLowerCase());
+      }
+    });
+    if (isMessageDetail) {
+      this.setState({
+        detailMessages: newArr,
+        keyword
+      });
+    } else {
+      this.setState({
+        messages: newArr,
+        keyword
+      });
+    }
   }
 
   handleViewMessageClick() {
@@ -87,11 +199,34 @@ export default class Message extends React.Component {
       postId: postId,
       senderId: senderId,
       senderName: senderName,
-      recipientId: recipientId
+      recipientId: recipientId,
+      messages: this.state.originalMessages
     });
+    this.viewMessageDetail(senderId, postId, recipientId);
     this.setState({
-      isMessageDetail: true
+      isMessageDetail: true,
+      isFirstSearch: true,
+      isSearch: false
     });
+  }
+
+  textBolder(text, boldStr) {
+    const keyword = new RegExp(boldStr, 'i');
+    const array = text.split(keyword);
+    const keyIndex = text.toLowerCase().indexOf(boldStr.toLowerCase());
+    const originalKeyword = text.substring(keyIndex, keyIndex + boldStr.length);
+    return (
+      <>
+        {array.map((item, index) => (
+          <span key={index}>
+            {item}
+            {index !== array.length - 1 && (
+              <b className="text-dark bg-warning">{originalKeyword}</b>
+            )}
+          </span>
+        ))}
+      </>
+    );
   }
 
   getTimeMsg(createdAt) {
@@ -142,11 +277,25 @@ export default class Message extends React.Component {
     const {
       handleBackClick,
       getTimeMsg,
-      handleSearchClick,
       handleViewMessageClick,
-      getMessageList
+      getMessageList,
+      searchKeyword,
+      viewMessageDetail,
+      sendMessage,
+      searchToggle,
+      textBolder
     } = this;
-    const { messages, isMessageDetail, senderId, senderName, postId, recipientId } = this.state;
+    const {
+      messages,
+      detailMessages,
+      isMessageDetail,
+      senderId,
+      senderName,
+      postId,
+      recipientId,
+      isSearch,
+      keyword
+    } = this.state;
     return (
       <div>
         <MessageHeader
@@ -156,33 +305,35 @@ export default class Message extends React.Component {
           senderName={senderName}
           isMessageDetail={isMessageDetail}
           handleBackClick={handleBackClick}
-          handleSearchClick={handleSearchClick}
           getMessageList={getMessageList}
+          searchKeyword={searchKeyword}
+          detailMessages={detailMessages}
+          isSearch={isSearch}
+          searchToggle={searchToggle}
         />
-        {messages.length === undefined || messages.length === 0
-          ? (
-            <div className='d-flex flex-column align-items-center'>
-              <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
-                <div className='pt-3 pb-3 mx-auto'>You have no messages.</div>
-              </div>
-            </div>
+        {isMessageDetail
+          ? (<MessageDetail
+            getTimeMsg={getTimeMsg}
+            userInfo={userInfo}
+            postId={postId}
+            senderId={senderId}
+            recipientId={recipientId}
+            viewMessageDetail={viewMessageDetail}
+            sendMessage={sendMessage}
+            detailMessages={detailMessages}
+            keyword={keyword}
+            textBolder={textBolder}
+          />
           )
-          : isMessageDetail
-            ? (<MessageDetail
-              getTimeMsg={getTimeMsg}
-              userInfo={userInfo}
-              postId={postId}
-              senderId={senderId}
-              recipientId={recipientId}
-            />
-            )
-            : (<MessageList
-              messages={messages}
-              userInfo={userInfo}
-              getTimeMsg={getTimeMsg}
-              handleViewMessageClick={handleViewMessageClick}
-            />
-            )
+          : (<MessageList
+            messages={messages}
+            userInfo={userInfo}
+            getTimeMsg={getTimeMsg}
+            handleViewMessageClick={handleViewMessageClick}
+            keyword={keyword}
+            textBolder={textBolder}
+          />
+          )
         }
       </div>
     );
