@@ -6,6 +6,7 @@ const ClientError = require('./client-error');
 const staticMiddleware = require('./static-middleware');
 const sessionMiddleware = require('./session-middleware');
 const multer = require('multer');
+// const { Server } = require('http');
 const app = express();
 
 app.use(express.json());
@@ -144,7 +145,18 @@ app.post('/api/post/image/:path', (req, res) => {
       notes,
       category
     } = req.body;
-    if (!sellerId || !description || !imageUrl || !title || !startingBid || !biddingEnabled || !isDeleted || !expiredAt || !notes || !category) {
+    if (
+      !sellerId ||
+      !description ||
+      !imageUrl ||
+      !title ||
+      !startingBid ||
+      !biddingEnabled ||
+      !isDeleted ||
+      !expiredAt ||
+      !notes ||
+      !category
+    ) {
       return res.status(404).json({
         error: 'Some fields are missing!'
       });
@@ -279,23 +291,13 @@ app.patch('/api/post/', (req, res, next) => {
 });
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
-  const {
-    senderId,
-    recipientId,
-    postId,
-    message
-  } = req.body;
+  const { senderId, recipientId, postId, message } = req.body;
   const sql = `
     INSERT INTO "message" ("senderId", "recipientId", "postId", "message", "createdAt")
          VALUES ($1, $2, $3, $4, now())
       RETURNING *
   `;
-  const params = [
-    senderId,
-    recipientId,
-    postId,
-    message
-  ];
+  const params = [senderId, recipientId, postId, message];
   db.query(sql, params)
     .then(result => {
       const message = result.rows[0];
@@ -564,6 +566,15 @@ app.post('/api/bid', (req, res, next) => {
         });
       } else if (!higherBid) {
         const sql = `
+          insert into "bid" ("bidderId", "postId", "currentBid")
+          values ($1, $2, $3)
+          returning *;
+        `;
+        const params = [bidderId, postId, currentBid];
+        db.query(sql, params).then(result => {
+          const bid = result.rows[0];
+          res.status(200).json(bid);
+        });
         select "startingBid"
         from "post"
         where "postId" = $1
@@ -597,6 +608,70 @@ app.post('/api/bid', (req, res, next) => {
       res.status(500).json({
         error: 'An unexpected error occurred.'
       });
+    });
+});
+
+const getSQLWatchLists = `select *
+          from "watchlists"
+          where "userId" = $2 and "postId" = $1;`;
+
+function getUserIdParams(postId, req) {
+  if (postId && req && req.session && req.session.userInfo && req.session.userInfo.userId) {
+    return [`${Number(postId)}`, `${req.session.userInfo.userId}`];
+  }
+}
+
+// USER GETS SPECIFIC ITEM IN WATCHLIST
+app.get('/api/watchlists/:postId', (req, res, err) => {
+  const { postId } = req.params;
+
+  const params = getUserIdParams(postId, req);
+
+  if (params) {
+    db.query(getSQLWatchLists, params).then(result => {
+      const watchlistObject = result && result.rows && result.rows[0];
+
+      if (watchlistObject) {
+        res.send({ status: 'successful', watchListItem: watchlistObject });
+      } else {
+        res.send({ status: 'does not exist', watchListItem: null });
+      }
+    });
+  } else {
+    res.send({ status: 'does not exist' });
+  }
+});
+
+// USER CAN ADD TO WATCHLISTS
+app.post('/api/watchlists/:postId', (req, res, err) => {
+  const { postId } = req.params;
+
+  const params = getUserIdParams(postId, req);
+
+  db.query(getSQLWatchLists, params)
+    .then(result => {
+      const watchlistObject = result && result.rows && result.rows[0];
+      if (!watchlistObject) {
+        const sql2 = `
+        INSERT INTO "watchlists" ("postId","userId")
+             values ($1, $2)
+             returning *`;
+        db.query(sql2, params).then(data => {
+          return res.json({ status: 'inserted' });
+        });
+      } else {
+        const sql3 = `
+        delete from "watchlists"
+        where "userId"= $2 and "postId" = $1`;
+        db.query(sql3, params).then(data => {
+          return res.json({ status: 'deleted' });
+        });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.send({ message: err });
+      // res.status(500).json({ error: 'An unexpected error occurred' });
     });
 });
 

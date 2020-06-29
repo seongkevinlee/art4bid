@@ -12,7 +12,8 @@ export default class SpecificPost extends React.Component {
       watchlistInfo: null,
       bidInfo: null,
       bidHistory: 'off',
-      isModalOpen: false
+      isModalOpen: false,
+      isWatchlisted: false
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
@@ -20,6 +21,8 @@ export default class SpecificPost extends React.Component {
     this.toggleBidHistory = this.toggleBidHistory.bind(this);
     this.messageBtnClick = this.messageBtnClick.bind(this);
     this.handleModalCloseClick = this.handleModalCloseClick.bind(this);
+    this.checkIfWatchlisted = this.checkIfWatchlisted.bind(this);
+    this.addToWatchlist = this.addToWatchlist.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +30,7 @@ export default class SpecificPost extends React.Component {
     this.getPostInfo(postId);
     this.getWatchlistInfo(postId);
     this.getBidInfo(postId);
+    this.checkIfWatchlisted();
   }
 
   getPostInfo(postId) {
@@ -43,8 +47,7 @@ export default class SpecificPost extends React.Component {
       .then(info => {
         const watchlistInfo = info.totalWatchlisters;
         this.setState({ watchlistInfo });
-      }
-      );
+      });
   }
 
   getBidInfo(postId) {
@@ -71,8 +74,42 @@ export default class SpecificPost extends React.Component {
     });
   }
 
+  checkIfWatchlisted() {
+    fetch(`/api/watchlists/${Number(this.props.postId)}`, {
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'successful') {
+          return this.setState({ isWatchlisted: true });
+        }
+      });
+  }
+
+  addToWatchlist() {
+    fetch(`/api/watchlists/${Number(this.props.postId)}`, {
+      method: 'POST'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'inserted') {
+          return this.setState({ isWatchlisted: true });
+        } else {
+          return this.setState({
+            isWatchlisted: false
+          });
+        }
+      });
+  }
+
   render() {
-    const { postInfo, watchlistInfo, bidInfo, isModalOpen } = this.state;
+    const {
+      postInfo,
+      watchlistInfo,
+      bidInfo,
+      isModalOpen,
+      isWatchlisted
+    } = this.state;
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
     const { userId, postId, setView } = this.props;
     if (postInfo && watchlistInfo && bidInfo) {
@@ -84,7 +121,8 @@ export default class SpecificPost extends React.Component {
       }
       let bodyview;
       if (this.state.bidHistory === 'off') {
-        bodyview = <PostBody
+        bodyview = (
+          <PostBody
           postId= {postInfo.postId}
           description={postInfo.description}
           highestBid={highestBid}
@@ -95,11 +133,15 @@ export default class SpecificPost extends React.Component {
           toggleBidHistory={toggleBidHistory}
           messageBtnClick={messageBtnClick}
           getBidInfo={this.getBidInfo}
-        />;
+          />
+        );
       } else if (this.state.bidHistory === 'on') {
-        bodyview = <BidHistory
-          postId={postId}
-          toggleBidHistory={this.toggleBidHistory} />;
+        bodyview = (
+          <BidHistory
+            postId={postId}
+            toggleBidHistory={this.toggleBidHistory}
+          />
+        );
       }
       return (
         <div className="indiv-post">
@@ -108,32 +150,29 @@ export default class SpecificPost extends React.Component {
             title={postInfo.title}
             userName={postInfo.userName}
             watchlist={watchlistInfo}
+            addToWatchlist={this.addToWatchlist}
+            isWatchlisted={isWatchlisted}
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>
           </div>
+          <div>{bodyview}</div>
           <div>
-            {bodyview}
-          </div>
-          <div>
-            {
-              isModalOpen
-                ? <Modal
-                  userId={userId}
-                  postId={postId}
-                  recipientId={postInfo.sellerId}
-                  handleModalCloseClick={handleModalCloseClick}
-                />
-                : ('')
-            }
+            {isModalOpen ? (
+              <Modal
+                userId={userId}
+                postId={postId}
+                recipientId={postInfo.sellerId}
+                handleModalCloseClick={handleModalCloseClick}
+              />
+            ) : (
+              ''
+            )}
           </div>
         </div>
       );
     } else {
-      return (
-        <div></div>
-      );
+      return <div></div>;
     }
-
   }
 }
