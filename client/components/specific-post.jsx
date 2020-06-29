@@ -13,7 +13,7 @@ export default class SpecificPost extends React.Component {
       bidInfo: null,
       bidHistory: 'off',
       isModalOpen: false,
-      isWatchlisted: 'bacon'
+      isWatchlisted: false
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
@@ -21,6 +21,7 @@ export default class SpecificPost extends React.Component {
     this.toggleBidHistory = this.toggleBidHistory.bind(this);
     this.messageBtnClick = this.messageBtnClick.bind(this);
     this.handleModalCloseClick = this.handleModalCloseClick.bind(this);
+    this.checkIfWatchlisted = this.checkIfWatchlisted.bind(this);
     this.addToWatchlist = this.addToWatchlist.bind(this);
   }
 
@@ -29,7 +30,7 @@ export default class SpecificPost extends React.Component {
     this.getPostInfo(postId);
     this.getWatchlistInfo(postId);
     this.getBidInfo(postId);
-    // this.addToWatchlist();
+    this.checkIfWatchlisted();
   }
 
   getPostInfo(postId) {
@@ -73,26 +74,42 @@ export default class SpecificPost extends React.Component {
     });
   }
 
+  checkIfWatchlisted() {
+    fetch(`/api/watchlists/${Number(this.props.postId)}`, {
+      method: 'GET'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'successful') {
+          return this.setState({ isWatchlisted: true });
+        }
+      });
+  }
+
   addToWatchlist() {
-    // fetch(`/api/watchlists/${Number(this.props.postId)}`, {
-    //   method: 'POST'
-    // })
-    //   .then(res => res.json())
-    //   .then(data => {
-    //     if (data.status === 'red') {
-    //       console.log(this.state.isWatchlisted);
-    //       return this.setState({ isWatchlisted: 'red' });
-    //     } else {
-    //       console.log(this.state.isWatchlisted);
-    //       return this.setState({
-    //         isWatchlisted: 'black'
-    //       });
-    //     }
-    //   });
+    fetch(`/api/watchlists/${Number(this.props.postId)}`, {
+      method: 'POST'
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'inserted') {
+          return this.setState({ isWatchlisted: true });
+        } else {
+          return this.setState({
+            isWatchlisted: false
+          });
+        }
+      });
   }
 
   render() {
-    const { postInfo, watchlistInfo, bidInfo, isModalOpen } = this.state;
+    const {
+      postInfo,
+      watchlistInfo,
+      bidInfo,
+      isModalOpen,
+      isWatchlisted
+    } = this.state;
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
     const { userId, postId, setView } = this.props;
     if (postInfo && watchlistInfo && bidInfo) {
@@ -132,7 +149,7 @@ export default class SpecificPost extends React.Component {
             userName={postInfo.userName}
             watchlist={watchlistInfo}
             addToWatchlist={this.addToWatchlist}
-            isWatchlisted={this.isWatchlisted}
+            isWatchlisted={isWatchlisted}
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>

@@ -1,8 +1,7 @@
 import React from 'react';
+import { FireAltIcon } from '../assets/Svg';
 
 export default function PostHeader(props) {
-
-  // console.log(props);
 
   return (
     <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
@@ -27,12 +26,7 @@ export default function PostHeader(props) {
         className="header-icon-container d-flex flex-column justify-content-center mt-2"
         onClick={props.addToWatchlist}
       >
-
-        <img
-          className="header-icon"
-          src={'./images/' + props.isWatchlisted }
-        ></img>
-        <img className="header-icon" src="./images/fire-alt-solid.svg"></img>
+        <FireAltIcon isWatchlisted={props.isWatchlisted}/>
         <p className="following mt-2 mb-0">
           <span>{props.watchlist}</span> Watching
         </p>

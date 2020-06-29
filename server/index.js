@@ -567,19 +567,45 @@ app.post('/api/bid', (req, res, next) => {
     });
 });
 
+const getSQLWatchLists = `select *
+          from "watchlists"
+          where "userId" = $2 and "postId" = $1;`;
+
+function getUserIdParams(postId, req) {
+  if (postId && req && req.session && req.session.userInfo && req.session.userInfo.userId) {
+    return [`${Number(postId)}`, `${req.session.userInfo.userId}`];
+  }
+}
+
+// USER GETS SPECIFIC ITEM IN WATCHLIST
+app.get('/api/watchlists/:postId', (req, res, err) => {
+  const { postId } = req.params;
+
+  const params = getUserIdParams(postId, req);
+
+  if (params) {
+    db.query(getSQLWatchLists, params).then(result => {
+      const watchlistObject = result && result.rows && result.rows[0];
+
+      if (watchlistObject) {
+        res.send({ status: 'successful', watchListItem: watchlistObject });
+      } else {
+        res.send({ status: 'does not exist', watchListItem: null });
+      }
+    });
+  } else {
+    res.send({ status: 'does not exist' });
+  }
+});
+
 // USER CAN ADD TO WATCHLISTS
 app.post('/api/watchlists/:postId', (req, res, err) => {
   const { postId } = req.params;
 
-  const params = [`${Number(postId)}`, `${req.session.userInfo.userId}`];
+  const params = getUserIdParams(postId, req);
 
-  const sql = `select *
-          from "watchlists"
-          where "userId" = $2 and "postId" = $1;`;
-
-  db.query(sql, params)
+  db.query(getSQLWatchLists, params)
     .then(result => {
-      // eslint-disable-next-line no-console
       const watchlistObject = result && result.rows && result.rows[0];
       if (!watchlistObject) {
         const sql2 = `
@@ -587,16 +613,14 @@ app.post('/api/watchlists/:postId', (req, res, err) => {
              values ($1, $2)
              returning *`;
         db.query(sql2, params).then(data => {
-          // console.log('hit');
-          return res.json({ status: 'red' });
+          return res.json({ status: 'inserted' });
         });
       } else {
         const sql3 = `
         delete from "watchlists"
         where "userId"= $2 and "postId" = $1`;
         db.query(sql3, params).then(data => {
-          // console.log('hit2');
-          return res.json({ status: 'black' });
+          return res.json({ status: 'deleted' });
         });
       }
     })
