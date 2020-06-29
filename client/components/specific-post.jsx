@@ -93,11 +93,11 @@ export default class SpecificPost extends React.Component {
       .then(res => res.json())
       .then(data => {
         if (data.status === 'inserted') {
-          return this.setState({ isWatchlisted: true });
+          return this.setState({ isWatchlisted: true }, () => this.getWatchlistInfo(this.props.postId));
         } else {
           return this.setState({
             isWatchlisted: false
-          });
+          }, () => this.getWatchlistInfo(this.props.postId));
         }
       });
   }
@@ -123,7 +123,7 @@ export default class SpecificPost extends React.Component {
       if (this.state.bidHistory === 'off') {
         bodyview = (
           <PostBody
-            postId={postInfo.postId}
+            postId= {postInfo.postId}
             description={postInfo.description}
             highestBid={highestBid}
             totalBids={bidInfo.totalBids}
@@ -152,6 +152,8 @@ export default class SpecificPost extends React.Component {
             watchlist={watchlistInfo}
             addToWatchlist={this.addToWatchlist}
             isWatchlisted={isWatchlisted}
+            getWatchlistInfo={this.getWatchlistInfo}
+            postId={postInfo.postId}
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>

@@ -6,10 +6,24 @@ export default class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      editMode: false
+      editMode: false,
+      userId: this.props.userInfo.userId,
+      userInfo: {}
     };
 
     this.editModeToggle = this.editModeToggle.bind(this);
+    this.getUserData = this.getUserData.bind(this);
+  }
+
+  componentDidMount() {
+    this.getUserData();
+  }
+
+  getUserData() {
+    fetch(`/api/user/${this.state.userId}`)
+      .then(res => res.json())
+      .then(data => { this.setState({ userInfo: data }); })
+      .catch(err => console.error(err));
   }
 
   editModeToggle() {
@@ -25,16 +39,15 @@ export default class Profile extends React.Component {
   }
 
   renderProfile() {
-    const { profileImg, coverImg, description, userName } = this.props.userInfo;
+    const { profileImg, coverImg, description, userName } = this.state.userInfo;
 
     return (
       <div className='d-flex flex-column align-items-center'>
         <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
-          <button
-            className='btn btn-cancel-header text-center d-flex justify-content-center align-items-center'
+          <div
+            className='back-container'
           >
-            CANCEL
-          </button>
+          </div>
           <div className='header-title pt-3 pb-3'>PROFILE</div>
           <button
             className='btn btn-submit-header text-center'
@@ -43,12 +56,16 @@ export default class Profile extends React.Component {
             EDIT
           </button>
         </div>
-        <div className='coverPhoto d-flex flex-column align-items-center justify-content-center pt-4 col-12' style={{ backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(${coverImg})` }}>
-          <div className='profileImg-container' style={{ backgroundImage: `url(${profileImg})` }}>
+        <div
+          className='coverPhoto d-flex flex-column align-items-center justify-content-center pt-4 col-12'
+          style={{ backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})` }}>
+          <div
+            className='profileImg-container'
+            style={{ backgroundImage: `url(/images/user-profiles/${profileImg})` }}>
           </div>
           <h4 id='profileUserName'>{userName}</h4>
           <p className='profile-description text-center mt-2 mb-2 ml-1 mr-1'>
-            {description}
+            {!description ? ' ' : description}
           </p>
         </div>
         <UserPosts/>
@@ -58,7 +75,7 @@ export default class Profile extends React.Component {
 
   renderEditProfile() {
     return (
-      <EditProfile editModeToggle={this.editModeToggle} userInfo={this.props.userInfo}/>
+      <EditProfile editModeToggle={this.editModeToggle} userInfo={this.state.userInfo} getUserData={this.getUserData}/>
     );
   }
 

@@ -143,10 +143,20 @@ button {
   background-color: white;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
 }
 
 .profileImgEdit:active {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.back-container{
+  width: 20%;
+}
+.back-arrow {
+  width: 20px;
+  height: 34px;
+  filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.7));
 }
 
 .profileImg-container {
@@ -158,6 +168,20 @@ button {
   height: 150px;
   border-radius: 50%;
 }
+#profile-img-upload {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+#cover-img-upload {
+  position: absolute;
+  width: 94%;
+  height: 34%;
+  opacity: 0;
+}
 
 .coverPhotoEdit {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -167,6 +191,7 @@ button {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 
 .coverPhoto {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -206,7 +231,7 @@ button {
 }
 
 .message-postid, .message-time, .message-date {
-  font-size: 8px;
+  font-size: 9px;
 }
 
 .message-content {
@@ -243,7 +268,6 @@ button {
 
 .icon-custom {
   font-size: 30px;
-  width: 50px;
   filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
   text-align: center;
 }
@@ -306,7 +330,19 @@ button {
   z-index: 1;
   width: 350px;
   top: 55px;
-  animation: wide 0.5s ease-in;
+  animation: wide 0.2s ease-in;
+}
+
+.message-search-input-cancel-btn {
+  position: absolute;
+  z-index: 1;
+  width: 20px;
+  top: 57px;
+  left: 345px;
+  border: none;
+  background-color: none;
+  border-radius: 9px;
+  cursor: pointer;
 }
 
 @keyframes wide {
@@ -369,18 +405,15 @@ button {
 }
 
 /* View Specific Post */
-
 .post-header {
   height: 12vh;
   box-sizing: border-box;
 }
-
 .post-image-container {
   height: 32vh;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: lightgray
 }
-
 .post-description {
   height: 21vh;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -390,7 +423,6 @@ button {
   overflow: auto;
   text-align: center;
 }
-
 .post-bid-info {
   height: 22vh;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -398,53 +430,43 @@ button {
   border-radius: 9px;
   margin: 1vh 1%;
 }
-
 .header-icon-container {
   width: 20%;
   height: 90%;
 }
-
 .header-icon {
   width: 100%;
   height: 50%;
   object-fit: contain;
   filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
 }
-
 .post-header-text > p {
   line-height: 1.2;
 }
-
 .following {
   font-size: 0.65rem;
 }
-
 .post-image-container > img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
-
 .post-description > p {
   font-size: 0.78rem;
   margin-bottom: 0;
   font-weight: 300;
 }
-
 .bid-buttons-container {
   width: 35%;
 }
-
 .bid-buttons-container > form {
   width: 100%;
 }
-
 .bid-stats {
   width: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 9px;
 }
-
 #post-name {
   font-weight: 300;
   font-style: italic;
@@ -454,11 +476,9 @@ button {
   font-weight: 300;
   font-size: 0.7rem;
 }
-
 .bid-buttons-container > form {
   padding: 0;
 }
-
 #bid-offer,
 button#submit-bid,
 button#message,
@@ -469,34 +489,28 @@ button#edit-post {
   padding: 5%;
   height: 30%
 }
-
 #bid-offer {
   border: 0;
   width: 100%;
   margin: 0;
 }
-
 button#submit-bid,
 button#edit-post {
   background-color: #CA0101;
   color: white;
   margin: 5% 0;
 }
-
 button#message {
   background-color: #C4C4C4;
 }
-
 #expire-disclaimer {
   font-size: 0.6rem;
   margin-bottom: 0.5vh;
   color: #A0A0A0;
 }
-
 .bid-numbers > p {
     font-size: 0.8rem;
 }
-
 .red-underline {
   text-decoration: underline;
   color: #CA0101;
