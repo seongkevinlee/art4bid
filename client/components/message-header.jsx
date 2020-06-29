@@ -15,6 +15,7 @@ export default class MessageHeader extends React.Component {
     this.setState({
       search: ''
     });
+    this.props.searchKeyword('');
     this.props.searchToggle();
   }
 
@@ -65,6 +66,7 @@ export default class MessageHeader extends React.Component {
           </div>
           <div className="my-auto icon-custom">
             <i
+              style={{ display: isSearch ? 'none' : 'block' }}
               className="fas fa-search"
               onClick={handleSearchClick}>
             </i>
@@ -81,14 +83,20 @@ export default class MessageHeader extends React.Component {
           }
         </div>
         <div>
-          <input
-            autoFocus
-            type="text"
-            className="mx-auto fixed-top message-search-input border-0"
-            placeholder={`${isMessageDetail ? 'search message' : 'search sender'}`}
-            onChange={handleSearchInputChange}
-            value={search}
-            style={{ display: isSearch ? 'block' : 'none' }} />
+          <div style={{ display: isSearch ? 'block' : 'none' }} >
+            <input
+              autoFocus
+              type="text"
+              className="mx-auto border-0 fixed-top message-search-input"
+              placeholder={`${isMessageDetail ? 'search message' : 'search sender'}`}
+              onChange={handleSearchInputChange}
+              value={search}
+            />
+            <div
+              className="message-search-input-cancel-btn"
+              onClick={handleSearchClick}
+            ><i className="fas fa-times"></i></div>
+          </div>
         </div>
       </div>
     );

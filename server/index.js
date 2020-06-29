@@ -429,6 +429,30 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
     });
 });
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
+app.get('/api/watchlist/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+  if (!Number.isInteger(userId) || userId < 0) {
+    return res.status(400).json({ error: 'userId must be a positive integer' });
+  }
+  const sql = `
+    SELECT "p".*
+    FROM "post" AS "p"
+    JOIN "watchlists" AS "w"
+    ON "p"."postId" =  "w"."postId"
+    WHERE "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => {
+      return res.status(500).json({
+        error: `An unexpected error occurred ${err.message}`
+      });
+    });
+});
+// USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
   if (!Number.isInteger(postId) || postId < 0) {
