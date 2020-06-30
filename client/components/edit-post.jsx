@@ -88,11 +88,14 @@ export default class EditPost extends React.Component {
       biddingEnabled,
       isDeleted,
       expiredAt,
-      notes,
       category,
       postId
     } = this.state;
 
+    let { notes } = this.state;
+    if (!notes) {
+      notes = ' ';
+    }
     const formData = new FormData();
 
     // Update the formData object
