@@ -8,8 +8,6 @@ import CreatePost from './create-post';
 import SpecificPost from './specific-post';
 import MyBids from './my-bids';
 import Watchlist from './watchlist';
-const UserContext = React.createContext('userInfo');
-export { UserContext };
 
 export default class App extends React.Component {
   constructor(props) {
@@ -107,12 +105,10 @@ export default class App extends React.Component {
     }
 
     return (
-      <UserContext.Provider value={this.state.userInfo}>
-        <div>
-          {pageBody}
-          <NavBar view={this.state.view} setView={setView} />
-        </div>
-      </UserContext.Provider>
+      <div>
+        {pageBody}
+        <NavBar view={this.state.view} setView={setView} />
+      </div>
     );
   }
 }

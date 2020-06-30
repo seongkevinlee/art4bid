@@ -67,7 +67,8 @@ export default class ViewWatchlist extends React.Component {
               className="back-arrow"
               src="./images/backarrow.png"
               alt="back-arrow"
-              onClick={this.handleClick} />
+              onClick={this.handleClick}
+            />
           </div>
           <div className="header-title pt-3 pb-3">
             WATCHLIST
