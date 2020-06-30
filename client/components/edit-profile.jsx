@@ -75,7 +75,10 @@ export default class EditProfile extends React.Component {
       .then(response => {
         response.json();
       })
-      .then(() => this.props.getUserData())
+      .then(() => {
+        this.props.getUserData();
+        this.props.editModeToggle();
+      })
       .catch(err => console.error(err));
   }
 

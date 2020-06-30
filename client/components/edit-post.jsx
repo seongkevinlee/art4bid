@@ -17,7 +17,7 @@ export default class EditPost extends React.Component {
       biddingEnabled: postInfo.biddingEnabled,
       isDeleted: postInfo.isDeleted,
       expiredAt: postInfo.expiredAt,
-      notes: '',
+      notes: postInfo.notes,
       category: postInfo.category,
       selectedFile: null,
       filePathImageURL: null,
@@ -37,6 +37,9 @@ export default class EditPost extends React.Component {
     if (!notes === null) {
       this.setState({ notes });
     }
+
+    const expireDate = this.props.postInfo.expiredAt.slice(0, 10);
+    this.setState({ expiredAt: expireDate });
   }
 
   handleModal() {
@@ -59,6 +62,12 @@ export default class EditPost extends React.Component {
 
   // setting state for image input
   handleFileChange(event) {
+    if (!this.state.imageUrl) {
+      this.setState({
+        filePathImageURL: this.props.imageUrl
+      });
+    }
+
     this.setState({
       selectedFile: event.target.files[0],
       [event.target.name]: event.target.value,
@@ -103,12 +112,11 @@ export default class EditPost extends React.Component {
       method: 'POST',
       body: formData
     })
-      .then(res => {
-        return res.json();
-      })
+      // .then(res => {
+      //   console.log(res.json());
+      // })
       .then(data => {
-        // eslint-disable-next-line no-console
-        console.log('it works');
+        this.props.getPostInfo(this.props.postId);
         this.props.editModeToggle();
       })
       .catch(error => console.error('image uploading error', error));
@@ -143,9 +151,12 @@ export default class EditPost extends React.Component {
           style={{ display: `${this.state.display}` }}
         >
           <div className="new-post-modal-content">
-            Are you sure you want to cancel creating a post?
+            Are you sure you want to cancel editing a post?
             <div>
-              <button className="yes-button" onClick={this.handleReset}>
+              <button className="yes-button" onClick={() => {
+                this.handleReset();
+                this.props.editModeToggle();
+              }}>
                 Yes
               </button>
               <button onClick={this.handleCancel}>No</button>
@@ -248,7 +259,7 @@ export default class EditPost extends React.Component {
                 disabled={!this.state.biddingEnabled}
                 type="number"
                 min="1.00"
-                placeholder="$0.00"
+                placeholder="$0"
                 name="startingBid"
                 value={this.state.startingBid}
                 onChange={this.handleChange}

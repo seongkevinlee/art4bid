@@ -680,7 +680,7 @@ app.post('/api/bid', (req, res, next) => {
   const { bidderId, postId, currentBid } = req.body;
   if (!bidderId || !postId || !currentBid) {
     return res.status(400).json({
-      error: 'Must be logged in and submit a bid price'
+      error: 'Must be logged in and add a bid price'
     });
   } else if (isNaN(Number(currentBid)) || Number(currentBid) < 0) {
     return res.status(400).json({
@@ -813,8 +813,7 @@ app.get('/api/bids/:userId', (req, res, next) => {
     SELECT "p".*
     FROM "post" AS "p"
     JOIN "bid" AS "b"
-    ON "p"."postId
-" =  "b"."postId"
+    ON "p"."postId" =  "b"."postId"
     WHERE "bidderId" = $1
   `;
   const params = [userId];
