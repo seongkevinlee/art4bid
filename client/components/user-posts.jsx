@@ -51,7 +51,7 @@ export default class UserPosts extends React.Component {
 
   render() {
     return (
-      <div className='thumbnail-container d-flex justify-content-start'>
+      <div className='thumbnail-container d-flex justify-content-start flex-wrap'>
         {this.renderPosts()}
       </div>
     );
