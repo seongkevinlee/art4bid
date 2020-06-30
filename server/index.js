@@ -808,5 +808,6 @@ app.use((err, req, res, next) => {
 });
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
-  console.log('[http] Server listening on port', process.env.PORT);
+  console.log('[http] Server listening on port', process.env.PORT)
+  ;
 });

@@ -201,7 +201,9 @@ export default class SpecificPost extends React.Component {
       <EditPost
         userId={this.props.userId}
         postInfo={this.state.postInfo}
-        editModeToggle={this.editModeToggle}/>
+        editModeToggle={this.editModeToggle}
+        postId={this.props.postId}
+        getPostInfo={this.getPostInfo}/>
     );
   }
 

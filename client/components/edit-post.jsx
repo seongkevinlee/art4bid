@@ -107,8 +107,7 @@ export default class EditPost extends React.Component {
         return res.json();
       })
       .then(data => {
-        // eslint-disable-next-line no-console
-        console.log('it works');
+        this.props.getPostInfo(this.props.postId);
         this.props.editModeToggle();
       })
       .catch(error => console.error('image uploading error', error));
@@ -143,9 +142,12 @@ export default class EditPost extends React.Component {
           style={{ display: `${this.state.display}` }}
         >
           <div className="new-post-modal-content">
-            Are you sure you want to cancel creating a post?
+            Are you sure you want to cancel editing a post?
             <div>
-              <button className="yes-button" onClick={this.handleReset}>
+              <button className="yes-button" onClick={() => {
+                this.handleReset();
+                this.props.editModeToggle();
+              }}>
                 Yes
               </button>
               <button onClick={this.handleCancel}>No</button>
