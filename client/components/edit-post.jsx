@@ -127,16 +127,19 @@ export default class EditPost extends React.Component {
     return (
       <div>
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
-          <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
+          <div
+            className='back-container text-center d-flex justify-content-start align-items-center'
+          >
             <img
-              alt=""
+              type='button'
+              className="back-arrow"
+              src="./images/backarrow.png"
+              alt="back-arrow"
               onClick={this.handleModal}
-              className="header-icon"
-              src="./images/kindpng.png"
-            ></img>
+            />
           </div>
           <div className="header-title pt-3 pb-3 new-post-header">EDIT POST</div>
-          <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
+          <div className="back-container d-flex justify-content-center align-items-center">
             <button
               type="Submit"
               form="new-post"
