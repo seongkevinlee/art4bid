@@ -45,18 +45,20 @@ export default class EditProfile extends React.Component {
     event.stopPropagation();
 
     const { profileImg, coverImg, description, location, email, userId } = this.state;
+    const changedProfileImg = Date.now().toString().concat(profileImg.split(' ').join(''));
+    const changedCoverImg = Date.now().toString().concat(coverImg.split(' ').join(''));
     const profileData = new FormData();
     if (this.state.selectedProfileImgFile) {
-      profileData.append('image', this.state.selectedProfileImgFile, profileImg);
+      profileData.append('image', this.state.selectedProfileImgFile, changedProfileImg);
     }
     if (this.state.selectedCoverImgFile) {
-      profileData.append('image', this.state.selectedCoverImgFile, coverImg);
+      profileData.append('image', this.state.selectedCoverImgFile, changedCoverImg);
     }
     if (profileImg) {
-      profileData.append('profileImg', profileImg);
+      profileData.append('profileImg', changedProfileImg);
     }
     if (coverImg) {
-      profileData.append('coverImg', coverImg);
+      profileData.append('coverImg', changedCoverImg);
     }
     if (description) {
       profileData.append('description', description);

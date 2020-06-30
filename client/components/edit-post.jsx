@@ -98,11 +98,12 @@ export default class EditPost extends React.Component {
     }
     const formData = new FormData();
 
+    // const changedPostImg = Date.now().toString().concat(filePathImageURL.split(' ').join(''));
     // Update the formData object
-    // formData.append('image', this.state.selectedFile, filePathImageURL);
+    // formData.append('image', this.state.selectedFile, changedPostImg);
     formData.append('sellerId', sellerId);
     formData.append('description', description);
-    // formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
+    // formData.append('imageUrl', `/images/user-posts/${changedPostImg}`);
     formData.append('title', title);
     formData.append('startingBid', startingBid);
     formData.append('biddingEnabled', biddingEnabled);
