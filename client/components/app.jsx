@@ -1,15 +1,14 @@
 import React from 'react';
 import Profile from './profile';
 import LoginPage from './login-page';
+import SignupPage from './signup-page';
 import SearchPage from './search-page';
 import Message from './message';
 import NavBar from './navbar';
 import CreatePost from './create-post';
 import SpecificPost from './specific-post';
 import MyBids from './my-bids';
-import ViewWatchlist from './user-can-view-watchlist';
-const UserContext = React.createContext('userInfo');
-export { UserContext };
+import Watchlist from './watchlist';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -62,7 +61,11 @@ export default class App extends React.Component {
     const { login, setView, getPostInfo } = this;
     let pageBody;
     if (this.state.loggedIn === false) {
-      return <LoginPage userInfo={login} />;
+      if (this.state.view === 'signup') {
+        return <SignupPage setView={setView} login={login} />;
+      } else {
+        return <LoginPage setView={setView} userInfo={login} />;
+      }
     } else if (this.state.view === 'search') {
       pageBody = <SearchPage setView={setView} getPostInfo={getPostInfo} />;
     } else if (this.state.view === 'profile') {
@@ -87,10 +90,17 @@ export default class App extends React.Component {
     } else if (this.state.view === 'create') {
       pageBody = <CreatePost setView={this.setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'my-bids') {
-      pageBody = <MyBids setView={this.setView} userInfo={this.state.userInfo}/>;
+      pageBody = (
+        <MyBids
+          getPostInfo={getPostInfo}
+          setView={this.setView}
+          userInfo={this.state.userInfo}
+          previousView={this.state.previousView}/>
+
+      );
     } else if (this.state.view === 'watchlist') {
       pageBody = (
-        <ViewWatchlist
+        <Watchlist
           getPostInfo={getPostInfo}
           setView={setView}
           userInfo={this.state.userInfo}
@@ -100,12 +110,10 @@ export default class App extends React.Component {
     }
 
     return (
-      <UserContext.Provider value={this.state.userInfo}>
-        <div>
-          {pageBody}
-          <NavBar view={this.state.view} setView={setView} />
-        </div>
-      </UserContext.Provider>
+      <div>
+        {pageBody}
+        <NavBar view={this.state.view} setView={setView} />
+      </div>
     );
   }
 }

@@ -42,6 +42,33 @@ app.post('/api/login/', (req, res, next) => {
       return res.send({ message: err });
     });
 });
+
+// USER CAN SIGN UP
+app.post('/api/signup/', (req, res, next) => {
+  const { userName, email, password } = req.body;
+  const params = [userName, email, password];
+  const findUserDB = `
+    INSERT INTO "user" ("userName", "email", "password")
+         VALUES ($1, $2, $3)
+         RETURNING *;
+  `;
+  db.query(findUserDB, params)
+    .then(result => {
+      const newUser = result.rows[0];
+      if (!newUser) {
+        return res.status(400).json({
+          error: `Failed to create user ${userName}`
+        });
+      } else {
+        req.session.userId = newUser.userId;
+        return res.json(newUser);
+      }
+    })
+    .catch(err => {
+      return res.send({ message: err.message });
+    });
+});
+
 // USER CAN SEARCH POST BY LOCATION (ZIPCODE)
 app.get('/api/post/:location', (req, res, next) => {
   const { location } = req.params;
@@ -239,6 +266,7 @@ app.post('/api/post/image/:path', (req, res) => {
     }
   });
 });
+
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category/:offset', (req, res, next) => {
   const category = req.params.category;
@@ -270,6 +298,8 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
       });
     });
 });
+
+
 
 // TO UPLOAD IMAGE FOR EDIT POST
 app.post('/api/edit/post/image/:path', (req, res) => {
@@ -362,6 +392,9 @@ app.post('/api/edit/post/image/:path', (req, res) => {
     }
   });
 });
+
+
+
 
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
@@ -502,6 +535,8 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
+
+
 // USER CAN VIEW THE POSTS IN MY WATCHLIST
 // This should be refactored using req.session.userId(if it's possible)
 // Also ths endpoint name should be changed to /api/watchlists, but careful to use same endpoint
@@ -528,6 +563,7 @@ app.get('/api/watchlist/:userId', (req, res, next) => {
       });
     });
 });
+
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -551,6 +587,7 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
       });
     });
 });
+
 // USER CAN VIEW A SPECIFIC POST - bid info
 app.get('/api/bidinfo/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -575,6 +612,7 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
       });
     });
 });
+
 // USER CAN VIEW A SPECIFIC POST - bid history
 app.get('/api/bidhistory/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -762,6 +800,7 @@ app.post('/api/watchlists/:postId', (req, res, err) => {
       // res.status(500).json({ error: 'An unexpected error occurred' });
     });
 });
+
 // USER CAN VIEW THE POSTS THAT THEY HAVE BIDDED ON
 // Currently designed to use params.usedId. Please change it to req.session.userId if you want
 app.get('/api/bids/:userId', (req, res, next) => {
@@ -788,6 +827,7 @@ app.get('/api/bids/:userId', (req, res, next) => {
       });
     });
 });
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
@@ -808,6 +848,5 @@ app.use((err, req, res, next) => {
 });
 app.listen(process.env.PORT, () => {
   // eslint-disable-next-line no-console
-  console.log('[http] Server listening on port', process.env.PORT)
-  ;
+  console.log('[http] Server listening on port', process.env.PORT);
 });
