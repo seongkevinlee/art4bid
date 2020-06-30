@@ -134,6 +134,7 @@ button {
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+/* PROFILE */
 .profileImgEdit {
   border-radius: 50%;
   border-style: solid;
@@ -194,7 +195,7 @@ button {
 
 
 .coverPhoto {
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-repeat: no-repeat;
   background-size: cover;
   padding: 0;
@@ -222,10 +223,24 @@ button {
   border-radius: 9px;
 }
 
+.thumbnail-container {
+  width: 100%;
+}
+
+/* HEADERS*/
+.my-bids-header, .watchlist-header, .profile-header, .edit-profile-header {
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.watchlist-button, .profile-edit-btn, .edit-profile-save-btn, .my-bids-btn {
+  height: 67px;
+}
+
+
 .placeholder {
   color: #a4a4a4;
 }
 
+/* MESSAGES */
 .message-sender {
   font-size: 16px;
 }

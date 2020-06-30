@@ -93,7 +93,7 @@ export default class EditProfile extends React.Component {
 
     return (
       <div className='d-flex flex-column align-items-center'>
-        <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
+        <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
           <div
             className='back-container text-center d-flex justify-content-start align-items-center'
           >
@@ -101,7 +101,7 @@ export default class EditProfile extends React.Component {
           </div>
           <div className='header-title pt-3 pb-3'>EDIT</div>
           <button
-            className='btn btn-submit-header text-center'
+            className='edit-profile-save-btn btn btn-submit-header text-center'
             onClick={this.handleSubmit}>
             SAVE
           </button>

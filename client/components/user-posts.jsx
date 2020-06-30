@@ -29,7 +29,7 @@ export default class UserPosts extends React.Component {
   renderPosts() {
     const postThumbnails = [...this.state.postThumbnails];
     if (postThumbnails.length === 0) {
-      return <h4>No posts to show...</h4>;
+      return <p>No posts to show...</p>;
     } else {
       const postThumbnailsGrid = postThumbnails.map(thumbnail => {
         return (
@@ -50,6 +50,10 @@ export default class UserPosts extends React.Component {
   }
 
   render() {
-    return <div>{this.renderPosts()}</div>;
+    return (
+      <div className='thumbnail-container d-flex justify-content-start'>
+        {this.renderPosts()}
+      </div>
+    );
   }
 }
