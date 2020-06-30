@@ -35,8 +35,8 @@ export default class EditPost extends React.Component {
 
   componentDidMount() {
     const { notes } = this.props.postInfo;
-    if (!notes === null) {
-      this.setState({ notes });
+    if (notes === null || notes === ' ') {
+      this.setState({ notes: '' });
     }
 
     const expireDate = this.props.postInfo.expiredAt.slice(0, 10);
