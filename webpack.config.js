@@ -1,10 +1,8 @@
 require('dotenv/config');
 const path = require('path');
-
 const clientPath = path.join(__dirname, 'client/');
 const publicPath = path.join(__dirname, 'server/public/');
 const uploadPath = path.join(__dirname, 'server/public/images/user-profiles');
-
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
@@ -23,9 +21,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: [
-              '@babel/plugin-transform-react-jsx'
-            ]
+            plugins: ['@babel/plugin-transform-react-jsx']
           }
         }
       }

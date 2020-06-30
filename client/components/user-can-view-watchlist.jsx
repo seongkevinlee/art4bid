@@ -44,6 +44,10 @@ export default class ViewWatchlist extends React.Component {
             key={thumbnail.postId}
             className="user-post-thumbnail col-4 p-0 col-4"
             src={thumbnail.imageUrl}
+            onClick={() => {
+              this.props.getPostInfo(thumbnail.postId);
+              this.props.setView('post');
+            }}
           />
         );
       });
@@ -62,9 +66,10 @@ export default class ViewWatchlist extends React.Component {
               src="./images/kindpng.png"
             ></img>
           </div>
-          <div className="header-title pt-3 pb-3 new-post-header">WATCHLIST</div>
-          <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
+          <div className="header-title pt-3 pb-3 new-post-header">
+            WATCHLIST
           </div>
+          <div className="header-icon-container d-flex flex-column justify-content-center mt-2"></div>
         </header>
         <div>{this.renderPosts()}</div>
       </div>
