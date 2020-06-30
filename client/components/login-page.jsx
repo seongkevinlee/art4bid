@@ -8,6 +8,7 @@ export default class LoginPage extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSignUpClick = this.handleSignUpClick.bind(this);
   }
 
   handleChange() {
@@ -20,6 +21,10 @@ export default class LoginPage extends React.Component {
       return;
     }
     this.props.userInfo(this.state.value);
+  }
+
+  handleSignUpClick() {
+    this.props.setView('signup');
   }
 
   render() {
@@ -42,6 +47,9 @@ export default class LoginPage extends React.Component {
             />
             <button className="btn btn-submit">sign-in</button>
           </form>
+        </div>
+        <div>
+          <p onClick={this.handleSignUpClick}>sign-up</p>
         </div>
       </div>
     );

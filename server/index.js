@@ -42,6 +42,31 @@ app.post('/api/login/', (req, res, next) => {
       return res.send({ message: err });
     });
 });
+// USER CAN LOGIN
+app.post('/api/signup/', (req, res, next) => {
+  const { userName, email, password } = req.body;
+  const params = [userName, email, password];
+  const findUserDB = `
+    INSERT INTO "user" ("userName", "email", "password")
+         VALUES ($1, $2, $3)
+         RETURNING *;
+  `;
+  db.query(findUserDB, params)
+    .then(result => {
+      const newUser = result.rows[0];
+      if (!newUser) {
+        return res.status(400).json({
+          error: `Failed to create user ${userName}`
+        });
+      } else {
+        req.session.userId = newUser.userId;
+        return res.json(newUser);
+      }
+    })
+    .catch(err => {
+      return res.send({ message: err.message });
+    });
+});
 // USER CAN SEARCH POST BY LOCATION (ZIPCODE)
 app.get('/api/post/:location', (req, res, next) => {
   const { location } = req.params;
@@ -271,7 +296,7 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
     });
 });
 // USER CAN EDIT A POST
-app.patch('/api/post/', (req, res, next) => {
+app.post('/api/post/', (req, res, next) => {
   const {
     postId,
     description,
@@ -281,7 +306,8 @@ app.patch('/api/post/', (req, res, next) => {
     biddingEnabled,
     isDeleted,
     expiredAt,
-    category
+    category,
+    notes
   } = req.body;
   const sql = `
       UPDATE "post"
@@ -292,8 +318,9 @@ app.patch('/api/post/', (req, res, next) => {
              "biddingEnabled" = $5,
              "isDeleted" = $6,
              "expiredAt" = $7,
-             "category" = $8
-      WHERE "postId" = $9
+             "category" = $8,
+             "notes" = $9
+      WHERE "postId" = $10
       RETURNING *
   `;
   const params = [
@@ -305,6 +332,7 @@ app.patch('/api/post/', (req, res, next) => {
     isDeleted,
     expiredAt,
     category,
+    notes,
     postId
   ];
   db.query(sql, params)

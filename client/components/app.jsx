@@ -1,6 +1,7 @@
 import React from 'react';
 import Profile from './profile';
 import LoginPage from './login-page';
+import SignupPage from './signup-page';
 import SearchPage from './search-page';
 import Message from './message';
 import NavBar from './navbar';
@@ -56,7 +57,11 @@ export default class App extends React.Component {
     const { login, setView, getPostInfo } = this;
     let pageBody;
     if (this.state.loggedIn === false) {
-      return <LoginPage userInfo={login} />;
+      if (this.state.view === 'signup') {
+        return <SignupPage setView={setView} login={login} />;
+      } else {
+        return <LoginPage setView={setView} userInfo={login} />;
+      }
     } else if (this.state.view === 'search') {
       pageBody = <SearchPage setView={setView} getPostInfo={getPostInfo} />;
     } else if (this.state.view === 'profile') {
