@@ -13,6 +13,7 @@ export default class Message extends React.Component {
       detailMessages: [],
       isMessageDetail: false,
       postId: null,
+      postTitle: null,
       senderId: null,
       isReceived: true,
       recipientId: null,
@@ -194,11 +195,13 @@ export default class Message extends React.Component {
     const senderId = event.target.id.split(',')[0];
     const senderName = event.target.id.split(',')[1];
     const postId = event.target.id.split(',')[2];
-    const recipientId = event.target.id.split(',')[3];
+    const postTitle = event.target.id.split(',')[3];
+    const recipientId = event.target.id.split(',')[4];
     this.setState({
       postId: postId,
       senderId: senderId,
       senderName: senderName,
+      postTitle: postTitle,
       recipientId: recipientId,
       messages: this.state.originalMessages
     });
@@ -292,6 +295,7 @@ export default class Message extends React.Component {
       senderId,
       senderName,
       postId,
+      postTitle,
       recipientId,
       isSearch,
       keyword
@@ -300,6 +304,7 @@ export default class Message extends React.Component {
       <div>
         <MessageHeader
           postId={postId}
+          postTitle={postTitle}
           userInfo={userInfo}
           senderId={senderId}
           senderName={senderName}

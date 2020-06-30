@@ -45,6 +45,7 @@ export default class MessageHeader extends React.Component {
     const {
       postId,
       senderId,
+      postTitle,
       senderName,
       userInfo,
       isMessageDetail,
@@ -80,7 +81,7 @@ export default class MessageHeader extends React.Component {
             ? (
               <p className="text-primary postid-custom text-center mb-1">
                 {`Sender: ${displayName} |`}
-                <span className="cursor-pointer" onClick={handlePostIDClick}>{`postID: ${postId}`}</span>
+                <span className="cursor-pointer" onClick={handlePostIDClick}>{`Title: ${postTitle} (${postId})`}</span>
               </p>
             )
             : (
@@ -93,7 +94,7 @@ export default class MessageHeader extends React.Component {
             <input
               autoFocus
               type="text"
-              className="mx-auto border-0 fixed-top message-search-input cursor-pointer"
+              className="pb-1 mx-auto border-0 fixed-top message-search-input cursor-pointer"
               placeholder={`${isMessageDetail ? 'search message' : 'search sender'}`}
               onChange={handleSearchInputChange}
               value={search}

@@ -12,18 +12,18 @@ export default class MessageList extends React.Component {
                 const isMe = userInfo.userName === message.senderName;
                 let name = null;
                 if (keyword) {
-                  name = textBolder(`${message.senderName}${isMe ? '(Me)' : ''}`, keyword);
+                  name = textBolder(`${message.senderName}${isMe ? ' (Me)' : ''}`, keyword);
                 } else {
                   name = (
                     <>
-                      {`${message.senderName}${isMe ? '(Me)' : ''}`}
+                      {`${message.senderName}${isMe ? ' (Me)' : ''}`}
                     </>
                   );
                 }
                 return (
                   <div
                     key={index}
-                    className={`fadeIn mx-auto ${isMe ? 'message-box-list-me' : 'message-box-list-sender'}`}>
+                    className={`mb-1 fadeIn mx-auto ${isMe ? 'message-box-list-me' : 'message-box-list-sender'}`}>
                     <div className="d-flex justify-space-between">
                       <span
                         className="col mt-2 ml-1 message-sender text-left"
@@ -39,8 +39,8 @@ export default class MessageList extends React.Component {
                       <div className="col text-dark pb-1 message-content">
                         <span
                           className="ml-1 text-left cursor-pointer"
-                          id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.recipientId}
-                          onClick={handleViewMessageClick}>{'postID:' + message.postId}</span>
+                          id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.title + ',' + message.recipientId}
+                          onClick={handleViewMessageClick}>{'Title: ' + message.title}</span>
                       </div>
                     </div>
                   </div>

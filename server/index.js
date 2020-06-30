@@ -183,7 +183,7 @@ app.post('/api/post/image/:path', (req, res) => {
   });
   const upload = multer({
     limits: {
-      fileSize: 1000000
+      fileSize: 10000000
     },
     storage: storage,
     fileFilter(req, file, cb) {
@@ -425,13 +425,15 @@ app.post('/api/message/list/', (req, res, next) => {
     });
   }
   const sql = `
-      SELECT "me"."senderName", "me"."senderId", "me"."recipientId", "me"."postId", "me"."message", "me"."createdAt" FROM (
+      SELECT "me"."senderName", "me"."senderId", "me"."recipientId", "me"."postId", "p"."title", "me"."message", "me"."createdAt" FROM (
       SELECT DISTINCT ON ("m"."senderId", "m"."recipientId", "m"."postId") "u"."userName" AS "senderName", "m"."senderId", "m"."recipientId", "m"."postId", "m"."message", "m"."createdAt"
       FROM "message" AS "m"
       JOIN "user" AS "u"
       ON "u"."userId" = "m"."senderId"
       WHERE "m"."recipientId" = $1 OR "m"."senderId" = $1
       ORDER BY "m"."senderId", "m"."recipientId", "m"."postId" DESC) AS "me"
+      JOIN "post" AS "p"
+      ON "p"."postId" = "me"."postId"
       ORDER BY "me"."createdAt" DESC
   `;
   const params = [recipientId];

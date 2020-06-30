@@ -6,16 +6,27 @@ export default class PostBody extends React.Component {
     this.state = {
       submittedBid: '',
       notes: '',
-      bidAlert: null
+      bidAlert: null,
+      isEditing: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getNotes = this.getNotes.bind(this);
+    this.handleClick = this.handleClick.bind(this);
   }
 
   handleChange(event) {
+    event.preventDefault();
     const value = event.target.value;
     this.setState({ submittedBid: value });
+  }
+
+  handleClick() {
+    event.preventDefault();
+    this.setState({
+      isEditing: !this.state.isEditing
+    });
+    event.target.value = '';
   }
 
   handleSubmit(event) {
@@ -42,7 +53,10 @@ export default class PostBody extends React.Component {
             this.setState({ bidAlert: bidInfo.error });
           } else {
             this.props.getBidInfo(this.props.postId);
-            this.setState({ bidAlert: 'Bid has been successfully submitted' });
+            this.setState({
+              bidAlert: 'Bid has been successfully submitted',
+              isEditing: false
+            });
           }
         })
         .catch(err => console.error(err.message));
@@ -57,7 +71,7 @@ export default class PostBody extends React.Component {
     fetch(`api/notes/${postId}`)
       .then(res => res.json())
       .then(notes => {
-        if (!notes) {
+        if (notes === ' ') {
           this.setState({ notes: 'There are no notes' });
         } else if (notes !== null) {
           this.setState({ notes });
@@ -66,19 +80,29 @@ export default class PostBody extends React.Component {
   }
 
   render() {
-    const { userId, sellerId } = this.props;
-
+    const { userId, sellerId, highestBid, description, bidEnd } = this.props;
+    const { handleSubmit, handleChange, handleClick } = this;
+    const { isEditing } = this.state;
+    const formattedHighestBid = new Intl.NumberFormat().format(highestBid);
     let notesOrBid =
       <div className="bid-buttons-container d-flex flex-column">
-        <form onSubmit={this.handleSubmit}>
-          <input
-            name="bid-offer"
-            id="bid-offer"
-            type="number"
-            placeholder="$0"
-            value={this.state.submittedBid}
-            onChange={this.handleChange}
-          />
+        <form onSubmit={handleSubmit}>
+          {isEditing
+            ? (<input
+              id="bid-offer"
+              type="number"
+              onChange={handleChange}
+              onBlur={handleClick}
+            />)
+            : (<input
+              id="bid-offer"
+              type="text"
+              placeholder={`$${formattedHighestBid}`}
+              onClick={handleClick}
+              readOnly
+            />)
+          }
+
           <button
             id="submit-bid"
             type="submit"
@@ -105,7 +129,7 @@ export default class PostBody extends React.Component {
         </div>;
 
       totalBids = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline text-right m-0">Total Bids:</p>;
-      totalBidsNumber = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline m-0">{this.props.totalBids}</p>;
+      totalBidsNumber = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline m-0">{totalBids}</p>;
     }
 
     let modalDisplay = { display: 'none' };
@@ -115,7 +139,7 @@ export default class PostBody extends React.Component {
     return (
       <div>
         <div className="post-description">
-          <p className="text-center">{this.props.description}</p>
+          <p className="text-center">{description}</p>
         </div>
         <div className="post-bid-info d-flex align-items-center justify-content-between">
           {notesOrBid}
@@ -128,9 +152,9 @@ export default class PostBody extends React.Component {
                 <p className="text-right m-0">Expires:</p>
               </div>
               <div className="bid-numbers">
-                <p className="m-0">${this.props.highestBid}</p>
+                <p className="m-0">${formattedHighestBid}</p>
                 {totalBidsNumber}
-                <p className="m-0">{this.props.bidEnd}</p>
+                <p className="m-0">{bidEnd}</p>
               </div>
             </div>
           </div>

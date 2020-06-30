@@ -35,8 +35,8 @@ export default class EditPost extends React.Component {
 
   componentDidMount() {
     const { notes } = this.props.postInfo;
-    if (!notes === null) {
-      this.setState({ notes });
+    if (notes === null || notes === ' ') {
+      this.setState({ notes: '' });
     }
 
     const expireDate = this.props.postInfo.expiredAt.slice(0, 10);
@@ -88,18 +88,22 @@ export default class EditPost extends React.Component {
       biddingEnabled,
       isDeleted,
       expiredAt,
-      notes,
       category,
       postId
     } = this.state;
 
+    let { notes } = this.state;
+    if (!notes) {
+      notes = ' ';
+    }
     const formData = new FormData();
 
+    // const changedPostImg = Date.now().toString().concat(filePathImageURL.split(' ').join(''));
     // Update the formData object
-    // formData.append('image', this.state.selectedFile, filePathImageURL);
+    // formData.append('image', this.state.selectedFile, changedPostImg);
     formData.append('sellerId', sellerId);
     formData.append('description', description);
-    // formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
+    // formData.append('imageUrl', `/images/user-posts/${changedPostImg}`);
     formData.append('title', title);
     formData.append('startingBid', startingBid);
     formData.append('biddingEnabled', biddingEnabled);
@@ -124,6 +128,26 @@ export default class EditPost extends React.Component {
   }
 
   render() {
+    // Changing Category
+
+    let paintingDisabled = null;
+    let photoDisabled = null;
+    let otherDisabled = null;
+
+    if (this.props.postInfo.category) {
+      switch (this.props.postInfo.category) {
+        case 'paintings':
+          paintingDisabled = 'disabled';
+          break;
+        case 'photographs':
+          photoDisabled = 'disabled';
+          break;
+        case 'other':
+          otherDisabled = 'disabled';
+          break;
+      }
+    }
+
     return (
       <div>
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
@@ -229,9 +253,9 @@ export default class EditPost extends React.Component {
                 <option disabled="disabled" value={this.state.category}>
                   Select Category
                 </option>
-                <option value="paintings">Paintings</option>
-                <option value="photographs">Photographs</option>
-                <option value="other">Other</option>
+                <option disabled={paintingDisabled} value="paintings">Paintings</option>
+                <option disabled={photoDisabled} value="photographs">Photographs</option>
+                <option disabled={otherDisabled} value="other">Other</option>
               </select>
 
               {/* notes */}
