@@ -73,7 +73,8 @@ export default class SignupPage extends React.Component {
       .then(result => {
         if (result.userId) {
           this.props.setView('search');
-          this.props.login(result.name);
+          // this needs to be
+          this.props.login(result.userName);
         }
         if (result.message && result.message.split(' ')[0] === 'duplicate') {
           this.showMessage('Your username or email is already existed.', 2000);
