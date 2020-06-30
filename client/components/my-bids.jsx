@@ -37,7 +37,7 @@ export default class MyBids extends React.Component {
   renderPosts() {
     const postThumbnails = [...this.state.postThumbnails];
     if (postThumbnails.length === 0) {
-      return <h4>No posts have been saved...</h4>;
+      return <h4>You have not made any bids.</h4>;
     } else {
       const postThumbnailsGrid = postThumbnails.map(thumbnail => {
         return (
@@ -77,7 +77,7 @@ export default class MyBids extends React.Component {
               LIST
           </button>
         </div>
-        <div className="mt-4">{this.renderPosts()}</div>
+        <div className="mt-4 text-center">{this.renderPosts()}</div>
       </div>
     );
   }
