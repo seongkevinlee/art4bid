@@ -1,5 +1,5 @@
 import React from 'react';
-import ToggleButton from 'react-toggle-button';
+// import ToggleButton from 'react-toggle-button';
 
 export default class CreatePost extends React.Component {
   constructor(props) {
@@ -12,15 +12,16 @@ export default class CreatePost extends React.Component {
       imageUrl: '',
       title: '',
       startingBid: '',
-      biddingEnabled: false,
+      biddingEnabled: true,
       isDeleted: false,
-      expiredAt: '',
+      expiredAt: '2020/06/30',
       notes: '',
       category: '',
       selectedFile: null,
       filePathImageURL: null,
       display: 'none'
     };
+    this.date = new Date();
     this.baseState = this.state;
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -29,7 +30,27 @@ export default class CreatePost extends React.Component {
     this.handleReset = this.handleReset.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    this.dummyFunction = this.dummyFunction.bind(this);
+    this.getTodaysDate = this.getTodaysDate.bind(this);
+    // this.dummyFunction = this.dummyFunction.bind(this);
+  }
+
+  componentDidMount() {
+
+  }
+
+  getTodaysDate() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    const yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
   }
 
   dummyFunction() {
@@ -44,6 +65,12 @@ export default class CreatePost extends React.Component {
   // delete all changes
   handleReset() {
     this.setState(this.baseState);
+
+    const replaceImage = document.getElementsByClassName(
+      'create-new-post-image'
+    );
+
+    replaceImage[0].setAttribute('src', './images/create-new-post.png');
   }
 
   handleCancel() {
@@ -57,10 +84,10 @@ export default class CreatePost extends React.Component {
 
   // setting state for image input
   handleFileChange(event) {
-    const inputFile = document.getElementById(
-      'imageUrl'
+    const inputFile = document.getElementById('imageUrl');
+    const replaceImage = document.getElementsByClassName(
+      'create-new-post-image'
     );
-    const replaceImage = document.getElementsByClassName('create-new-post-image');
     const file = inputFile.files[0];
 
     if (file) {
@@ -170,7 +197,11 @@ export default class CreatePost extends React.Component {
         <form id="new-post" onSubmit={this.handleSubmit}>
           {/* add picture */}
           <div style={{ textAlign: 'center' }}>
-            <img src="./images/create-new-post.png" alt="create-new-post" className="create-new-post-image" />
+            <img
+              src="./images/create-new-post.png"
+              alt="create-new-post"
+              className="create-new-post-image"
+            />
           </div>
 
           <label htmlFor="imageUrl"></label>
@@ -246,7 +277,7 @@ export default class CreatePost extends React.Component {
 
             <div className="bidding-content">
               {/* toggle bidding button */}
-              <div>
+              {/* <div>
                 <ToggleButton
                   className="big"
                   oChange={this.dummyFunction}
@@ -257,7 +288,7 @@ export default class CreatePost extends React.Component {
                     });
                   }}
                 />
-              </div>
+              </div> */}
 
               {/* starting bid */}
               <label htmlFor="starting-bid">Starting Bid:</label>
@@ -265,7 +296,7 @@ export default class CreatePost extends React.Component {
                 disabled={!this.state.biddingEnabled}
                 type="number"
                 min="1.00"
-                placeholder="$0.00"
+                placeholder="$"
                 name="startingBid"
                 value={this.state.startingBid}
                 onChange={this.handleChange}
@@ -274,10 +305,13 @@ export default class CreatePost extends React.Component {
               {/* bid expiry */}
               <label htmlFor="bid-expiry">Bid Expiration Date:</label>
               <input
+                style={{ fontSize: '12px', padding: '4px' }}
                 disabled={!this.state.biddingEnabled}
                 type="date"
                 name="expiredAt"
-                value={this.state.expiredAt}
+                // value={this.state.expiredAt}
+                value={this.getTodaysDate()}
+                // value="08-26-1980"
                 onChange={this.handleChange}
                 className="bid-expiry"
               />
