@@ -33,19 +33,19 @@ export default function NavBar(props) {
   return (
     <div className="navbar bg-white p-0">
       <div>
-        <img id="search" className="nav-icon" src={searchIcon} onClick={() => props.setView('search')}></img>
+        <img alt="" id="search" className="nav-icon" src={searchIcon} onClick={() => props.setView('search')}></img>
       </div>
       <div>
-        <img id="message" className="nav-icon" src={messageIcon} onClick={() => props.setView('message')}></img>
+        <img alt="" id="message" className="nav-icon" src={messageIcon} onClick={() => props.setView('message')}></img>
       </div>
       <div>
-        <img id="create" className="nav-icon" src={createPostIcon} onClick={() => props.setView('create')}></img>
+        <img alt="" id="create" className="nav-icon" src={createPostIcon} onClick={() => props.setView('create')}></img>
       </div>
       <div>
-        <img id="my-bids" className="nav-icon" src={watchlistIcon} onClick={() => props.setView('my-bids')}></img>
+        <img alt="" id="my-bids" className="nav-icon" src={watchlistIcon} onClick={() => props.setView('my-bids')}></img>
       </div>
       <div>
-        <img id="profile" className="nav-icon" src={profileIcon} onClick={() => props.setView('profile')}></img>
+        <img alt="" id="profile" className="nav-icon" src={profileIcon} onClick={() => props.setView('profile')}></img>
       </div>
     </div>
   );

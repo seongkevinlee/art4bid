@@ -9,6 +9,7 @@ export default class MessageHeader extends React.Component {
     this.handleSearchClick = this.handleSearchClick.bind(this);
     this.handleSearchInputChange = this.handleSearchInputChange.bind(this);
     this.handleBackBtnClick = this.handleBackBtnClick.bind(this);
+    this.handlePostIDClick = this.handlePostIDClick.bind(this);
   }
 
   handleSearchClick() {
@@ -34,6 +35,12 @@ export default class MessageHeader extends React.Component {
     this.props.handleBackClick();
   }
 
+  handlePostIDClick() {
+    const { postId, setView, getPostInfo } = this.props;
+    getPostInfo(postId);
+    setView('post');
+  }
+
   render() {
     const {
       postId,
@@ -43,7 +50,7 @@ export default class MessageHeader extends React.Component {
       isMessageDetail,
       isSearch
     } = this.props;
-    const { handleBackBtnClick } = this;
+    const { handleBackBtnClick, handlePostIDClick } = this;
     const { handleSearchClick, handleSearchInputChange } = this;
     const { search } = this.state;
     const displayName = Number(senderId) === Number(userInfo.userId) ? 'Me' : senderName;
@@ -53,7 +60,7 @@ export default class MessageHeader extends React.Component {
           <div className="my-auto icon-custom-back">
             <i
               style={{ display: isMessageDetail ? 'block' : 'none' }}
-              className="fas fa-chevron-left"
+              className="fas fa-chevron-left cursor-pointer"
               onClick={handleBackBtnClick}>
             </i>
           </div>
@@ -63,7 +70,7 @@ export default class MessageHeader extends React.Component {
           <div className="my-auto icon-custom-search">
             <i
               style={{ display: isSearch ? 'none' : 'block' }}
-              className="fas fa-search"
+              className="fas fa-search cursor-pointer"
               onClick={handleSearchClick}>
             </i>
           </div>
@@ -71,7 +78,10 @@ export default class MessageHeader extends React.Component {
         <div>
           {isMessageDetail
             ? (
-              <p className="text-primary postid-custom text-center mb-1">{`Sender: ${displayName} | postID: ${postId}`}</p>
+              <p className="text-primary postid-custom text-center mb-1">
+                {`Sender: ${displayName} |`}
+                <span className="cursor-pointer" onClick={handlePostIDClick}>{`postID: ${postId}`}</span>
+              </p>
             )
             : (
               <p className="text-secondary postid-custom text-center mb-1">{'click message to view details'}</p>
@@ -83,13 +93,13 @@ export default class MessageHeader extends React.Component {
             <input
               autoFocus
               type="text"
-              className="mx-auto border-0 fixed-top message-search-input"
+              className="mx-auto border-0 fixed-top message-search-input cursor-pointer"
               placeholder={`${isMessageDetail ? 'search message' : 'search sender'}`}
               onChange={handleSearchInputChange}
               value={search}
             />
             <div
-              className="message-search-input-cancel-btn"
+              className="message-search-input-cancel-btn cursor-pointer"
               onClick={handleSearchClick}
             ><i className="fas fa-times"></i></div>
           </div>

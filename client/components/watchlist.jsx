@@ -41,6 +41,7 @@ export default class ViewWatchlist extends React.Component {
       const postThumbnailsGrid = postThumbnails.map(thumbnail => {
         return (
           <img
+            alt=""
             key={thumbnail.postId}
             className="user-post-thumbnail col-4 p-0 col-4"
             src={thumbnail.imageUrl}

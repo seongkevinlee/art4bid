@@ -77,7 +77,11 @@ export default class App extends React.Component {
         />
       );
     } else if (this.state.view === 'message') {
-      pageBody = <Message setView={setView} userInfo={this.state.userInfo} />;
+      pageBody = (
+        <Message
+          setView={setView}
+          getPostInfo={getPostInfo}
+          userInfo={this.state.userInfo} />);
     } else if (this.state.view === 'post') {
       pageBody = (
         <SpecificPost
