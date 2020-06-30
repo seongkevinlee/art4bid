@@ -27,6 +27,7 @@ export default class SearchPage extends React.Component {
     this.getZipcodesByZipcodeWithinRadius = this.getZipcodesByZipcodeWithinRadius.bind(this);
     this.searchPostsByZipcodes = this.searchPostsByZipcodes.bind(this);
     this.showMessage = this.showMessage.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -175,18 +176,15 @@ export default class SearchPage extends React.Component {
     });
   }
 
-  handleSearchClick() {
+  handleSearchClick(selectedPlace) {
     const { search } = this.state;
-    if (search && search.trim().length > 0) {
-      if (isNaN(Number(search))) {
-        const city = search.split(',')[0].trim().toUpperCase();
-        const state = search.split(',')[1] ? search.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
-        // for now, the api doesn't support search by city, we need to receive city and state together
-        this.getZipcodesByCity(city, state);
-      } else {
+    if (selectedPlace) {
+      const city = selectedPlace.split(',')[0].trim().toUpperCase();
+      const state = selectedPlace.split(',')[1] ? selectedPlace.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
+      this.getZipcodesByCity(city, state);
+    } else if (search && search.trim().length > 0) {
       // radius mile is set to 5 as default
-        this.getZipcodesByZipcodeWithinRadius(search, 5);
-      }
+      this.getZipcodesByZipcodeWithinRadius(search, 5);
     } else {
       this.showMessage('please enter keyword', 1000);
     }
@@ -203,37 +201,40 @@ export default class SearchPage extends React.Component {
     });
   }
 
+  handleSubmit(event) {
+    event.preventDefault();
+    this.handleSearchClick();
+  }
+
   render() {
-    const { handleSearchChange, handleSearchClick } = this;
+    const { handleSearchChange, handleSearchClick, handleSubmit } = this;
     const { search, paintings, photographs, other } = this.state;
     if (paintings.length >= 0 && photographs.length >= 0 && other.length >= 0) {
       return (
         <div>
           <div>
-            <nav className="text-center pt-3">
+            <form className="text-center pt-3" onSubmit={handleSubmit}>
               <div className="position-relative">
                 <Autocomplete
                   autoFocus
                   types={['(regions)']}
                   onPlaceSelected={place => {
-                    this.setState({
-                      search: place.formatted_address
-                    });
+                    handleSearchClick(place.formatted_address);
                   }}
                   componentRestrictions={{ country: 'us' }}
                   className="search-bar text-center w-75 border-0 pt-2 pb-2"
                   type="text"
                   name="search"
                   placeholder="search"
-                  value={search}
-                  onChange={handleSearchChange} />
+                  value={search || ''}
+                  onChange={handleSearchChange}/>
                 <img
                   alt=""
                   className="search-mag position-absolute cursor-pointer"
                   src="./images/search-solid.svg"
                   onClick={handleSearchClick}></img>
               </div>
-            </nav>
+            </form>
           </div>
           <div className="d-flex mt-4 justify-content-around text-center">
             <div className="column-label align-text-bottom">
