@@ -623,5 +623,7 @@ button#edit-post {
   font-weight: 300;
 }
 
-
 /* Edit Post */
+.edit-post {
+  margin-bottom: 17px;
+}

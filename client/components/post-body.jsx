@@ -115,7 +115,7 @@ export default class PostBody extends React.Component {
     return (
       <div>
         <div className="post-description">
-          <p className="text-left">{this.props.description}</p>
+          <p className="text-center">{this.props.description}</p>
         </div>
         <div className="post-bid-info d-flex align-items-center justify-content-between">
           {notesOrBid}

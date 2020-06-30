@@ -299,8 +299,6 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
     });
 });
 
-
-
 // TO UPLOAD IMAGE FOR EDIT POST
 app.post('/api/edit/post/image/:path', (req, res) => {
   const folder = `./server/public/images/${req.params.path}`;
@@ -332,7 +330,7 @@ app.post('/api/edit/post/image/:path', (req, res) => {
     const {
       postId,
       description,
-      imageUrl,
+      // imageUrl,
       title,
       startingBid,
       biddingEnabled,
@@ -344,20 +342,18 @@ app.post('/api/edit/post/image/:path', (req, res) => {
     const sql = `
       UPDATE "post"
          SET "description" = $1,
-             "imageUrl" = $2,
-             "title" = $3,
-             "startingBid" = $4,
-             "biddingEnabled" = $5,
-             "isDeleted" = $6,
-             "expiredAt" = $7,
-             "category" = $8,
-             "notes" = $9
-      WHERE "postId" = $10
+             "title" = $2,
+             "startingBid" = $3,
+             "biddingEnabled" = $4,
+             "isDeleted" = $5,
+             "expiredAt" = $6,
+             "category" = $7,
+             "notes" = $8
+      WHERE "postId" = $9
       RETURNING *
   `;
     const params = [
       description,
-      imageUrl,
       title,
       startingBid,
       biddingEnabled,
@@ -392,9 +388,6 @@ app.post('/api/edit/post/image/:path', (req, res) => {
     }
   });
 });
-
-
-
 
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
@@ -535,7 +528,6 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
-
 
 // USER CAN VIEW THE POSTS IN MY WATCHLIST
 // This should be refactored using req.session.userId(if it's possible)
