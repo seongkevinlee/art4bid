@@ -75,6 +75,7 @@ export default class EditProfile extends React.Component {
       .then(response => {
         response.json();
       })
+      .then(() => this.props.getUserData())
       .catch(err => console.error(err));
   }
 

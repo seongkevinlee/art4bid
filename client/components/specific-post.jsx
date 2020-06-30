@@ -3,6 +3,7 @@ import PostHeader from './post-header';
 import PostBody from './post-body';
 import BidHistory from './bid-history';
 import Modal from './modal';
+import EditPost from './edit-post';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -13,7 +14,8 @@ export default class SpecificPost extends React.Component {
       bidInfo: null,
       bidHistory: 'off',
       isModalOpen: false,
-      isWatchlisted: false
+      isWatchlisted: false,
+      editMode: false
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
@@ -23,6 +25,7 @@ export default class SpecificPost extends React.Component {
     this.handleModalCloseClick = this.handleModalCloseClick.bind(this);
     this.checkIfWatchlisted = this.checkIfWatchlisted.bind(this);
     this.addToWatchlist = this.addToWatchlist.bind(this);
+    this.editModeToggle = this.editModeToggle.bind(this);
   }
 
   componentDidMount() {
@@ -102,7 +105,19 @@ export default class SpecificPost extends React.Component {
       });
   }
 
-  render() {
+  editModeToggle() {
+    if (this.state.editMode) {
+      this.setState({
+        editMode: false
+      });
+    } else {
+      this.setState({
+        editMode: true
+      });
+    }
+  }
+
+  renderPost() {
     const {
       postInfo,
       watchlistInfo,
@@ -123,7 +138,7 @@ export default class SpecificPost extends React.Component {
       if (this.state.bidHistory === 'off') {
         bodyview = (
           <PostBody
-            postId= {postInfo.postId}
+            postId={postInfo.postId}
             description={postInfo.description}
             highestBid={highestBid}
             totalBids={bidInfo.totalBids}
@@ -133,6 +148,7 @@ export default class SpecificPost extends React.Component {
             toggleBidHistory={toggleBidHistory}
             messageBtnClick={messageBtnClick}
             getBidInfo={this.getBidInfo}
+            editModeToggle = {this.editModeToggle}
           />
         );
       } else if (this.state.bidHistory === 'on') {
@@ -154,6 +170,8 @@ export default class SpecificPost extends React.Component {
             isWatchlisted={isWatchlisted}
             getWatchlistInfo={this.getWatchlistInfo}
             postId={postInfo.postId}
+            previousView={this.props.previousView}
+
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>
@@ -174,7 +192,24 @@ export default class SpecificPost extends React.Component {
         </div>
       );
     } else {
-      return <div></div>;
+      return null;
+    }
+  }
+
+  renderEditPost() {
+    return (
+      <EditPost
+        userId={this.props.userId}
+        postInfo={this.state.postInfo}
+        editModeToggle={this.editModeToggle}/>
+    );
+  }
+
+  render() {
+    if (this.state.editMode === false) {
+      return this.renderPost();
+    } else {
+      return this.renderEditPost();
     }
   }
 }

@@ -100,6 +100,7 @@ export default class PostBody extends React.Component {
           <button
             id="edit-post"
             className="text-center"
+            onClick={() => this.props.editModeToggle()}
           >Edit Post</button>
         </div>;
 

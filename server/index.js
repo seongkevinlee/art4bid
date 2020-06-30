@@ -42,7 +42,8 @@ app.post('/api/login/', (req, res, next) => {
       return res.send({ message: err });
     });
 });
-// USER CAN LOGIN
+
+// USER CAN SIGN UP
 app.post('/api/signup/', (req, res, next) => {
   const { userName, email, password } = req.body;
   const params = [userName, email, password];
@@ -67,6 +68,7 @@ app.post('/api/signup/', (req, res, next) => {
       return res.send({ message: err.message });
     });
 });
+
 // USER CAN SEARCH POST BY LOCATION (ZIPCODE)
 app.get('/api/post/:location', (req, res, next) => {
   const { location } = req.params;
@@ -264,6 +266,7 @@ app.post('/api/post/image/:path', (req, res) => {
     }
   });
 });
+
 // USER CAN VIEW ALL POSTS
 app.get('/api/posts/:category/:offset', (req, res, next) => {
   const category = req.params.category;
@@ -295,21 +298,50 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
       });
     });
 });
-// USER CAN EDIT A POST
-app.post('/api/post/', (req, res, next) => {
-  const {
-    postId,
-    description,
-    imageUrl,
-    title,
-    startingBid,
-    biddingEnabled,
-    isDeleted,
-    expiredAt,
-    category,
-    notes
-  } = req.body;
-  const sql = `
+
+
+
+// TO UPLOAD IMAGE FOR EDIT POST
+app.post('/api/edit/post/image/:path', (req, res) => {
+  const folder = `./server/public/images/${req.params.path}`;
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+  const upload = multer({
+    limits: {
+      fileSize: 10000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    // USER CAN EDIT A POST
+    const {
+      postId,
+      description,
+      imageUrl,
+      title,
+      startingBid,
+      biddingEnabled,
+      isDeleted,
+      expiredAt,
+      category,
+      notes
+    } = req.body;
+    const sql = `
       UPDATE "post"
          SET "description" = $1,
              "imageUrl" = $2,
@@ -323,35 +355,47 @@ app.post('/api/post/', (req, res, next) => {
       WHERE "postId" = $10
       RETURNING *
   `;
-  const params = [
-    description,
-    imageUrl,
-    title,
-    startingBid,
-    biddingEnabled,
-    isDeleted,
-    expiredAt,
-    category,
-    notes,
-    postId
-  ];
-  db.query(sql, params)
-    .then(result => {
-      const post = result.rows[0];
-      if (!post) {
-        return res.status(400).json({
-          error: 'Failed to update post'
+    const params = [
+      description,
+      imageUrl,
+      title,
+      startingBid,
+      biddingEnabled,
+      isDeleted,
+      expiredAt,
+      category,
+      notes,
+      postId
+    ];
+    db.query(sql, params)
+      .then(result => {
+        const post = result.rows[0];
+        if (!post) {
+          return res.status(400).json({
+            error: 'Failed to update post'
+          });
+        } else {
+          return res.status(202).json(post);
+        }
+      })
+      .catch(err => {
+        return res.status(500).json({
+          error: `An unexpected error occurred. ${err.message}`
         });
-      } else {
-        return res.status(202).json(post);
-      }
-    })
-    .catch(err => {
-      return res.status(500).json({
-        error: `An unexpected error occurred. ${err.message}`
       });
-    });
+    if (err) {
+      return res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      return res.status(200).json();
+    }
+  });
 });
+
+
+
+
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
   const { senderId, recipientId, postId, message } = req.body;
@@ -491,6 +535,8 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
+
+
 // USER CAN VIEW THE POSTS IN MY WATCHLIST
 // This should be refactored using req.session.userId(if it's possible)
 // Also ths endpoint name should be changed to /api/watchlists, but careful to use same endpoint
@@ -517,6 +563,7 @@ app.get('/api/watchlist/:userId', (req, res, next) => {
       });
     });
 });
+
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -540,6 +587,7 @@ app.get('/api/watchlistcounts/:postId', (req, res, next) => {
       });
     });
 });
+
 // USER CAN VIEW A SPECIFIC POST - bid info
 app.get('/api/bidinfo/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -564,6 +612,7 @@ app.get('/api/bidinfo/:postId', (req, res, next) => {
       });
     });
 });
+
 // USER CAN VIEW A SPECIFIC POST - bid history
 app.get('/api/bidhistory/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -751,6 +800,7 @@ app.post('/api/watchlists/:postId', (req, res, err) => {
       // res.status(500).json({ error: 'An unexpected error occurred' });
     });
 });
+
 // USER CAN VIEW THE POSTS THAT THEY HAVE BIDDED ON
 // Currently designed to use params.usedId. Please change it to req.session.userId if you want
 app.get('/api/bids/:userId', (req, res, next) => {
@@ -777,6 +827,7 @@ app.get('/api/bids/:userId', (req, res, next) => {
       });
     });
 });
+
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")

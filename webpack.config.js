@@ -1,10 +1,9 @@
 require('dotenv/config');
 const path = require('path');
-
 const clientPath = path.join(__dirname, 'client/');
 const publicPath = path.join(__dirname, 'server/public/');
 const uploadPath = path.join(__dirname, 'server/public/images/user-profiles');
-
+const uploadPath2 = path.join(__dirname, 'server/public/images/user-posts');
 module.exports = {
   resolve: {
     extensions: ['.js', '.jsx']
@@ -14,7 +13,7 @@ module.exports = {
     path: publicPath
   },
   watchOptions: {
-    ignored: uploadPath
+    ignored: [uploadPath, uploadPath2]
   },
   module: {
     rules: [
@@ -23,9 +22,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            plugins: [
-              '@babel/plugin-transform-react-jsx'
-            ]
+            plugins: ['@babel/plugin-transform-react-jsx']
           }
         }
       }
