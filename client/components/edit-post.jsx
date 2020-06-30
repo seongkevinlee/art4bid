@@ -163,10 +163,11 @@ export default class EditPost extends React.Component {
             </div>
           </div>
         </div>
-
         <form id="new-post" onSubmit={this.handleSubmit}>
           {/* add picture */}
-          <div className="create-new-post-image"></div>
+          <div style={{ textAlign: 'center' }}>
+            <img src={this.props.postInfo.imageUrl} alt="create-new-post" className="create-new-post-image" />
+          </div>
 
           <label htmlFor="imageUrl"></label>
           <input
@@ -175,7 +176,7 @@ export default class EditPost extends React.Component {
             name="imageUrl"
             accept="image/png, image/jpeg"
             className="new-post-input"
-            // title=" "
+            title=" "
             value={this.state.imageUrl}
             onChange={this.handleFileChange}
             required
