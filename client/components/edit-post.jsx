@@ -17,7 +17,7 @@ export default class EditPost extends React.Component {
       biddingEnabled: postInfo.biddingEnabled,
       isDeleted: postInfo.isDeleted,
       expiredAt: postInfo.expiredAt,
-      notes: '',
+      notes: postInfo.notes,
       category: postInfo.category,
       selectedFile: null,
       filePathImageURL: null,
@@ -62,6 +62,12 @@ export default class EditPost extends React.Component {
 
   // setting state for image input
   handleFileChange(event) {
+    if (!this.state.imageUrl) {
+      this.setState({
+        filePathImageURL: this.props.imageUrl
+      });
+    }
+
     this.setState({
       selectedFile: event.target.files[0],
       [event.target.name]: event.target.value,
@@ -253,7 +259,7 @@ export default class EditPost extends React.Component {
                 disabled={!this.state.biddingEnabled}
                 type="number"
                 min="1.00"
-                placeholder="$0.00"
+                placeholder="$0"
                 name="startingBid"
                 value={this.state.startingBid}
                 onChange={this.handleChange}
