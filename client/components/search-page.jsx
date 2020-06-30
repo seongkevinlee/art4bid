@@ -177,7 +177,7 @@ export default class SearchPage extends React.Component {
 
   handleSearchClick() {
     const { search } = this.state;
-    if (search.trim().length > 0) {
+    if (search && search.trim().length > 0) {
       if (isNaN(Number(search))) {
         const city = search.split(',')[0].trim().toUpperCase();
         const state = search.split(',')[1] ? search.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
@@ -229,7 +229,7 @@ export default class SearchPage extends React.Component {
                   onChange={handleSearchChange} />
                 <img
                   alt=""
-                  className="search-mag position-absolute"
+                  className="search-mag position-absolute cursor-pointer"
                   src="./images/search-solid.svg"
                   onClick={handleSearchClick}></img>
               </div>
