@@ -43,11 +43,11 @@ export default class Profile extends React.Component {
 
     return (
       <div className="d-flex flex-column align-items-center">
-        <div className="d-flex justify-content-between col-12 mb-2 mt-1">
+        <div className="profile-header d-flex justify-content-between col-12 mt-1">
           <div className="back-container"></div>
           <div className="header-title pt-3 pb-3">PROFILE</div>
           <button
-            className="btn btn-submit-header text-center"
+            className="profile-edit-btn btn btn-submit-header text-center"
             onClick={this.editModeToggle}
           >
             EDIT

@@ -6,12 +6,16 @@ export default function PostHeader(props) {
   return (
     <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
       <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
-        <img
-          alt=""
-          onClick={() => props.setView(props.previousView)}
-          className="header-icon"
-          src="./images/kindpng.png"
-        ></img>
+        <div
+          className='back-container text-center d-flex justify-content-start align-items-center'
+        >
+          <img
+            type='button'
+            className="back-arrow"
+            src="./images/backarrow.png"
+            alt="back-arrow"
+            onClick={() => props.setView(props.previousView)} />
+        </div>
         <p className="following m-0 invisible">go back</p>
       </div>
       <div className="post-header-text">

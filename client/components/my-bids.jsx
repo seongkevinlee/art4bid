@@ -37,7 +37,7 @@ export default class MyBids extends React.Component {
   renderPosts() {
     const postThumbnails = [...this.state.postThumbnails];
     if (postThumbnails.length === 0) {
-      return <h4>You have not made any bids.</h4>;
+      return <p>You have not made any bids.</p>;
     } else {
       const postThumbnailsGrid = postThumbnails.map(thumbnail => {
         return (
@@ -60,25 +60,20 @@ export default class MyBids extends React.Component {
   render() {
     return (
       <div>
-        <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
+        <div className='my-bids-header d-flex justify-content-between col-12 mb-2 mt-1'>
           <div
             className='back-container text-center d-flex justify-content-start align-items-center'
           >
-            <img
-              type='button'
-              className="back-arrow"
-              src="./images/backarrow.png"
-              alt="back-arrow"/>
           </div>
           <div className='header-title pt-3 pb-3'>MY BIDS</div>
           <button
-            className='btn btn-submit-header text-center'
+            className='watchlist-button btn btn-submit-header text-center'
             onClick={this.setView}>
               WATCH{'\n'}
               LIST
           </button>
         </div>
-        <div className="mt-4 text-center">{this.renderPosts()}</div>
+        <div className="mt-2">{this.renderPosts()}</div>
       </div>
     );
   }
