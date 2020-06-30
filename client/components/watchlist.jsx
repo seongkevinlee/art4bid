@@ -58,20 +58,23 @@ export default class ViewWatchlist extends React.Component {
   render() {
     return (
       <div>
-        <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
-          <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
+        <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
+          <div
+            className='back-container text-center d-flex justify-content-start align-items-center'
+          >
             <img
-              onClick={this.handleClick}
-              className="header-icon"
-              src="./images/kindpng.png"
-            ></img>
+              type='button'
+              className="back-arrow"
+              src="./images/backarrow.png"
+              alt="back-arrow"
+              onClick={this.handleClick} />
           </div>
-          <div className="header-title pt-3 pb-3 new-post-header">
+          <div className="header-title pt-3 pb-3">
             WATCHLIST
           </div>
-          <div className="header-icon-container d-flex flex-column justify-content-center mt-2"></div>
-        </header>
-        <div>{this.renderPosts()}</div>
+          <div className="back-container"></div>
+        </div>
+        <div className="mt-4">{this.renderPosts()}</div>
       </div>
     );
   }

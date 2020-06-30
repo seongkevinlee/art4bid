@@ -7,7 +7,7 @@ import NavBar from './navbar';
 import CreatePost from './create-post';
 import SpecificPost from './specific-post';
 import MyBids from './my-bids';
-import ViewWatchlist from './user-can-view-watchlist';
+import Watchlist from './watchlist';
 const UserContext = React.createContext('userInfo');
 export { UserContext };
 
@@ -87,10 +87,17 @@ export default class App extends React.Component {
     } else if (this.state.view === 'create') {
       pageBody = <CreatePost setView={this.setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'my-bids') {
-      pageBody = <MyBids setView={this.setView} userInfo={this.state.userInfo}/>;
+      pageBody = (
+        <MyBids
+          getPostInfo={getPostInfo}
+          setView={this.setView}
+          userInfo={this.state.userInfo}
+          previousView={this.state.previousView}/>
+
+      );
     } else if (this.state.view === 'watchlist') {
       pageBody = (
-        <ViewWatchlist
+        <Watchlist
           getPostInfo={getPostInfo}
           setView={setView}
           userInfo={this.state.userInfo}
