@@ -57,6 +57,19 @@ export default class CreatePost extends React.Component {
 
   // setting state for image input
   handleFileChange(event) {
+    const inputFile = document.getElementById(
+      'imageUrl'
+    );
+    const replaceImage = document.getElementsByClassName('create-new-post-image');
+    const file = inputFile.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.addEventListener('load', function () {
+        replaceImage[0].setAttribute('src', this.result);
+      });
+      reader.readAsDataURL(file);
+    }
     this.setState({
       selectedFile: event.target.files[0],
       [event.target.name]: event.target.value,
@@ -150,7 +163,9 @@ export default class CreatePost extends React.Component {
 
         <form id="new-post" onSubmit={this.handleSubmit}>
           {/* add picture */}
-          <div className="create-new-post-image"></div>
+          <div style={{ textAlign: 'center' }}>
+            <img src="./images/create-new-post.png" alt="create-new-post" className="create-new-post-image" />
+          </div>
 
           <label htmlFor="imageUrl"></label>
           <input

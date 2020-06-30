@@ -774,7 +774,8 @@ app.get('/api/bids/:userId', (req, res, next) => {
     SELECT "p".*
     FROM "post" AS "p"
     JOIN "bid" AS "b"
-    ON "p"."postId" =  "b"."postId"
+    ON "p"."postId
+" =  "b"."postId"
     WHERE "bidderId" = $1
   `;
   const params = [userId];
