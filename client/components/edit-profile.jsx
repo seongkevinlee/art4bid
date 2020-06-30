@@ -100,11 +100,16 @@ export default class EditProfile extends React.Component {
             <img type='button' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel}/>
           </div>
           <div className='header-title pt-3 pb-3'>EDIT</div>
-          <button
-            className='edit-profile-save-btn btn btn-submit-header text-center'
-            onClick={this.handleSubmit}>
-            SAVE
-          </button>
+          <div className="back-container d-flex justify-content-center align-items-center">
+            <button
+              type="Submit"
+              form="new-post"
+              className="yes-button"
+              style={{ height: '40px' }}
+              onClick={this.handleSubmit}>
+              SAVE
+            </button>
+          </div>
         </div>
         <div className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4' style={{ backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})` }}>
           <input
