@@ -37,6 +37,9 @@ export default class EditPost extends React.Component {
     if (!notes === null) {
       this.setState({ notes });
     }
+
+    const expireDate = this.props.postInfo.expiredAt.slice(0, 10);
+    this.setState({ expiredAt: expireDate });
   }
 
   handleModal() {
@@ -103,9 +106,9 @@ export default class EditPost extends React.Component {
       method: 'POST',
       body: formData
     })
-      .then(res => {
-        return res.json();
-      })
+      // .then(res => {
+      //   console.log(res.json());
+      // })
       .then(data => {
         this.props.getPostInfo(this.props.postId);
         this.props.editModeToggle();
