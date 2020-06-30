@@ -88,9 +88,13 @@ export default class CreatePost extends React.Component {
       biddingEnabled,
       isDeleted,
       expiredAt,
-      notes,
       category
     } = this.state;
+
+    let { notes } = this.state;
+    if (!notes) {
+      notes = ' ';
+    }
 
     const formData = new FormData();
 
