@@ -77,19 +77,19 @@ export default class SearchPage extends React.Component {
   //     .then(res => res.json())
   //     .then(thumbnailInfo => {
   //       if (category === 'paintings') {
-  //         this.paintingOffset += 10;
+  //         this.paintingOffset += thumbnailInfo.length;
   //         const paintingsArr = this.state.paintings.slice().concat(thumbnailInfo);
   //         this.setState({
   //           paintings: paintingsArr
   //         });
   //       } else if (category === 'photographs') {
-  //         this.photographOffset += 10;
+  //         this.photographOffset += thumbnailInfo.length;
   //         const photographsArr = this.state.photographs.slice().concat(thumbnailInfo);
   //         this.setState({
   //           photographs: photographsArr
   //         });
   //       } else if (category === 'other') {
-  //         this.otherOffset += 10;
+  //         this.otherOffset += thumbnailInfo.length;
   //         const otherArr = this.state.other.slice().concat(thumbnailInfo);
   //         this.setState({
   //           other: otherArr
