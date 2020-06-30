@@ -15,11 +15,11 @@ option {
 }
 
 .create-new-post-image {
-  background-image: url("./images/create-new-post.png");
   height: 210px;
   width: 360px;
   background-repeat: no-repeat;
   background-size: cover;
+  object-fit: contain;
 }
 
 .title-description {
