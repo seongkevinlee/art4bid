@@ -18,17 +18,19 @@ export default class ThumbnailColumn extends React.Component {
     const { postThumbnails } = this.state;
     const thumbnails = postThumbnails.map(thumbnail => {
       return (
-        <img
-          alt=""
-          key={thumbnail.postId}
-          src={thumbnail.imageUrl}
-          className="w-100 contain fadeIn"
-          onClick={() => {
-            this.props.getPostInfo(thumbnail.postId);
-            this.props.setView('post');
-          }
-          }>
-        </img>
+        <div key={thumbnail.postId} className="thumbnail-container">
+          <img
+            alt=""
+            key={thumbnail.postId}
+            src={thumbnail.imageUrl}
+            className="w-100 h-100 fadeIn cover"
+            onClick={() => {
+              this.props.getPostInfo(thumbnail.postId);
+              this.props.setView('post');
+            }
+            }>
+          </img>
+        </div>
       );
     });
     return (
