@@ -22,6 +22,9 @@ export default function NavBar(props) {
     case 'watchlist':
       watchlistIcon = './images/fire-red.png';
       break;
+    case 'my-bids':
+      watchlistIcon = './images/fire-red.png';
+      break;
     case 'profile':
       profileIcon = './images/user-red.png';
       break;
@@ -39,7 +42,7 @@ export default function NavBar(props) {
         <img id="create" className="nav-icon" src={createPostIcon} onClick={() => props.setView('create')}></img>
       </div>
       <div>
-        <img id="watchlist" className="nav-icon" src={watchlistIcon} onClick={() => props.setView('watchlist')}></img>
+        <img id="my-bids" className="nav-icon" src={watchlistIcon} onClick={() => props.setView('my-bids')}></img>
       </div>
       <div>
         <img id="profile" className="nav-icon" src={profileIcon} onClick={() => props.setView('profile')}></img>
