@@ -183,7 +183,7 @@ app.post('/api/post/image/:path', (req, res) => {
   });
   const upload = multer({
     limits: {
-      fileSize: 1000000
+      fileSize: 10000000
     },
     storage: storage,
     fileFilter(req, file, cb) {
