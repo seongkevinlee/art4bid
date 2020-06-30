@@ -71,40 +71,75 @@ app.get('/api/post/:location', (req, res, next) => {
       });
     });
 });
-// USER CAN EDIT PROFILE
-app.put('/api/user/:userId', (req, res, next) => {
+
+// USER CAN VIEW PROFILE
+app.get('/api/user/:userId', (req, res, next) => {
   const userId = parseInt(req.params.userId);
-  const { email, profileImg, coverImg, description, location } = req.body;
-  if (!Number.isInteger(userId) || userId <= 0) {
-    return res.status(400).json({
-      error: 'UserId must be a positive integer'
-    });
-  }
-  if (!email) {
-    return res.status(400).json({
-      error: 'Email is a required field'
-    });
-  }
-  if (!location) {
-    return res.status(400).json({
-      error: 'Location is a required field'
-    });
-  }
   const sql = `
-  UPDATE     "user"
-  SET        "email" = $1,
-             "profileImg" = $2,
-             "coverImg" = $3,
-             "description" = $4,
-             "location" = $5
-  WHERE      "userId" = $6
-  RETURNING  *
-  `;
-  const params = [email, profileImg, coverImg, description, location, userId];
+    SELECT     *
+    FROM       "user"
+    WHERE      "userId" = $1
+    `;
+  const params = [userId];
   db.query(sql, params)
-    .then(result => res.json(result.rows))
+    .then(result => { res.json(result.rows[0]); })
     .catch(err => next(err));
 });
+
+// USER CAN EDIT PROFILE
+app.post('/api/user/:userId', (req, res, next) => {
+  const folder = './server/public/images/user-profiles';
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder, { recursive: true });
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+  const upload = multer({
+    limits: {
+      fileSize: 10000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).array('image');
+  upload(req, res, function (err) {
+    const userId = parseInt(req.params.userId);
+    const { email, profileImg, coverImg, description, location } = req.body;
+    const sql = `
+    UPDATE     "user"
+    SET        "email" = $1,
+               "profileImg" = $2,
+               "coverImg" = $3,
+               "description" = $4,
+               "location" = $5
+    WHERE      "userId" = $6
+    RETURNING  *
+    `;
+    const params = [email, profileImg, coverImg, description, location, userId];
+    db.query(sql, params)
+      .then(result => res.json(result.rows))
+      .catch(err => next(err));
+    if (err) {
+      res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      res.status(200).json();
+    }
+  });
+
+});
+
 // TO UPLOAD AN IMAGE to a path(param)
 app.post('/api/post/image/:path', (req, res) => {
   const folder = `./server/public/images/${req.params.path}`;
@@ -467,6 +502,32 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
       });
     });
 });
+// USER CAN VIEW THE POSTS IN MY WATCHLIST
+// This should be refactored using req.session.userId(if it's possible)
+// Also ths endpoint name should be changed to /api/watchlists, but careful to use same endpoint
+app.get('/api/watchlist/:userId', (req, res, next) => {
+  const userId = Number(req.params.userId);
+  if (!Number.isInteger(userId) || userId < 0) {
+    return res.status(400).json({ error: 'userId must be a positive integer' });
+  }
+  const sql = `
+    SELECT "p".*
+    FROM "post" AS "p"
+    JOIN "watchlists" AS "w"
+    ON "p"."postId" =  "w"."postId"
+    WHERE "userId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => {
+      return res.status(500).json({
+        error: `An unexpected error occurred ${err.message}`
+      });
+    });
+});
 // USER CAN VIEW A SPECIFIC POST - the watchlist counts
 app.get('/api/watchlistcounts/:postId', (req, res, next) => {
   const postId = Number(req.params.postId);
@@ -654,13 +715,10 @@ function getUserIdParams(postId, req) {
 // USER GETS SPECIFIC ITEM IN WATCHLIST
 app.get('/api/watchlists/:postId', (req, res, err) => {
   const { postId } = req.params;
-
   const params = getUserIdParams(postId, req);
-
   if (params) {
     db.query(getSQLWatchLists, params).then(result => {
       const watchlistObject = result && result.rows && result.rows[0];
-
       if (watchlistObject) {
         res.send({ status: 'successful', watchListItem: watchlistObject });
       } else {
@@ -704,7 +762,32 @@ app.post('/api/watchlists/:postId', (req, res, err) => {
       // res.status(500).json({ error: 'An unexpected error occurred' });
     });
 });
-
+// USER CAN VIEW THE POSTS THAT THEY HAVE BIDDED ON
+// Currently designed to use params.usedId. Please change it to req.session.userId if you want
+app.get('/api/bids/:userId', (req, res, next) => {
+  // const userId = Number(req.session.userId);
+  const userId = Number(req.params.userId);
+  if (!Number.isInteger(userId) || userId < 0) {
+    return res.status(400).json({ error: 'userId must be a positive integer' });
+  }
+  const sql = `
+    SELECT "p".*
+    FROM "post" AS "p"
+    JOIN "bid" AS "b"
+    ON "p"."postId" =  "b"."postId"
+    WHERE "bidderId" = $1
+  `;
+  const params = [userId];
+  db.query(sql, params)
+    .then(result => {
+      return res.status(200).json(result.rows);
+    })
+    .catch(err => {
+      return res.status(500).json({
+        error: `An unexpected error occurred ${err.message}`
+      });
+    });
+});
 // HEALTH CHECK
 app.get('/api/health-check', (req, res, next) => {
   db.query("select 'successfully connected' as \"message\"")
