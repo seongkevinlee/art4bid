@@ -7,6 +7,7 @@ export default function PostHeader(props) {
     <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
       <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
         <img
+          alt=""
           onClick={() => props.setView(props.previousView)}
           className="header-icon"
           src="./images/kindpng.png"

@@ -313,6 +313,10 @@ button {
   border-radius: 6px;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 .message-padding {
   height: 160px;
 }

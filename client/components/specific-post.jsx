@@ -174,7 +174,7 @@ export default class SpecificPost extends React.Component {
 
           />
           <div className="post-image-container">
-            <img src={postInfo.imageUrl}></img>
+            <img alt="" src={postInfo.imageUrl}></img>
           </div>
           <div>{bodyview}</div>
           <div>

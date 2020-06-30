@@ -38,7 +38,7 @@ export default class MessageList extends React.Component {
                     <div>
                       <div className="col text-dark pb-1 message-content">
                         <span
-                          className="ml-1 text-left"
+                          className="ml-1 text-left cursor-pointer"
                           id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.recipientId}
                           onClick={handleViewMessageClick}>{'postID:' + message.postId}</span>
                       </div>

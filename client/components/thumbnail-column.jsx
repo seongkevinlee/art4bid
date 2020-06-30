@@ -19,6 +19,7 @@ export default class ThumbnailColumn extends React.Component {
     const thumbnails = postThumbnails.map(thumbnail => {
       return (
         <img
+          alt=""
           key={thumbnail.postId}
           src={thumbnail.imageUrl}
           className="w-100 contain fadeIn"

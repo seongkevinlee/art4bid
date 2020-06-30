@@ -228,6 +228,7 @@ export default class SearchPage extends React.Component {
                   value={search}
                   onChange={handleSearchChange} />
                 <img
+                  alt=""
                   className="search-mag position-absolute"
                   src="./images/search-solid.svg"
                   onClick={handleSearchClick}></img>

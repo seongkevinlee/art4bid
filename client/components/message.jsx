@@ -273,7 +273,7 @@ export default class Message extends React.Component {
   }
 
   render() {
-    const { userInfo } = this.props;
+    const { setView, getPostInfo, userInfo } = this.props;
     const {
       handleBackClick,
       getTimeMsg,
@@ -310,6 +310,8 @@ export default class Message extends React.Component {
           detailMessages={detailMessages}
           isSearch={isSearch}
           searchToggle={searchToggle}
+          setView={setView}
+          getPostInfo={getPostInfo}
         />
         {isMessageDetail
           ? (<MessageDetail

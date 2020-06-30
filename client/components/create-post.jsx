@@ -128,6 +128,7 @@ export default class CreatePost extends React.Component {
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
           <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
             <img
+              alt=""
               onClick={this.handleModal}
               className="header-icon"
               src="./images/kindpng.png"
