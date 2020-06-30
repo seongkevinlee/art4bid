@@ -270,20 +270,48 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
       });
     });
 });
-// USER CAN EDIT A POST
-app.patch('/api/post/', (req, res, next) => {
-  const {
-    postId,
-    description,
-    imageUrl,
-    title,
-    startingBid,
-    biddingEnabled,
-    isDeleted,
-    expiredAt,
-    category
-  } = req.body;
-  const sql = `
+
+// TO UPLOAD IMAGE FOR EDIT POST
+app.post('/api/edit/post/image/:path', (req, res) => {
+  const folder = `./server/public/images/${req.params.path}`;
+  if (!fs.existsSync(folder)) {
+    fs.mkdirSync(folder);
+  }
+  const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, folder);
+    },
+    filename: function (req, file, cb) {
+      cb(null, file.originalname);
+    }
+  });
+  const upload = multer({
+    limits: {
+      fileSize: 10000000
+    },
+    storage: storage,
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
+        return cb(new Error('Please upload a jpg., .jpeg, or .png file'));
+      }
+      cb(undefined, true);
+    }
+  }).single('image');
+  upload(req, res, function (err) {
+    // USER CAN EDIT A POST
+    const {
+      postId,
+      description,
+      imageUrl,
+      title,
+      startingBid,
+      biddingEnabled,
+      isDeleted,
+      expiredAt,
+      category,
+      notes
+    } = req.body;
+    const sql = `
       UPDATE "post"
          SET "description" = $1,
              "imageUrl" = $2,
@@ -292,38 +320,49 @@ app.patch('/api/post/', (req, res, next) => {
              "biddingEnabled" = $5,
              "isDeleted" = $6,
              "expiredAt" = $7,
-             "category" = $8
-      WHERE "postId" = $9
+             "category" = $8,
+             "notes" = $9
+      WHERE "postId" = $10
       RETURNING *
   `;
-  const params = [
-    description,
-    imageUrl,
-    title,
-    startingBid,
-    biddingEnabled,
-    isDeleted,
-    expiredAt,
-    category,
-    postId
-  ];
-  db.query(sql, params)
-    .then(result => {
-      const post = result.rows[0];
-      if (!post) {
-        return res.status(400).json({
-          error: 'Failed to update post'
+    const params = [
+      description,
+      imageUrl,
+      title,
+      startingBid,
+      biddingEnabled,
+      isDeleted,
+      expiredAt,
+      category,
+      notes,
+      postId
+    ];
+    db.query(sql, params)
+      .then(result => {
+        const post = result.rows[0];
+        if (!post) {
+          return res.status(400).json({
+            error: 'Failed to update post'
+          });
+        } else {
+          return res.status(202).json(post);
+        }
+      })
+      .catch(err => {
+        return res.status(500).json({
+          error: `An unexpected error occurred. ${err.message}`
         });
-      } else {
-        return res.status(202).json(post);
-      }
-    })
-    .catch(err => {
-      return res.status(500).json({
-        error: `An unexpected error occurred. ${err.message}`
       });
-    });
+    if (err) {
+      return res.status(400).json({
+        error: 'Failed to upload an image'
+      });
+    } else {
+      return res.status(200).json();
+    }
+  });
 });
+
 // USER CAN SEND A PRIVATE MESSAGE
 app.post('/api/message/', (req, res, next) => {
   const { senderId, recipientId, postId, message } = req.body;
