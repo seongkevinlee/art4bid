@@ -154,6 +154,8 @@ export default class SpecificPost extends React.Component {
             isWatchlisted={isWatchlisted}
             getWatchlistInfo={this.getWatchlistInfo}
             postId={postInfo.postId}
+            previousView={this.props.previousView}
+
           />
           <div className="post-image-container">
             <img src={postInfo.imageUrl}></img>

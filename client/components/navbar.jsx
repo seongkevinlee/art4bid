@@ -10,7 +10,7 @@ export default function NavBar(props) {
 
   switch (view) {
     case 'search':
-    case 'post':
+    // case 'post':
       searchIcon = './images/search-red.png';
       break;
     case 'message':
