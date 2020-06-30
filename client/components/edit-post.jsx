@@ -11,7 +11,7 @@ export default class EditPost extends React.Component {
       textDisplay: false,
       sellerId: postInfo.sellerId,
       description: postInfo.description,
-      imageUrl: '',
+      imageUrl: postInfo.imageUrl,
       title: postInfo.title,
       startingBid: postInfo.startingBid,
       biddingEnabled: postInfo.biddingEnabled,
@@ -19,14 +19,15 @@ export default class EditPost extends React.Component {
       expiredAt: postInfo.expiredAt,
       notes: postInfo.notes,
       category: postInfo.category,
-      selectedFile: null,
-      filePathImageURL: null,
+      // selectedFile: null,
+      // filePathImageURL: null,
+      // newImageUrl: '',
       display: 'none'
     };
     this.baseState = this.state;
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleFileChange = this.handleFileChange.bind(this);
+    // this.handleFileChange = this.handleFileChange.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
@@ -61,19 +62,19 @@ export default class EditPost extends React.Component {
   }
 
   // setting state for image input
-  handleFileChange(event) {
-    if (!this.state.imageUrl) {
-      this.setState({
-        filePathImageURL: this.props.imageUrl
-      });
-    }
+  // handleFileChange(event) {
+  //   if (!this.state.imageUrl) {
+  //     this.setState({
+  //       filePathImageURL: this.props.imageUrl
+  //     });
+  //   }
 
-    this.setState({
-      selectedFile: event.target.files[0],
-      [event.target.name]: event.target.value,
-      filePathImageURL: event.target.files[0].name
-    });
-  }
+  //   this.setState({
+  //     selectedFile: event.target.files[0],
+  //     [event.target.name]: event.target.value,
+  //     filePathImageURL: event.target.files[0].name
+  //   });
+  // }
 
   handleSubmit(event) {
     event.preventDefault();
@@ -81,7 +82,7 @@ export default class EditPost extends React.Component {
     const {
       sellerId,
       description,
-      filePathImageURL,
+      // filePathImageURL,
       title,
       startingBid,
       biddingEnabled,
@@ -95,10 +96,10 @@ export default class EditPost extends React.Component {
     const formData = new FormData();
 
     // Update the formData object
-    formData.append('image', this.state.selectedFile, filePathImageURL);
+    // formData.append('image', this.state.selectedFile, filePathImageURL);
     formData.append('sellerId', sellerId);
     formData.append('description', description);
-    formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
+    // formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
     formData.append('title', title);
     formData.append('startingBid', startingBid);
     formData.append('biddingEnabled', biddingEnabled);
@@ -166,21 +167,21 @@ export default class EditPost extends React.Component {
         <form id="new-post" onSubmit={this.handleSubmit}>
           {/* add picture */}
           <div style={{ textAlign: 'center' }}>
-            <img src={this.props.postInfo.imageUrl} alt="create-new-post" className="create-new-post-image" />
+            <img src={this.state.imageUrl} alt="create-new-post" className="create-new-post-image edit-post" />
           </div>
 
-          <label htmlFor="imageUrl"></label>
+          {/* <label htmlFor="imageUrl"></label>
           <input
             type="file"
             id="imageUrl"
-            name="imageUrl"
+            name="newImageUrl"
             accept="image/png, image/jpeg"
             className="new-post-input"
             title=" "
-            value={this.state.imageUrl}
+            value={this.state.newImageUrl}
             onChange={this.handleFileChange}
             required
-          />
+          /> */}
 
           <div className="title-description">
             {/* enter title */}
