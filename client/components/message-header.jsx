@@ -49,22 +49,18 @@ export default class MessageHeader extends React.Component {
     const displayName = Number(senderId) === Number(userInfo.userId) ? 'Me' : senderName;
     return (
       <div className={`mx-auto message-header fixed-top ${isSearch ? 'bg-light' : 'bg-white'}`}>
-        <div className='d-flex justify-content-between col-12 mt-1'>
-          <div className="my-auto icon-custom">
-            {isMessageDetail
-              ? (
-                <i
-                  className="fas fa-chevron-left"
-                  onClick={handleBackBtnClick}>
-                </i>
-              )
-              : ('')
-            }
+        <div className='col-12 mt-1'>
+          <div className="my-auto icon-custom-back">
+            <i
+              style={{ display: isMessageDetail ? 'block' : 'none' }}
+              className="fas fa-chevron-left"
+              onClick={handleBackBtnClick}>
+            </i>
           </div>
-          <div>
+          <div className="text-center">
             <div className='header-title pt-2 mx-auto'>MESSAGE</div>
           </div>
-          <div className="my-auto icon-custom">
+          <div className="my-auto icon-custom-search">
             <i
               style={{ display: isSearch ? 'none' : 'block' }}
               className="fas fa-search"
