@@ -36,7 +36,7 @@ export default class ViewWatchlist extends React.Component {
   renderPosts() {
     const postThumbnails = [...this.state.postThumbnails];
     if (postThumbnails.length === 0) {
-      return <h4>No posts to show...</h4>;
+      return <h4>Nothing added to Watchlist...</h4>;
     } else {
       const postThumbnailsGrid = postThumbnails.map(thumbnail => {
         return (
@@ -75,7 +75,7 @@ export default class ViewWatchlist extends React.Component {
           </div>
           <div className="back-container"></div>
         </div>
-        <div className="mt-4">{this.renderPosts()}</div>
+        <div className="mt-4 text-center">{this.renderPosts()}</div>
       </div>
     );
   }
