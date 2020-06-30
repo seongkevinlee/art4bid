@@ -342,8 +342,6 @@ ALTER TABLE ONLY public.watchlists ALTER COLUMN "watchlistId" SET DEFAULT nextva
 --
 
 COPY public.bid ("bidId", "bidderId", "postId", "currentBid", "createdAt", "bidEnabled") FROM stdin;
-1	2	1	30	2020-06-22 22:43:37.442217+00	t
-2	3	1	40	2020-06-22 22:43:37.442217+00	t
 \.
 
 
@@ -368,14 +366,6 @@ COPY public.message ("messageId", "senderId", "recipientId", message, "createdAt
 --
 
 COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startingBid", "biddingEnabled", "isDeleted", "createdAt", "expiredAt", category, notes) FROM stdin;
-1	1	example1 description	https://i.picsum.photos/id/546/200/200.jpg?hmac=qPx0UfEYgljp1xwhEAy3t7xCT8uLxWCGibv7hu6EkwQ	exampleOne	20	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	paintings	\N
-2	1	example2 description	https://i.picsum.photos/id/154/200/200.jpg?hmac=ljiYfN3Am3TR0-aMErtWNuSQm8RTYarrv2QJfmWG6Cw	exampleTwo	30	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	paintings	\N
-3	2	example3 description	https://i.picsum.photos/id/204/200/200.jpg?hmac=gppQCOIV43fSCLsdUCoPQxrc16lrOEvVu2u5nH-I4Zo	exampleThree	40	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs	\N
-4	2	example4 description	https://i.picsum.photos/id/306/200/200.jpg?hmac=_MA2OQbvCf09ghW0BrkSYh9mOhP-xpHqg2c5joDIRFg	exampleFour	100	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	photographs	\N
-5	3	example5 description	https://i.picsum.photos/id/121/200/200.jpg?hmac=0aiR--xgWy1aIM85HCFMySsuQ7DJJBE6XW_Yv4nqU6s	exampleFive	110	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other	\N
-6	3	example6 description	https://i.picsum.photos/id/460/200/200.jpg?hmac=hL3I5G2p0p6vDGPyV9hergug-KipbUJVxqnnGIEBXg4	exampleSix	510	f	f	2020-06-22 22:43:37.442217+00	2020-06-23	other	\N
-70	1	asdf	/images/user-posts/Screen Shot 2020-05-24 at 12.43.59 PM.png	Grim Reaper	10	t	f	2020-06-22 22:43:37.442217+00	2020-06-17	paintings	asef
-71	1	asdf	/images/user-posts/Screen Shot 2020-05-24 at 12.43.59 PM.png	asdf	6	t	f	2020-06-22 22:43:37.442217+00	2020-06-11	paintings	asdf
 \.
 
 
@@ -384,13 +374,6 @@ COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startin
 --
 
 COPY public."user" ("userId", "userName", email, password, "profileImg", "coverImg", description, location, "createdAt") FROM stdin;
-2	TimD	timd@lfz.com	timd1234	/images/timd.png	/images/timd-cover.png	timd best	92604	2020-06-22 22:43:37.442217+00
-3	TimH	timh@lfz.com	timh1234	/images/timh.png	/images/timh-cover.png	timh best	92604	2020-06-22 22:43:37.442217+00
-5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 22:43:37.442217+00
-6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 22:43:37.442217+00
-1	Uzair	uzair@lfz.com	uzair1234	//i.imgur.com/Xe4ahew.png	https://i.pinimg.com/originals/91/e0/07/91e00767ce57b0979d8b4c7a2f2ae3b2.jpg	ANIME SIRENS GO UWU UWU UWU UWUUUUU WUUUUU WUUUU	92620	2020-06-22 22:43:37.442217+00
-53	UZair	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
-54	Sarah	\N	\N	\N	\N	\N	\N	2020-06-22 22:43:37.442217+00
 \.
 
 
@@ -399,7 +382,6 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 --
 
 COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM stdin;
-1	1	2	2020-06-22
 \.
 
 
@@ -407,7 +389,7 @@ COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM std
 -- Name: bid_bidId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."bid_bidId_seq"', 2, true);
+SELECT pg_catalog.setval('public."bid_bidId_seq"', 1, false);
 
 
 --
@@ -428,21 +410,21 @@ SELECT pg_catalog.setval('public."message_messageId_seq"', 1, false);
 -- Name: post_postId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."post_postId_seq"', 71, true);
+SELECT pg_catalog.setval('public."post_postId_seq"', 1, false);
 
 
 --
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 54, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 1, false);
 
 
 --
 -- Name: watchlists_watchlistId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."watchlists_watchlistId_seq"', 1, true);
+SELECT pg_catalog.setval('public."watchlists_watchlistId_seq"', 1, false);
 
 
 --
