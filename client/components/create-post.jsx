@@ -138,7 +138,7 @@ export default class CreatePost extends React.Component {
             />
           </div>
           <div className="header-title pt-3 pb-3 new-post-header">NEW POST</div>
-          <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
+          <div className="back-container d-flex justify-content-center align-items-center">
             <button
               type="Submit"
               form="new-post"

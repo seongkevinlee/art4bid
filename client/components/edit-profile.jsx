@@ -103,7 +103,6 @@ export default class EditProfile extends React.Component {
           <div className="back-container d-flex justify-content-center align-items-center">
             <button
               type="Submit"
-              form="new-post"
               className="yes-button"
               style={{ height: '40px' }}
               onClick={this.handleSubmit}>
