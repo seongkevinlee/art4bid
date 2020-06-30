@@ -30,7 +30,7 @@ export default class App extends React.Component {
     if (currentView === 'post') {
       this.setState({ view: this.state.previousView });
     }
-    this.setState({ view: currentView });
+    this.setState({ view: currentView, previousView: this.state.view });
   }
 
   getPostInfo(postId) {
@@ -80,6 +80,7 @@ export default class App extends React.Component {
           setView={setView}
           postId={this.state.postInfo}
           userId={this.state.userInfo.userId}
+          previousView={this.state.previousView}
         />
       );
     } else if (this.state.view === 'create') {
@@ -90,10 +91,9 @@ export default class App extends React.Component {
       pageBody = (
         <ViewWatchlist
           getPostInfo={getPostInfo}
-          previousView={this.state.previousView}
           setView={setView}
           userInfo={this.state.userInfo}
-
+          previousView={this.state.previousView}
         />
       );
     }
