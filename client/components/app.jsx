@@ -17,7 +17,7 @@ export default class App extends React.Component {
       isLoading: false,
       loggedIn: false,
       userInfo: {},
-      view: 'create',
+      view: 'search',
       postInfo: null,
       previousView: 'search'
     };
