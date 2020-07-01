@@ -139,7 +139,7 @@ export default class EditProfile extends React.Component {
         <textarea
           name="description"
           id="description-input"
-          className='description-input mt-2 mb-2 border-0'
+          className='description-input mt-2 mb-2 border-0 text-center'
           cols="50"
           rows="4"
           placeholder='Enter description here...'
