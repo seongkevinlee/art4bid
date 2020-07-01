@@ -130,7 +130,6 @@ export default class PostBody extends React.Component {
 
       totalBids = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline text-right m-0">Total Bids:</p>;
       totalBidsNumber = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline m-0">{this.props.totalBids}</p>;
-
     }
 
     let modalDisplay = { display: 'none' };

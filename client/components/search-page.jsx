@@ -209,7 +209,7 @@ export default class SearchPage extends React.Component {
   render() {
     const { handleSearchChange, handleSearchClick, handleSubmit } = this;
     const { search, paintings, photographs, other } = this.state;
-    if (paintings.length >= 0 && photographs.length >= 0 && other.length >= 0) {
+    if (paintings.length > 0 || photographs.length > 0 || other.length > 0) {
       return (
         <div>
           <div>
@@ -259,7 +259,7 @@ export default class SearchPage extends React.Component {
                     getPostInfo={this.props.getPostInfo} />
                 )
                 : <div className="flex-column thumbnail-column">
-                  <p className="mt-2 px-1 text-secondary">There are no images</p>
+                  <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
                 </div>
             }
             {
@@ -271,7 +271,7 @@ export default class SearchPage extends React.Component {
                     getPostInfo={this.props.getPostInfo} />
                 )
                 : <div className="flex-column thumbnail-column">
-                  <p className="mt-2 px-1 text-secondary">There are no images</p>
+                  <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
                 </div>
             }
             {
@@ -283,14 +283,14 @@ export default class SearchPage extends React.Component {
                     getPostInfo={this.props.getPostInfo} />
                 )
                 : <div className="flex-column thumbnail-column">
-                  <p className="mt-2 px-1 text-secondary">There are no images</p>
+                  <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
                 </div>
             }
           </div>
         </div>
       );
     } else {
-      return <h3 className="text-center mt-3">An error occurred</h3>;
+      return <h6 className="mt-5 text-center mt-3">No posts are found</h6>;
     }
   }
 }
