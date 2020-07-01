@@ -126,6 +126,7 @@ export default class SpecificPost extends React.Component {
       isWatchlisted
     } = this.state;
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
+    // const biddingClosed = new Date(postInfo.expiredAt) < new Date();
     const { userId, postId, setView } = this.props;
     if (postInfo && watchlistInfo && bidInfo) {
       let highestBid;

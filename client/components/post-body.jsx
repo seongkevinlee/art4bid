@@ -13,6 +13,7 @@ export default class PostBody extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.getNotes = this.getNotes.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
   }
 
   handleChange(event) {
@@ -84,38 +85,50 @@ export default class PostBody extends React.Component {
     const { handleSubmit, handleChange, handleClick } = this;
     const { isEditing } = this.state;
     const formattedHighestBid = new Intl.NumberFormat().format(highestBid);
-    let notesOrBid =
-      <div className="bid-buttons-container d-flex flex-column">
-        <form onSubmit={handleSubmit}>
-          {isEditing
-            ? (<input
+    const biddingClosed = new Date(this.props.bidEnd) < new Date();
+    let notesOrBid = (
+      <div
+        className="bid-buttons-container d-flex flex-column"
+        style={{ opacity: biddingClosed ? '40%' : '100%' }}
+      >
+        <form onSubmit={handleSubmit} id="form">
+          {isEditing ? (
+            <input
               id="bid-offer"
               type="number"
               onChange={handleChange}
               onBlur={handleClick}
-            />)
-            : (<input
+            />
+          ) : (
+            <input
               id="bid-offer"
               type="text"
               placeholder={`$${formattedHighestBid}`}
               onClick={handleClick}
               readOnly
-            />)
-          }
+            />
+          )}
 
-          <button
-            id="submit-bid"
-            type="submit"
-          >Submit Bid</button>
+          <button id="submit-bid" type={biddingClosed ? 'reset' : 'submit'}>
+            Submit Bid
+          </button>
         </form>
 
-        <button id="message" type="button" onClick={() => this.props.messageBtnClick()}> Message</button>
-      </div>;
+        <button
+          id="message"
+          type="button"
+          onClick={() => this.props.messageBtnClick()}
+        >
+          {' '}
+          Message
+        </button>
+      </div>
+    );
 
     let totalBids = <p className="text-right m-0">Total Bids:</p>;
     let totalBidsNumber = <p className="m-0">{this.props.totalBids}</p>;
     if (userId === sellerId) {
-      notesOrBid =
+      notesOrBid = (
         <div className="notes-container">
           <div className="notes-text">
             <p>Notes</p>
@@ -125,11 +138,28 @@ export default class PostBody extends React.Component {
             id="edit-post"
             className="text-center"
             onClick={() => this.props.editModeToggle()}
-          >Edit Post</button>
-        </div>;
+          >
+            Edit Post
+          </button>
+        </div>
+      );
 
-      totalBids = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline text-right m-0">Total Bids:</p>;
-      totalBidsNumber = <p onClick={() => this.props.toggleBidHistory('on')} className="red-underline m-0">{this.props.totalBids}</p>;
+      totalBids = (
+        <p
+          onClick={() => this.props.toggleBidHistory('on')}
+          className="red-underline text-right m-0"
+        >
+          Total Bids:
+        </p>
+      );
+      totalBidsNumber = (
+        <p
+          onClick={() => this.props.toggleBidHistory('on')}
+          className="red-underline m-0"
+        >
+          {this.props.totalBids}
+        </p>
+      );
     }
 
     let modalDisplay = { display: 'none' };
@@ -143,8 +173,13 @@ export default class PostBody extends React.Component {
         </div>
         <div className="post-bid-info d-flex align-items-center justify-content-between">
           {notesOrBid}
-          <div className="bid-stats p-3">
-            <p id="expire-disclaimer" className="text-center">All bids expire at 12AM PST on expiration date</p>
+          <div
+            className="bid-stats p-3"
+            style={{ opacity: biddingClosed ? '40%' : '100%' }}
+          >
+            <p id="expire-disclaimer" className="text-center">
+              All bids expire at 12AM PST on expiration date
+            </p>
             <div className="bid-numbers d-flex justify-content-between">
               <div className="text-right bid-numbers">
                 <p className="text-right m-0">Highest Bid:</p>
@@ -154,26 +189,32 @@ export default class PostBody extends React.Component {
               <div className="bid-numbers">
                 <p className="m-0">${formattedHighestBid}</p>
                 {totalBidsNumber}
-                <p className="m-0">{bidEnd}</p>
+                <p
+                  className="m-0"
+                  style={{ color: biddingClosed ? 'red' : 'black' }}
+                >
+                  {bidEnd}
+                </p>
               </div>
             </div>
           </div>
         </div>
         {/* Modal */}
-        <div
-          className="new-post-modal"
-          style={modalDisplay}
-        >
+        <div className="new-post-modal" style={modalDisplay}>
           <div className="new-post-modal-content">
             {this.state.bidAlert}
             <div>
-              <button onClick={() => { this.setState({ bidAlert: null }); }}>Ok</button>
+              <button
+                onClick={() => {
+                  this.setState({ bidAlert: null });
+                }}
+              >
+                Ok
+              </button>
             </div>
           </div>
         </div>
-
       </div>
     );
   }
-
 }
