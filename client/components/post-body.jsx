@@ -71,7 +71,7 @@ export default class PostBody extends React.Component {
     fetch(`api/notes/${postId}`)
       .then(res => res.json())
       .then(notes => {
-        if (notes === ' ') {
+        if (notes === ' ' || !notes) {
           this.setState({ notes: 'There are no notes' });
         } else if (notes !== null) {
           this.setState({ notes });
