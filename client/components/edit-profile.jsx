@@ -7,6 +7,7 @@ export default class EditProfile extends React.Component {
       profileImg: this.props.userInfo.profileImg,
       coverImg: this.props.userInfo.coverImg,
       location: this.props.userInfo.location,
+      city: '',
       description: this.props.userInfo.description,
       email: this.props.userInfo.email,
       userId: this.props.userInfo.userId,
@@ -20,10 +21,21 @@ export default class EditProfile extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleProfileImgChange = this.handleProfileImgChange.bind(this);
     this.handleCoverImgChange = this.handleCoverImgChange.bind(this);
+    this.getLocationByZipcode = this.getLocationByZipcode.bind(this);
+  }
+
+  componentDidMount() {
+    const { location } = this.state;
+    if (location) {
+      this.getLocationByZipcode(location);
+    }
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
+    if (event.target.id === 'location' && event.target.value.trim().length === 5) {
+      this.getLocationByZipcode(event.target.value.trim());
+    }
   }
 
   handleProfileImgChange(event) {
@@ -85,8 +97,30 @@ export default class EditProfile extends React.Component {
     this.props.getUserData();
   }
 
+  getLocationByZipcode(zipcode) {
+    const host = 'https://www.zipcodeapi.com/rest';
+    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
+    const param = 'info.json';
+    const url = `${host}/${key}/${param}/${zipcode}/degrees`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.city) {
+          this.setState({
+            city: `${data.city},${data.state}`
+          });
+        } else {
+          this.setState({
+            location: '',
+            city: 'No city found'
+          });
+        }
+      })
+      .catch(err => console.error(err.message));
+  }
+
   render() {
-    const { profileImg, coverImg, description, userName, location, email } = this.state;
+    const { profileImg, coverImg, description, userName, location, city, email } = this.state;
 
     return (
       <div className='d-flex flex-column align-items-center'>
@@ -145,6 +179,7 @@ export default class EditProfile extends React.Component {
           <div className='d-flex flex-end justify-content-center align-items-end col-12'>
             <label htmlFor="zip-input" className='col-5 text-center'>Your Zip-code:</label>
             <input
+              limit="5"
               name='location'
               id='location'
               type="number"
@@ -154,12 +189,12 @@ export default class EditProfile extends React.Component {
           </div>
           <div className='d-flex flex-end justify-content-center align-items-end col-12'>
             <label htmlFor="location" className='col-5 text-center'>Location:</label>
-            <input
+            <div
               name='city'
               id='city'
               type="text"
-              className='zip-input mt-3 col-5 border-0'
-              disabled/>
+              className='zip-input mt-3 col-5 border-0 text-center'>{city}</div>
+
           </div>
           <div className='d-flex flex-end justify-content-center align-items-end col-12'>
             <label htmlFor="email-input" className='col-5 text-center'>Email:</label>
