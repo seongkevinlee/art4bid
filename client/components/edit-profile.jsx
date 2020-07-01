@@ -45,20 +45,18 @@ export default class EditProfile extends React.Component {
     event.stopPropagation();
 
     const { profileImg, coverImg, description, location, email, userId } = this.state;
-    const changedProfileImg = Date.now().toString().concat(profileImg.split(' ').join(''));
-    const changedCoverImg = Date.now().toString().concat(coverImg.split(' ').join(''));
     const profileData = new FormData();
     if (this.state.selectedProfileImgFile) {
-      profileData.append('image', this.state.selectedProfileImgFile, changedProfileImg);
+      profileData.append('image', this.state.selectedProfileImgFile, profileImg);
     }
     if (this.state.selectedCoverImgFile) {
-      profileData.append('image', this.state.selectedCoverImgFile, changedCoverImg);
+      profileData.append('image', this.state.selectedCoverImgFile, coverImg);
     }
     if (profileImg) {
-      profileData.append('profileImg', changedProfileImg);
+      profileData.append('profileImg', profileImg);
     }
     if (coverImg) {
-      profileData.append('coverImg', changedCoverImg);
+      profileData.append('coverImg', coverImg);
     }
     if (description) {
       profileData.append('description', description);
@@ -74,9 +72,6 @@ export default class EditProfile extends React.Component {
       method: 'POST',
       body: profileData
     })
-      .then(response => {
-        response.json();
-      })
       .then(() => {
         this.props.getUserData();
         this.props.editModeToggle();

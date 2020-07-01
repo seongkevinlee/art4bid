@@ -397,7 +397,7 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 15:43:37.442217-07
 1	Uzair	uzair@lfz.com	uzair1234	//i.imgur.com/Xe4ahew.png	https://i.pinimg.com/originals/91/e0/07/91e00767ce57b0979d8b4c7a2f2ae3b2.jpg	ANIME SIRENS GO UWU UWU UWU UWUUUUU WUUUUU WUUUU	92620	2020-06-22 15:43:37.442217-07
 74	test2	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
-73	test	aerg@email.com	\N	profilepicsample-17.jpg	coverphotosample-14.jpg	description	91111	2020-06-22 15:43:37.442217-07
+73	test	aerg@email.com	\N	profilepicsample-7.jpg	coverphotosample-5.jpg	descriptionrgstergaerggsrth	91111	2020-06-22 15:43:37.442217-07
 \.
 
 
