@@ -11,16 +11,15 @@ export default class SearchPage extends React.Component {
       photographs: [],
       other: [],
       city: '',
-      query: ''
+      query: '',
+      paintingOffset: 10,
+      photographOffset: 10,
+      otherOffset: 10
     };
     this.getThumbnails = this.getThumbnails.bind(this);
-
-    // COMMENTED OUT CODE IS FOR INFINITE SCROLL LATER ON
-    // this.addThumbnails = this.addThumbnails.bind(this);
-    // this.paintingOffset = 10;
-    // this.photographOffset = 10;
-    // this.otherOffset = 10;
-
+    this.addPaintingThumbnails = this.addPaintingThumbnails.bind(this);
+    this.addPhotographThumbnails = this.addPhotographThumbnails.bind(this);
+    this.addOtherThumbnails = this.addOtherThumbnails.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
     this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
@@ -60,43 +59,56 @@ export default class SearchPage extends React.Component {
       });
   }
 
-  // addThumbnails(category) {
-  //   let offset;
-  //   switch (category) {
-  //     case 'paintings':
-  //       offset = this.paintingOffset;
-  //       break;
-  //     case 'photographs':
-  //       offset = this.photographOffset;
-  //       break;
-  //     case 'other':
-  //       offset = this.otherOffset;
-  //       break;
-  //   }
-  //   fetch(`./api/posts/${category}/${offset}`)
-  //     .then(res => res.json())
-  //     .then(thumbnailInfo => {
-  //       if (category === 'paintings') {
-  //         this.paintingOffset += thumbnailInfo.length;
-  //         const paintingsArr = this.state.paintings.slice().concat(thumbnailInfo);
-  //         this.setState({
-  //           paintings: paintingsArr
-  //         });
-  //       } else if (category === 'photographs') {
-  //         this.photographOffset += thumbnailInfo.length;
-  //         const photographsArr = this.state.photographs.slice().concat(thumbnailInfo);
-  //         this.setState({
-  //           photographs: photographsArr
-  //         });
-  //       } else if (category === 'other') {
-  //         this.otherOffset += thumbnailInfo.length;
-  //         const otherArr = this.state.other.slice().concat(thumbnailInfo);
-  //         this.setState({
-  //           other: otherArr
-  //         });
-  //       }
-  //     });
-  // }
+  addPaintingThumbnails() {
+    const offset = this.state.paintingOffset;
+    fetch(`./api/posts/paintings/${offset}`)
+      .then(res => res.json())
+      .then(thumbnailInfo => {
+        if (thumbnailInfo) {
+          let paintingOffset = this.state.paintingOffset;
+          paintingOffset += thumbnailInfo.length;
+          this.setState({ paintingOffset });
+          const paintingsArr = this.state.paintings.slice().concat(thumbnailInfo);
+          this.setState({
+            paintings: paintingsArr
+          });
+        }
+      });
+  }
+
+  addPhotographThumbnails() {
+    const offset = this.state.photographOffset;
+    fetch(`./api/posts/photographs/${offset}`)
+      .then(res => res.json())
+      .then(thumbnailInfo => {
+        if (thumbnailInfo) {
+          let photographOffset = this.state.photographOffset;
+          photographOffset += thumbnailInfo.length;
+          this.setState({ photographOffset });
+          const photographsArr = this.state.photographs.slice().concat(thumbnailInfo);
+          this.setState({
+            photographs: photographsArr
+          });
+        }
+      });
+  }
+
+  addOtherThumbnails() {
+    const offset = this.state.otherOffset;
+    fetch(`./api/posts/other/${offset}`)
+      .then(res => res.json())
+      .then(thumbnailInfo => {
+        if (thumbnailInfo) {
+          let otherOffset = this.state.otherOffset;
+          otherOffset += thumbnailInfo.length;
+          this.setState({ otherOffset });
+          const otherArr = this.state.other.slice().concat(thumbnailInfo);
+          this.setState({
+            other: otherArr
+          });
+        }
+      });
+  }
 
   getZipcodesByCity(city, state) {
     const host = 'https://www.zipcodeapi.com/rest/';
@@ -256,7 +268,9 @@ export default class SearchPage extends React.Component {
                   <ThumbnailColumn
                     thumbnails={paintings}
                     setView={this.props.setView}
-                    getPostInfo={this.props.getPostInfo} />
+                    getPostInfo={this.props.getPostInfo}
+                    // onClick={this.addPaintingThumbnails}
+                  />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
@@ -268,7 +282,9 @@ export default class SearchPage extends React.Component {
                   <ThumbnailColumn
                     thumbnails={photographs}
                     setView={this.props.setView}
-                    getPostInfo={this.props.getPostInfo} />
+                    getPostInfo={this.props.getPostInfo}
+                    // onClick={this.addPhotographThumbnails}
+                  />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
@@ -280,7 +296,9 @@ export default class SearchPage extends React.Component {
                   <ThumbnailColumn
                     thumbnails={other}
                     setView={this.props.setView}
-                    getPostInfo={this.props.getPostInfo} />
+                    getPostInfo={this.props.getPostInfo}
+                    // onClick={this.addOtherThumbnails}
+                  />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
