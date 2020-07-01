@@ -5,14 +5,19 @@ export default class OtherThumbnailColumn extends React.Component {
     super(props);
     this.state = {
       other: [],
-      otherOffset: 0,
-      buttonDisplay: null
+      otherOffset: 0
     };
+    this.container = React.createRef();
     this.addOtherThumbnails = this.addOtherThumbnails.bind(this);
+  }
+
+  addContainerListener() {
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight) { this.addOtherThumbnails(); } });
   }
 
   componentDidMount() {
     this.addOtherThumbnails();
+    this.addContainerListener();
   }
 
   addOtherThumbnails() {
@@ -53,14 +58,11 @@ export default class OtherThumbnailColumn extends React.Component {
             }
             }>
           </img>
-          <div className="mt-1 mb-2">
-            <button type="button" className={`load-button ${this.state.buttonDisplay}`} onClick={this.addOtherThumbnails}>+</button>
-          </div>
         </div>
       );
     });
     return (
-      <div className="flex-column thumbnail-column ">
+      <div className="flex-column thumbnail-column" ref={this.container}>
         {thumbnails}
       </div>
     );
