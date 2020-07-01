@@ -174,19 +174,28 @@ button {
   height: 150px;
   border-radius: 50%;
 }
-#profile-img-upload {
+
+.profile-img-upload {
   position: absolute;
   width: 150px;
   height: 150px;
   border-radius: 50%;
-  opacity: 0;
+  border: 2px solid white;
+  /* opacity: 0; */
 }
 
-#cover-img-upload {
+.add-profile-img {
+    margin-top: 31%;
+    margin-left: 36%;
+}
+
+.cover-img-upload {
   position: absolute;
   width: 94%;
   height: 34%;
-  opacity: 0;
+  object-fit: contain;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4));
+  /* opacity: 0; */
 }
 
 .coverPhotoEdit {
@@ -196,6 +205,7 @@ button {
   border-radius: 9px;
   background-repeat: no-repeat;
   background-size: cover;
+  height: 240px;
 }
 
 

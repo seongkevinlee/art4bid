@@ -5,7 +5,9 @@ export default class EditProfile extends React.Component {
     super(props);
     this.state = {
       profileImg: this.props.userInfo.profileImg,
+      profileImgFileObject: '',
       coverImg: this.props.userInfo.coverImg,
+      coverImgFileObject: '',
       location: this.props.userInfo.location,
       city: '',
       description: this.props.userInfo.description,
@@ -22,6 +24,10 @@ export default class EditProfile extends React.Component {
     this.handleProfileImgChange = this.handleProfileImgChange.bind(this);
     this.handleCoverImgChange = this.handleCoverImgChange.bind(this);
     this.getLocationByZipcode = this.getLocationByZipcode.bind(this);
+    this.handleCoverImgClick = this.handleCoverImgClick.bind(this);
+    this.handleProfileImgClick = this.handleProfileImgClick.bind(this);
+    this.coverImgUploader = React.createRef();
+    this.profileImgUploader = React.createRef();
   }
 
   componentDidMount() {
@@ -39,17 +45,31 @@ export default class EditProfile extends React.Component {
   }
 
   handleProfileImgChange(event) {
-    this.setState({
-      selectedProfileImgFile: event.target.files[0],
-      profileImg: event.target.files[0].name
-    });
+    if (event.target.files[0]) {
+      this.setState({
+        selectedProfileImgFile: event.target.files[0],
+        profileImgFileObject: URL.createObjectURL(event.target.files[0]),
+        profileImg: event.target.files[0].name
+      });
+    }
   }
 
   handleCoverImgChange(event) {
-    this.setState({
-      selectedCoverImgFile: event.target.files[0],
-      coverImg: event.target.files[0].name
-    });
+    if (event.target.files[0]) {
+      this.setState({
+        selectedCoverImgFile: event.target.files[0],
+        coverImgFileObject: URL.createObjectURL(event.target.files[0]),
+        coverImg: event.target.files[0].name
+      });
+    }
+  }
+
+  handleCoverImgClick() {
+    this.coverImgUploader.current.click();
+  }
+
+  handleProfileImgClick() {
+    this.profileImgUploader.current.click();
   }
 
   handleSubmit(event) {
@@ -120,15 +140,33 @@ export default class EditProfile extends React.Component {
   }
 
   render() {
-    const { profileImg, coverImg, description, userName, location, city, email } = this.state;
-
+    const {
+      profileImg,
+      profileImgFileObject,
+      coverImg,
+      coverImgFileObject,
+      description,
+      userName,
+      location,
+      city,
+      email
+    } = this.state;
+    const {
+      handleCoverImgChange,
+      handleCoverImgClick,
+      handleSubmit,
+      coverImgUploader,
+      profileImgUploader,
+      handleProfileImgChange,
+      handleProfileImgClick
+    } = this;
     return (
       <div className='d-flex flex-column align-items-center'>
         <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
           <div
             className='back-container text-center d-flex justify-content-start align-items-center'
           >
-            <img type='button' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel}/>
+            <img type='button' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel} />
           </div>
           <div className='header-title pt-3 pb-3'>EDIT</div>
           <div className="back-container d-flex justify-content-center align-items-center">
@@ -136,32 +174,56 @@ export default class EditProfile extends React.Component {
               type="Submit"
               className="yes-button"
               style={{ height: '40px' }}
-              onClick={this.handleSubmit}>
+              onClick={handleSubmit}>
               SAVE
             </button>
           </div>
         </div>
-        <div className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4' style={{ backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})` }}>
+        <div
+          className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4'
+          style={{ backgroundImage: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4))' }}>
+          {coverImg
+            ? (
+              <img
+                className="cover-img-upload rounded"
+                alt=""
+                src={coverImgFileObject || `images/user-profiles/${coverImg}`}
+                onClick={handleCoverImgClick}></img>
+            )
+            : (<div
+              className="cover-img-upload"
+              onClick={handleCoverImgClick}></div>)
+          }
           <input
+            hidden
             type="file"
-            id="cover-img-upload"
-            name="cover-img-upload"
             accept=".png, .jpeg, .gif"
-            className="cover-img-upload"
-            onChange={this.handleCoverImgChange}
+            ref={coverImgUploader}
+            onChange={handleCoverImgChange}
           />
-          <button
-            className='profileImgEdit btn'
-            style={{ backgroundImage: `url(/images/user-profiles/${profileImg})` } }>
-            {!profileImg ? <i className="fas fa-plus fa-3x"></i> : null}
-          </button>
+          {profileImg
+            ? (
+              <img
+                className="profile-img-upload"
+                alt=""
+                src={profileImgFileObject || `images/user-profiles/${profileImg}`}
+                onClick={handleProfileImgClick}></img>
+            )
+            : (
+              <div
+                className="profileImgEdit profile-img-upload"
+                onClick={handleProfileImgClick}>
+                <i className="add-profile-img fas fa-plus fa-3x"></i>
+              </div>
+            )
+          }
           <input
+            hidden
             type="file"
-            id="profile-img-upload"
             name="profile-img-upload"
             accept=".png, .jpeg, .gif"
-            className="profile-img-upload"
-            onChange={this.handleProfileImgChange}
+            ref={profileImgUploader}
+            onChange={handleProfileImgChange}
           />
           <h4>{userName}</h4>
         </div>
@@ -172,37 +234,38 @@ export default class EditProfile extends React.Component {
           cols="50"
           rows="4"
           placeholder='Enter description here...'
-          value={description}
+          value={description || ''}
           onChange={this.handleChange}>
         </textarea>
         <div className='location-info d-flex flex-column align-items-center justify-content-center'>
           <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-            <label htmlFor="zip-input" className='col-5 text-center'>Your Zip-code:</label>
+            <label htmlFor="zip-input" className='col text-center'>Your Zip-code:</label>
             <input
               limit="5"
               name='location'
               id='location'
               type="number"
-              value={location}
+              value={location || ''}
               className='zip-input mt-3 col-5 border-0'
-              onChange={this.handleChange}/>
+              onChange={this.handleChange} />
           </div>
           <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-            <label htmlFor="location" className='col-5 text-center'>Location:</label>
-            <div
+            <label htmlFor="location" className='col text-center'>Location:</label>
+            <input
               name='city'
               id='city'
               type="text"
-              className='zip-input mt-3 col-5 border-0 text-center'>{city}</div>
-
+              disabled
+              value={city}
+              className='zip-input mt-3 col-5 border-0 text-center' />
           </div>
           <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-            <label htmlFor="email-input" className='col-5 text-center'>Email:</label>
+            <label htmlFor="email-input" className='col text-center'>Email:</label>
             <input
               name='email'
               id='email'
               type="text"
-              value={email}
+              value={email || ''}
               onChange={this.handleChange}
               className='email-input mt-3 col-5 border-0'
             />
