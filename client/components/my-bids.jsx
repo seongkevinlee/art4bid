@@ -73,7 +73,7 @@ export default class MyBids extends React.Component {
               LIST
           </button>
         </div>
-        <div className="mt-2">{this.renderPosts()}</div>
+        <div className="mt-2 watchlist-bids-container">{this.renderPosts()}</div>
       </div>
     );
   }

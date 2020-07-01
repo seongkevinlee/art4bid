@@ -71,7 +71,7 @@ export default class ViewWatchlist extends React.Component {
           </div>
           <div className="back-container"></div>
         </div>
-        <div className="mt-2 watchlist-container">{this.renderPosts()}</div>
+        <div className="mt-2 watchlist-bids-container">{this.renderPosts()}</div>
       </div>
     );
   }
