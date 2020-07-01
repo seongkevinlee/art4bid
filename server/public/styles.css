@@ -191,11 +191,11 @@ button {
 
 .cover-img-upload {
   position: absolute;
-  width: 94%;
-  height: 34%;
-  object-fit: contain;
+  width: 96%;
+  height: 36%;
+  object-fit: fill;
   background-image: linear-gradient(rgba(255, 255, 255, 0.4));
-  /* opacity: 0; */
+  opacity: 0.7;
 }
 
 .coverPhotoEdit {
