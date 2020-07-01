@@ -321,9 +321,8 @@ export default class CreatePost extends React.Component {
                 disabled={!this.state.biddingEnabled}
                 type="date"
                 name="expiredAt"
+                defaultValue={this.getTodaysDate()}
                 // value={this.state.expiredAt}
-                value={this.getTodaysDate()}
-                // value="08-26-1980"
                 onChange={this.handleChange}
                 className="bid-expiry"
               />
