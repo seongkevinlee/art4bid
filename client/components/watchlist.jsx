@@ -59,7 +59,7 @@ export default class ViewWatchlist extends React.Component {
   render() {
     return (
       <div>
-        <div className='watchlist-header d-flex justify-content-between col-12 mb-2 mt-1'>
+        <div className='watchlist-header d-flex justify-content-between col-12 mb-2 pt-1'>
           <button
             className='my-bids-btn btn text-center btn-submit-header'
             onClick={this.handleClick}>
@@ -71,7 +71,7 @@ export default class ViewWatchlist extends React.Component {
           </div>
           <div className="back-container"></div>
         </div>
-        <div className="mt-2">{this.renderPosts()}</div>
+        <div className="mt-2 watchlist-container">{this.renderPosts()}</div>
       </div>
     );
   }
