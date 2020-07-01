@@ -1,6 +1,9 @@
 import React from 'react';
-import ThumbnailColumn from './thumbnail-column';
+// import ThumbnailColumn from './thumbnail-column';
 import Autocomplete from 'react-google-autocomplete';
+import PaintingsThumbnailColumn from './paintings-thumbnail-column';
+import PhotographsThumbnailColumn from './photographs-thumbnail-column';
+import OtherThumbnailColumn from './other-thumbnail-column';
 
 export default class SearchPage extends React.Component {
   constructor(props) {
@@ -11,15 +14,9 @@ export default class SearchPage extends React.Component {
       photographs: [],
       other: [],
       city: '',
-      query: '',
-      paintingOffset: 10,
-      photographOffset: 10,
-      otherOffset: 10
+      query: ''
     };
     this.getThumbnails = this.getThumbnails.bind(this);
-    this.addPaintingThumbnails = this.addPaintingThumbnails.bind(this);
-    this.addPhotographThumbnails = this.addPhotographThumbnails.bind(this);
-    this.addOtherThumbnails = this.addOtherThumbnails.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
     this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
@@ -55,57 +52,6 @@ export default class SearchPage extends React.Component {
               other: thumbnailInfo
             });
             break;
-        }
-      });
-  }
-
-  addPaintingThumbnails() {
-    const offset = this.state.paintingOffset;
-    fetch(`./api/posts/paintings/${offset}`)
-      .then(res => res.json())
-      .then(thumbnailInfo => {
-        if (thumbnailInfo) {
-          let paintingOffset = this.state.paintingOffset;
-          paintingOffset += thumbnailInfo.length;
-          this.setState({ paintingOffset });
-          const paintingsArr = this.state.paintings.slice().concat(thumbnailInfo);
-          this.setState({
-            paintings: paintingsArr
-          });
-        }
-      });
-  }
-
-  addPhotographThumbnails() {
-    const offset = this.state.photographOffset;
-    fetch(`./api/posts/photographs/${offset}`)
-      .then(res => res.json())
-      .then(thumbnailInfo => {
-        if (thumbnailInfo) {
-          let photographOffset = this.state.photographOffset;
-          photographOffset += thumbnailInfo.length;
-          this.setState({ photographOffset });
-          const photographsArr = this.state.photographs.slice().concat(thumbnailInfo);
-          this.setState({
-            photographs: photographsArr
-          });
-        }
-      });
-  }
-
-  addOtherThumbnails() {
-    const offset = this.state.otherOffset;
-    fetch(`./api/posts/other/${offset}`)
-      .then(res => res.json())
-      .then(thumbnailInfo => {
-        if (thumbnailInfo) {
-          let otherOffset = this.state.otherOffset;
-          otherOffset += thumbnailInfo.length;
-          this.setState({ otherOffset });
-          const otherArr = this.state.other.slice().concat(thumbnailInfo);
-          this.setState({
-            other: otherArr
-          });
         }
       });
   }
@@ -265,11 +211,10 @@ export default class SearchPage extends React.Component {
             {
               paintings.length > 0
                 ? (
-                  <ThumbnailColumn
-                    thumbnails={paintings}
+                  <PaintingsThumbnailColumn
+                    // thumbnails={paintings}
                     setView={this.props.setView}
                     getPostInfo={this.props.getPostInfo}
-                    // onClick={this.addPaintingThumbnails}
                   />
                 )
                 : <div className="flex-column thumbnail-column">
@@ -279,11 +224,10 @@ export default class SearchPage extends React.Component {
             {
               photographs.length > 0
                 ? (
-                  <ThumbnailColumn
-                    thumbnails={photographs}
+                  <PhotographsThumbnailColumn
+                    // thumbnails={photographs}
                     setView={this.props.setView}
                     getPostInfo={this.props.getPostInfo}
-                    // onClick={this.addPhotographThumbnails}
                   />
                 )
                 : <div className="flex-column thumbnail-column">
@@ -293,11 +237,10 @@ export default class SearchPage extends React.Component {
             {
               other.length > 0
                 ? (
-                  <ThumbnailColumn
-                    thumbnails={other}
+                  <OtherThumbnailColumn
+                    // thumbnails={other}
                     setView={this.props.setView}
                     getPostInfo={this.props.getPostInfo}
-                    // onClick={this.addOtherThumbnails}
                   />
                 )
                 : <div className="flex-column thumbnail-column">

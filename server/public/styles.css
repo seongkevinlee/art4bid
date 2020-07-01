@@ -28,6 +28,7 @@ input, button {
   overflow-y: scroll;
   height: 70vh;
   width: calc(100% / 3);
+  text-align: center
 }
 
 .profile-thumbnail-container {
@@ -51,6 +52,10 @@ input, button {
 
 .contain {
   object-fit: contain;
+}
+
+.load-button{
+  border:0;
 }
 
 /* navbar */
