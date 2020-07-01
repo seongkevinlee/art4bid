@@ -136,12 +136,14 @@ export default class CreatePost extends React.Component {
     }
 
     const formData = new FormData();
-
+    const newDate = Date.now();
+    const newFileURL = filePathImageURL.split('.')[0].length > 13 ? filePathImageURL.substring(13) : filePathImageURL;
+    const changedFileName = newDate.toString().concat(newFileURL.split(' ').join(''));
     // Update the formData object
-    formData.append('image', this.state.selectedFile, filePathImageURL);
+    formData.append('image', this.state.selectedFile, changedFileName);
     formData.append('sellerId', sellerId);
     formData.append('description', description);
-    formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
+    formData.append('imageUrl', `/images/user-posts/${changedFileName}`);
     formData.append('title', title);
     formData.append('startingBid', startingBid);
     formData.append('biddingEnabled', biddingEnabled);
