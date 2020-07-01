@@ -284,13 +284,7 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
   db.query(sql, params)
     .then(result => {
       const posts = result.rows;
-      if (posts.length === 0) {
-        return res.status(404).json({
-          error: `There are no more posts with the category ${category}`
-        });
-      } else {
-        res.status(200).json(posts);
-      }
+      res.status(200).json(posts);
     })
     .catch(err => {
       return res.status(500).json({
