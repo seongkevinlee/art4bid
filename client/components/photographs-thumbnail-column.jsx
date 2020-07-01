@@ -5,14 +5,19 @@ export default class PhotographsThumbnailColumn extends React.Component {
     super(props);
     this.state = {
       photographs: [],
-      photographOffset: 0,
-      buttonDisplay: null
+      photographOffset: 0
     };
+    this.container = React.createRef();
     this.addPhotographThumbnails = this.addPhotographThumbnails.bind(this);
+  }
+
+  addContainerListener() {
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight) { this.addPhotographThumbnails(); } });
   }
 
   componentDidMount() {
     this.addPhotographThumbnails();
+    this.addContainerListener();
   }
 
   addPhotographThumbnails() {
@@ -28,11 +33,6 @@ export default class PhotographsThumbnailColumn extends React.Component {
           this.setState({
             photographs: photographsArr
           });
-          if (this.state.photographs.length < 10) {
-            this.setState({ buttonDisplay: 'd-none' });
-          }
-        } else {
-          this.setState({ buttonDisplay: 'd-none' });
         }
       });
   }
@@ -53,14 +53,11 @@ export default class PhotographsThumbnailColumn extends React.Component {
             }
             }>
           </img>
-          <div className="mt-1 mb-2">
-            <button type="button" className={`load-button ${this.state.buttonDisplay}`} onClick={this.addPhotographThumbnails}>+</button>
-          </div>
         </div>
       );
     });
     return (
-      <div className="flex-column thumbnail-column">
+      <div className="flex-column thumbnail-column" ref={this.container}>
         {thumbnails}
       </div>
     );
