@@ -69,6 +69,8 @@ export default class CreatePost extends React.Component {
     );
 
     replaceImage[0].setAttribute('src', './images/create-new-post.png');
+
+    this.props.setView('search');
   }
 
   handleCancel() {
