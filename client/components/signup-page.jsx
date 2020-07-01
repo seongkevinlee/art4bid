@@ -53,7 +53,8 @@ export default class SignupPage extends React.Component {
   }
 
   handleCancelClick() {
-    this.props.setView('login');
+    event.preventDefault();
+    this.props.setView('create');
   }
 
   signup(username, email, password) {

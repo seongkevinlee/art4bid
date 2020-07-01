@@ -144,7 +144,7 @@ export default class CreatePost extends React.Component {
       body: formData
     })
       .then(res => {
-        res.json();
+        // res.json();
       })
       .then(data => {
         // eslint-disable-next-line no-console
