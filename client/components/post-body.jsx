@@ -168,7 +168,7 @@ export default class PostBody extends React.Component {
         style={{ opacity: biddingClosed ? '40%' : '100%' }}
       >
         <p id="expire-disclaimer" className="text-center">
-          All bids expire at 12AM PST on expiration date
+          All bids expire at 11:59 PST on expiration date
         </p>
         <div className="bid-numbers d-flex justify-content-between">
           <div className="text-right bid-numbers">
