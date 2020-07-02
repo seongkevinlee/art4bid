@@ -23,6 +23,7 @@ export default class SearchPage extends React.Component {
     this.searchPostsByZipcodes = this.searchPostsByZipcodes.bind(this);
     this.showMessage = this.showMessage.bind(this);
     this.loadPostsAgain = this.loadPostsAgain.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -125,6 +126,7 @@ export default class SearchPage extends React.Component {
   }
 
   handleSearchChange() {
+    event.preventDefault();
     if (event.target.value.length < 2) {
       event.target.value = event.target.value.trim();
     }
@@ -135,13 +137,13 @@ export default class SearchPage extends React.Component {
 
   handleSearchClick(selectedPlace) {
     const { search } = this.state;
-    if (selectedPlace.length) {
-      const city = selectedPlace.split(',')[0].trim().toUpperCase();
-      const state = selectedPlace.split(',')[1] ? selectedPlace.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
-      this.getZipcodesByCity(city, state);
-    } else if (search && search.trim().length > 0) {
+    if (!isNaN(Number(search)) && search && search.trim().length > 0) {
       // radius mile is set to 5 as default
       this.getZipcodesByZipcodeWithinRadius(search, 5);
+    } else if (search) {
+      const city = search.split(',')[0].trim().toUpperCase();
+      const state = search.split(',')[1] ? search.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
+      this.getZipcodesByCity(city, state);
     } else {
       this.showMessage('please enter keyword', 1000);
     }
@@ -169,25 +171,28 @@ export default class SearchPage extends React.Component {
     this.getThumbnails('other');
   }
 
-  handleSubmit(event) {
+  handleSubmit() {
     event.preventDefault();
     this.handleSearchClick();
   }
 
   render() {
-    const { handleSearchChange, handleSearchClick, loadPostsAgain } = this;
+    const { handleSearchChange, handleSearchClick, loadPostsAgain, handleSubmit } = this;
     const { search, paintings, photographs, other } = this.state;
     if (paintings.length > 0 || photographs.length > 0 || other.length > 0) {
       return (
         <div>
           <div>
-            <form className="text-center pt-3">
+            <form className="text-center pt-3" onSubmit={handleSubmit}>
               <div className="position-relative">
                 <Autocomplete
                   autoFocus
                   types={['(regions)']}
                   onPlaceSelected={place => {
-                    return handleSearchClick(place.formatted_address);
+                    this.setState({
+                      search: place.formatted_address
+                    });
+                    // handleSearchClick(place.formatted_address);
                   }}
                   componentRestrictions={{ country: 'us' }}
                   className="search-bar text-center w-75 border-0 pt-2 pb-2"
@@ -300,8 +305,8 @@ export default class SearchPage extends React.Component {
               <h6>Other</h6>
             </div>
           </div>
-          <div className="d-flex justify-content-around">
-            <h6 className="mt-5 text-center mt-3">No posts are found</h6>
+          <div className="text-center">
+            <p className="mt-5 text-center mt-3">No posts are found</p>
             <div>
               <button
                 className="btn btn-sm btn-outline-danger"

@@ -192,11 +192,12 @@ export default class Message extends React.Component {
   }
 
   handleViewMessageClick() {
-    const senderId = event.target.id.split(',')[0];
-    const senderName = event.target.id.split(',')[1];
-    const postId = event.target.id.split(',')[2];
-    const postTitle = event.target.id.split(',')[3];
-    const recipientId = event.target.id.split(',')[4];
+    const idArr = event.target.id.split(',');
+    const senderId = idArr[0];
+    const senderName = idArr[1];
+    const postId = idArr[2];
+    const postTitle = idArr[3];
+    const recipientId = idArr[4];
     this.setState({
       postId: postId,
       senderId: senderId,
