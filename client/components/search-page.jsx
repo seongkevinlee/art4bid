@@ -1,5 +1,4 @@
 import React from 'react';
-// import ThumbnailColumn from './thumbnail-column';
 import Autocomplete from 'react-google-autocomplete';
 import PaintingsThumbnailColumn from './paintings-thumbnail-column';
 import PhotographsThumbnailColumn from './photographs-thumbnail-column';
