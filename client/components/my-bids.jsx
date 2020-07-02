@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spring } from 'react-spring/renderprops';
 
 export default class MyBids extends React.Component {
   constructor(props) {
@@ -67,22 +68,30 @@ export default class MyBids extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className='my-bids-header d-flex justify-content-between col-12 mb-2 pt-1'>
-          <div
-            className='back-container text-center d-flex justify-content-start align-items-center'
-          >
-          </div>
-          <div className='header-title pt-3 pb-3'>MY BIDS</div>
-          <button
-            className='watchlist-button btn btn-submit-header text-center'
-            onClick={this.setView}>
+      <Spring
+        from={{ marginRight: -500 }}
+        to={{ marginRight: 0 }}
+      >
+        {
+          props =>
+            <div style={props}>
+              <div className='my-bids-header d-flex justify-content-between col-12 mb-2 pt-1'>
+                <div
+                  className='back-container text-center d-flex justify-content-start align-items-center'
+                >
+                </div>
+                <div className='header-title pt-3 pb-3'>MY BIDS</div>
+                <button
+                  className='mt-1 watchlist-button btn btn-submit-header text-center'
+                  onClick={this.setView}>
               WATCH{'\n'}
               LIST
-          </button>
-        </div>
-        <div className="mt-2 watchlist-bids-container">{this.renderPosts()}</div>
-      </div>
+                </button>
+              </div>
+              <div className="mt-2 watchlist-bids-container">{this.renderPosts()}</div>
+            </div>
+        }
+      </Spring>
     );
   }
 }

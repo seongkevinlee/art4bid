@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spring } from 'react-spring/renderprops';
 
 export default class ViewWatchlist extends React.Component {
   constructor(props) {
@@ -58,22 +59,30 @@ export default class ViewWatchlist extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className="watchlist-header d-flex justify-content-between col-12 mb-2 pt-1">
-          <button
-            className="my-bids-btn btn text-center btn-submit-header"
-            onClick={this.handleClick}
-          >
-            MY{'\n'}
-            BIDS
-          </button>
-          <div className="header-title pt-3 pb-3">WATCHLIST</div>
-          <div className="back-container"></div>
-        </div>
-        <div className="mt-2 watchlist-bids-container">
-          {this.renderPosts()}
-        </div>
-      </div>
+      <Spring
+        from={{ marginLeft: -500 }}
+        to={{ marginLeft: 0 }}
+      >
+        {
+          props =>
+            <div style={props}>
+              <div className="watchlist-header d-flex justify-content-between col-12 mb-2 pt-1">
+                <button
+                  className="mt-1 my-bids-btn btn text-center btn-submit-header"
+                  onClick={this.handleClick}
+                >
+                  MY{'\n'}
+                  BIDS
+                </button>
+                <div className="header-title pt-3 pb-3">WATCHLIST</div>
+                <div className="back-container"></div>
+              </div>
+              <div className="mt-2 watchlist-bids-container">
+                {this.renderPosts()}
+              </div>
+            </div>
+        }
+      </Spring>
     );
   }
 }

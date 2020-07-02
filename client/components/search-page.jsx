@@ -204,7 +204,7 @@ export default class SearchPage extends React.Component {
                 <img
                   alt=""
                   className="search-mag position-absolute cursor-pointer"
-                  src="./images/search-solid.svg"
+                  src="./images/search-brush.png"
                   onClick={handleSearchClick}></img>
               </div>
             </form>
@@ -287,7 +287,7 @@ export default class SearchPage extends React.Component {
                 <img
                   alt=""
                   className="search-mag position-absolute cursor-pointer"
-                  src="./images/search-solid.svg"
+                  src="./images/search-brush.png"
                   onClick={handleSearchClick}></img>
               </div>
             </form>

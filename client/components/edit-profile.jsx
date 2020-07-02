@@ -174,7 +174,7 @@ export default class EditProfile extends React.Component {
       >
         {
           props =>
-            <div className='d-flex flex-column align-items-center'>
+            <div style={props} className='d-flex flex-column align-items-center'>
               <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
