@@ -1,5 +1,5 @@
 import React from 'react';
-// import ToggleButton from 'react-toggle-button';
+import ToggleButton from './toggle-button';
 
 export default class CreatePost extends React.Component {
   constructor(props) {
@@ -12,7 +12,7 @@ export default class CreatePost extends React.Component {
       imageUrl: '',
       title: '',
       startingBid: '',
-      biddingEnabled: true,
+      biddingEnabled: false,
       isDeleted: false,
       expiredAt: '2020/06/30',
       notes: '',
@@ -31,6 +31,7 @@ export default class CreatePost extends React.Component {
     this.handleModal = this.handleModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.getTodaysDate = this.getTodaysDate.bind(this);
+    this.isEnabled = this.isEnabled.bind(this);
     // this.dummyFunction = this.dummyFunction.bind(this);
   }
 
@@ -96,11 +97,7 @@ export default class CreatePost extends React.Component {
         replaceImage[0].setAttribute('src', this.result);
       });
       reader.readAsDataURL(file);
-      if (
-        event.target &&
-        event.target.files[0] &&
-        event.target.files[0].name
-      ) {
+      if (event.target && event.target.files[0] && event.target.files[0].name) {
         this.setState({
           selectedFile: event.target.files[0],
           [event.target.name]: event.target.value,
@@ -114,6 +111,10 @@ export default class CreatePost extends React.Component {
         filePathImageURL: ''
       });
     }
+  }
+
+  isEnabled() {
+    this.setState({ biddingEnabled: !this.state.biddingEnabled });
   }
 
   handleSubmit(event) {
@@ -137,8 +138,13 @@ export default class CreatePost extends React.Component {
 
     const formData = new FormData();
     const newDate = Date.now();
-    const newFileURL = filePathImageURL.split('.')[0].length > 13 ? filePathImageURL.substring(13) : filePathImageURL;
-    const changedFileName = newDate.toString().concat(newFileURL.split(' ').join(''));
+    const newFileURL =
+      filePathImageURL.split('.')[0].length > 13
+        ? filePathImageURL.substring(13)
+        : filePathImageURL;
+    const changedFileName = newDate
+      .toString()
+      .concat(newFileURL.split(' ').join(''));
     // Update the formData object
     formData.append('image', this.state.selectedFile, changedFileName);
     formData.append('sellerId', sellerId);
@@ -303,6 +309,12 @@ export default class CreatePost extends React.Component {
                   }}
                 />
               </div> */}
+
+              <div>
+                <ToggleButton
+                  isEnabled={this.isEnabled}
+                />
+              </div>
 
               {/* starting bid */}
               <label htmlFor="starting-bid">Starting Bid:</label>

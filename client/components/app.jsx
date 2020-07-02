@@ -15,9 +15,9 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isLoading: false,
-      loggedIn: false,
+      loggedIn: true,
       userInfo: {},
-      view: 'search',
+      view: 'create',
       postInfo: null,
       previousView: 'search'
     };
