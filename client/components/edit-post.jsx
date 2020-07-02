@@ -291,6 +291,7 @@ export default class EditPost extends React.Component {
               {/* bid expiry */}
               <label htmlFor="bid-expiry">Bid Expiration Date:</label>
               <input
+                style={{ fontSize: '12px', padding: '4px' }}
                 disabled={!this.state.biddingEnabled}
                 type="date"
                 name="expiredAt"
