@@ -172,6 +172,7 @@ export default class CreatePost extends React.Component {
   }
 
   render() {
+    const today = this.getTodaysDate();
     return (
       <div>
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
@@ -318,6 +319,7 @@ export default class CreatePost extends React.Component {
                 type="date"
                 name="expiredAt"
                 defaultValue={this.state.expiredAt}
+                min={today}
                 // value={this.state.expiredAt}
                 onChange={this.handleChange}
                 className="bid-expiry"
