@@ -149,6 +149,7 @@ export default class SpecificPost extends React.Component {
             highestBid={highestBid}
             totalBids={bidInfo.totalBids}
             bidEnd={new Date(postInfo.expiredAt).toLocaleString('en-US', { timeZone: 'UTC' }).split(',')[0]}
+            bidExpireTimer = {postInfo.expiredAt.toLocaleString()}
             userId={userId}
             sellerId={postInfo.sellerId}
             toggleBidHistory={toggleBidHistory}

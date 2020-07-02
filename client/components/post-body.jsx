@@ -85,7 +85,11 @@ export default class PostBody extends React.Component {
     const { handleSubmit, handleChange, handleClick } = this;
     const { isEditing } = this.state;
     const formattedHighestBid = new Intl.NumberFormat().format(highestBid);
-    const biddingClosed = new Date(this.props.bidEnd) < new Date();
+    const bidDate = new Date(this.props.bidEnd);
+    bidDate.setUTCMinutes(1439);
+    bidDate.setUTCSeconds(59);
+    const biddingClosed = bidDate < new Date();
+
     let notesOrBid = (
       <div
         className="bid-buttons-container d-flex flex-column"
