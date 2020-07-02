@@ -343,10 +343,6 @@ ALTER TABLE ONLY public.watchlists ALTER COLUMN "watchlistId" SET DEFAULT nextva
 --
 
 COPY public.bid ("bidId", "bidderId", "postId", "currentBid", "createdAt", "bidEnabled") FROM stdin;
-2	73	1	30	2020-06-22 15:43:37.442217-07	t
-3	73	3	50	2020-06-22 15:43:37.442217-07	t
-4	73	4	200	2020-06-22 15:43:37.442217-07	t
-5	73	2	40	2020-06-22 15:43:37.442217-07	t
 \.
 
 
@@ -363,8 +359,6 @@ COPY public.comments ("commentId", "userId", comment, "postId", "createdAt") FRO
 --
 
 COPY public.message ("messageId", "senderId", "recipientId", message, "createdAt", "postId") FROM stdin;
-3	73	1	this is the the post EXampleOne	2020-06-29 21:36:16.158208-07	1
-4	73	2	aergaergaeirjhgaerh	2020-06-29 21:39:09.822206-07	4
 \.
 
 
@@ -373,16 +367,51 @@ COPY public.message ("messageId", "senderId", "recipientId", message, "createdAt
 --
 
 COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startingBid", "biddingEnabled", "isDeleted", "createdAt", "expiredAt", category, notes) FROM stdin;
-1	1	example1 description	https://i.picsum.photos/id/546/200/200.jpg?hmac=qPx0UfEYgljp1xwhEAy3t7xCT8uLxWCGibv7hu6EkwQ	exampleOne	20	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	paintings	\N
-2	1	example2 description	https://i.picsum.photos/id/154/200/200.jpg?hmac=ljiYfN3Am3TR0-aMErtWNuSQm8RTYarrv2QJfmWG6Cw	exampleTwo	30	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	paintings	\N
-3	2	example3 description	https://i.picsum.photos/id/204/200/200.jpg?hmac=gppQCOIV43fSCLsdUCoPQxrc16lrOEvVu2u5nH-I4Zo	exampleThree	40	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	photographs	\N
-4	2	example4 description	https://i.picsum.photos/id/306/200/200.jpg?hmac=_MA2OQbvCf09ghW0BrkSYh9mOhP-xpHqg2c5joDIRFg	exampleFour	100	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	photographs	\N
-5	3	example5 description	https://i.picsum.photos/id/121/200/200.jpg?hmac=0aiR--xgWy1aIM85HCFMySsuQ7DJJBE6XW_Yv4nqU6s	exampleFive	110	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	other	\N
-6	3	example6 description	https://i.picsum.photos/id/460/200/200.jpg?hmac=hL3I5G2p0p6vDGPyV9hergug-KipbUJVxqnnGIEBXg4	exampleSix	510	f	f	2020-06-22 15:43:37.442217-07	2020-06-23	other	\N
-72	73	artaergaerg	/images/user-posts/profile-pic-4.PNG	my art	20	t	f	2020-06-29 21:40:47.446471-07	2020-06-19	photographs	araergarvfxvfv
-73	73	testest	/images/user-posts/1593558318057profilepicsample-8.jpg	testest	23	t	f	2020-06-30 16:05:18.584909-07	2020-07-01	paintings	geargaergaer
-74	73	aergaerg	/images/user-posts/1593558466523profilepicsample-13.jpg	geragerg	23	t	f	2020-06-30 16:07:47.034166-07	2020-06-30	paintings	aergaerg
-75	73	argaeraerv	/images/user-posts/1593558496313profilepicsample-12.jpg	rgaergaer	30	t	f	2020-06-30 16:08:16.751494-07	2020-07-01	paintings	eravervaer
+99	77	Picture of my friend wandering the beach.	/images/user-posts/photograph-15.jpg	Beach Wanderer	100	t	f	2020-07-01 17:09:54.193187-07	2020-07-31	photographs	 
+100	77	Selling this painting for a friend.\nSize: 18x24	/images/user-posts/painting-17.jpg	Lysergic Energy	250	t	f	2020-07-01 17:12:30.719449-07	2020-07-25	paintings	Michelle wants atleast 250 for this
+101	77	Selling this for a friend.\nSize: 24x28	/images/user-posts/painting-18.jpg	Sunset Beach	300	t	f	2020-07-01 17:14:14.485832-07	2020-07-29	paintings	Michelle wants atleast 300 for this one
+102	77	Selling this for a friend.\nSize: 18x24	/images/user-posts/painting-21.jpg	Inside Wave	250	t	f	2020-07-01 17:15:13.068929-07	2020-07-28	paintings	Michelle wants atleast 250 for this
+103	78	Made from wires, screws, and other random pieces of metal.\n12' x 6' x 3'\n	/images/user-posts/other-1.jpg	Junk Cycle	150	t	f	2020-07-01 17:22:05.050924-07	2020-07-28	other	\n
+104	78	Flower is included but can also be removed if wanted.\nDM for dimensions.	/images/user-posts/other-2.jpg	Flower Head	150	t	f	2020-07-01 17:23:59.976487-07	2020-07-29	other	2ft x1.5ft x 1ft 
+76	75	Available in various sizes.	/images/user-posts/photograph-1.jpg	Autumn Forest	100	t	f	2020-07-01 12:28:24.501509-07	2020-07-31	photographs	don't take less than $150
+77	75	Long-exposure of a waterfall.\nDM me for available sizes.	/images/user-posts/photograph-2.jpg	Waterfall	150	t	f	2020-07-01 12:30:43.154892-07	2020-07-31	photographs	3 available copies\n18x12, 22x18, 28x24
+78	75	A picture of these amazing lanterns I took during my trip to Japan.\nDM for available sizes.	/images/user-posts/photograph-3.jpg	Lanterns in Japan	120	t	f	2020-07-01 12:32:46.853571-07	2020-07-31	photographs	4 in stock\n(3) 12x18\n(1) 20x26
+79	75	HDR photo from my trip to Greenland.\nOnly available in large sizes. DM for details.	/images/user-posts/photograph-4.jpg	Lakeside Mountain	200	t	f	2020-07-01 12:35:29.783477-07	2020-07-31	photographs	4 available
+80	75	Another photograph of lanterns.\nI know, I'm obsessed.\nDM for size details.	/images/user-posts/photograph-5.jpg	Laterns 2	100	t	f	2020-07-01 12:36:41.804531-07	2020-07-31	photographs	3 prints available
+81	75	Aerial drone shot of snowy mountains.\nDM for size details.	/images/user-posts/photograph-6.jpg	Drone Snow	80	t	f	2020-07-01 12:37:59.939294-07	2020-07-31	photographs	Prints in stock: 12
+82	75	I was mesmerized by these flowers.	/images/user-posts/photograph-7.jpg	Flowers	50	t	f	2020-07-01 12:40:32.538498-07	2020-07-31	photographs	Jamie wanted me to save her a copy of this.
+83	75	Drone shot of the mountain tops.\nIt was extremely difficult to get this picture.	/images/user-posts/photograph-8.jpg	Clouds	250	t	f	2020-07-01 12:41:43.397331-07	2020-06-30	photographs	Steph wanted this for $300
+84	75	I love the beach!	/images/user-posts/photograph-9.jpg	Beach Vibes	120	t	f	2020-07-01 12:42:38.854407-07	2020-07-31	photographs	James offered $100 for a large print.
+85	76	The sunrise exposing the morning dew is a magnificent wonder.\nSize: 24x30	/images/user-posts/painting-1.jpg	Morning Dew	500	t	f	2020-07-01 12:47:51.736884-07	2020-06-30	paintings	Rachel offered $500 for this.
+86	76	I liked these color combinations.	/images/user-posts/painting-2.jpg	Abstract Flower	250	t	f	2020-07-01 12:50:55.903721-07	2020-07-31	paintings	Jim offered $250
+87	76	I always see these mundane looking plants where I live so I wanted paint them with some drama.	/images/user-posts/painting-3.jpg	Sun Plants	300	t	f	2020-07-01 12:52:20.09116-07	2020-07-31	paintings	drew offered $300
+88	76	Been getting into some abstract art to experiment with color schemes.	/images/user-posts/painting-4.jpg	Abstraction 1	100	t	f	2020-07-01 12:53:52.047234-07	2020-07-28	paintings	 
+89	76	More abstract experimentation	/images/user-posts/painting-5.jpg	Abstraction 2	100	t	f	2020-07-01 12:54:39.355936-07	2020-07-26	paintings	 
+90	76	I really liked the color scheme for this.	/images/user-posts/painting-6.jpg	Abstraction 3	100	t	f	2020-07-01 12:55:24.13902-07	2020-07-27	paintings	 
+91	76	Can you see the boat?	/images/user-posts/painting-7.jpg	Warm Waters	250	t	f	2020-07-01 12:56:30.969152-07	2020-07-27	paintings	Hanna offered $250
+92	76	I painted this one thinking of a close friend.	/images/user-posts/painting-8.jpg	Abstraction 4	200	t	f	2020-07-01 16:47:35.783551-07	2020-07-31	paintings	Jamie offered $200 for this
+93	76	I painted this while I was going through heartache.	/images/user-posts/painting-9.jpg	Abstraction 5	250	t	f	2020-07-01 16:48:41.727048-07	2020-07-28	paintings	 
+94	77	Photo of my model friend Emma.	/images/user-posts/photograph-10.jpg	Emma	100	t	f	2020-07-01 16:55:45.775936-07	2020-07-29	photographs	 
+95	77	The beauty if these flowers struck me.	/images/user-posts/photograph-11.jpg	Flower Field	75	t	f	2020-07-01 16:58:15.93645-07	2020-07-28	photographs	 
+96	77	I have prints of these available in all sizes.	/images/user-posts/photograph-12.jpg	Moraine Lake	80	t	f	2020-07-01 17:05:58.186026-07	2020-07-28	photographs	 
+97	77	Festival in Portugal.\nPrints available in all sizes.\nDM for details.	/images/user-posts/photograph-13.jpg	Umbrella Festival	75	t	f	2020-07-01 17:07:01.611486-07	2020-07-24	photographs	 
+98	77	The sun created a great silhouette for this girl and the moon.	/images/user-posts/photograph-14.jpg	Dusk Child	100	t	f	2020-07-01 17:08:44.083331-07	2020-07-28	photographs	 
+105	78	Made from wood.\nDimensions; 2ft x 1.5ft x 2ft	/images/user-posts/other-6.jpg	Meditate	200	t	f	2020-07-01 17:25:30.144913-07	2020-08-01	other	 
+106	78	Made from bronze.\nSize of a large apple.	/images/user-posts/other-7.jpg	Ganesha	300	t	f	2020-07-01 17:26:38.167743-07	2020-07-27	other	 
+107	78	Made from clay.\nDimensions: 4ft x 2ft x 2ft	/images/user-posts/other-8.jpg	Young Love	700	t	f	2020-07-01 17:28:31.876677-07	2020-08-04	other	Expensive shipping. Weighs over 20lbs
+108	78	Made from ivory.\nDimensions: 2ft x 1.5ft x 1.5ft	/images/user-posts/other-9.jpg	Lady	450	t	f	2020-07-01 17:29:50.882567-07	2020-07-30	other	Weights 10 lbs
+109	78	Made out of rock.\nDimensions: 8" x 5" x 5"	/images/user-posts/other-13.jpg	Gautama	120	t	f	2020-07-01 17:32:13.504431-07	2020-07-29	other	 
+110	78	Made from clay.\nDimensions: 2ft x 1ft x 1ft	/images/user-posts/other-20.jpg	Cover My Eyes	350	t	f	2020-07-01 17:33:42.703589-07	2020-08-05	other	Weighs 8 lbs
+111	78	See no evil, hear no evil, speak no evil.\n3 separate pieces come in collection.	/images/user-posts/other-16.jpg	Three Wise Monkeys	250	t	f	2020-07-01 17:35:56.520658-07	2020-06-30	other	1 lb each.
+112	79	Dimensions: 16x24	/images/user-posts/other-10.jpg	Be Brilliant	350	t	f	2020-07-01 17:40:14.288583-07	2020-07-29	other	Weights 2 lb
+113	79	Dimensions: 24x30	/images/user-posts/other-5.jpg	Just Fantasy?	400	t	f	2020-07-01 17:41:41.204784-07	2020-07-28	other	Weighs 3 lbs
+114	79	Dimensions: 24x18	/images/user-posts/other-12.jpg	Think Different	350	t	f	2020-07-01 17:42:44.195997-07	2020-07-28	other	Weighs 2 lbs
+115	79	Dimensions: 14x14	/images/user-posts/other-15.jpg	All We Have Is Now	200	t	f	2020-07-01 17:43:44.674955-07	2020-08-04	other	weighs 1.5 lbs
+116	79	Dimensions: 24x32	/images/user-posts/other-11.jpg	I Licked It	450	t	f	2020-07-01 17:44:37.790397-07	2020-08-04	other	weighs 4 lbs
+117	79	Dimensions: 22x28	/images/user-posts/other-18.jpg	This Must Be The Place	400	t	f	2020-07-01 17:45:57.955745-07	2020-08-06	other	weighs 2 lbs
+118	79	Dimensions: 24x28	/images/user-posts/painting-20.jpg	Purple Waves	200	t	f	2020-07-01 17:47:01.219701-07	2020-07-28	paintings	 
+119	79	Dimensions: 24x18	/images/user-posts/painting-19.jpg	Phantasm	250	t	f	2020-07-01 17:47:50.467911-07	2020-07-30	paintings	 
+120	79	Dimensions: 24x30	/images/user-posts/painting-15.jpg	Pink Freedom	300	t	f	2020-07-01 17:49:01.164602-07	2020-08-04	paintings	 
 \.
 
 
@@ -391,13 +420,11 @@ COPY public.post ("postId", "sellerId", description, "imageUrl", title, "startin
 --
 
 COPY public."user" ("userId", "userName", email, password, "profileImg", "coverImg", description, location, "createdAt") FROM stdin;
-2	TimD	timd@lfz.com	timd1234	/images/timd.png	/images/timd-cover.png	timd best	92604	2020-06-22 15:43:37.442217-07
-3	TimH	timh@lfz.com	timh1234	/images/timh.png	/images/timh-cover.png	timh best	92604	2020-06-22 15:43:37.442217-07
-5	Cody	cody@lfz.com	cody1234	/images/cody.png	/images/cody-cover.png	cody best	92604	2020-06-22 15:43:37.442217-07
-6	TJ	tj@lfz.com	tjtj1234	/images/tj.png	/images/tj-cover.png	tj best	92604	2020-06-22 15:43:37.442217-07
-1	Uzair	uzair@lfz.com	uzair1234	//i.imgur.com/Xe4ahew.png	https://i.pinimg.com/originals/91/e0/07/91e00767ce57b0979d8b4c7a2f2ae3b2.jpg	ANIME SIRENS GO UWU UWU UWU UWUUUUU WUUUUU WUUUU	92620	2020-06-22 15:43:37.442217-07
-74	test2	\N	\N	\N	\N	\N	\N	2020-06-22 15:43:37.442217-07
-73	test	aerg@email.com	\N	profilepicsample-7.jpg	coverphotosample-5.jpg	descriptionrgstergaerggsrth	91111	2020-06-22 15:43:37.442217-07
+78	theSculptist	thesculptist@gmail.com	\N	profile-6.jpg	cover-9.jpg	My life is sculpting and creating things.\nI also paint when I am inspired.	92618	2020-06-22 15:43:37.442217-07
+79	ARTisLIFE	artislife@gmail.com	\N	profile-11.jpg	cover-12.jpg	Art is Life!\nI paint and I sculpt. I specialize in custom neon lighting. DM for commissions.	92679	2020-06-22 15:43:37.442217-07
+75	mzStacey	mzstacey@gmail.com	\N	profile-1.jpg	cover-1.jpg	Beauty is everywhere.\nDM me for comissions!	92604	2020-06-22 15:43:37.442217-07
+76	thatPainterLife	paint4me@gmail.com	\N	profile-2.jpg	cover-4.jpg	Painting is life. All my work is one of a kind.	92604	2020-06-22 15:43:37.442217-07
+77	photoFanatic	photofanatic@gmail.com	\N	profile-8.jpg	cover-5.jpg	Taking photos is my life.\nSelling them is my livelihood.	92610	2020-06-22 15:43:37.442217-07
 \.
 
 
@@ -406,9 +433,6 @@ COPY public."user" ("userId", "userName", email, password, "profileImg", "coverI
 --
 
 COPY public.watchlists ("watchlistId", "postId", "userId", "createdAt") FROM stdin;
-8	2	73	2020-06-22
-9	5	73	2020-06-22
-10	75	73	2020-06-22
 \.
 
 
@@ -437,14 +461,14 @@ SELECT pg_catalog.setval('public."message_messageId_seq"', 4, true);
 -- Name: post_postId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."post_postId_seq"', 75, true);
+SELECT pg_catalog.setval('public."post_postId_seq"', 120, true);
 
 
 --
 -- Name: user_userId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."user_userId_seq"', 74, true);
+SELECT pg_catalog.setval('public."user_userId_seq"', 79, true);
 
 
 --
