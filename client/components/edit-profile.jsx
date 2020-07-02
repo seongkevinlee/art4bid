@@ -87,15 +87,15 @@ export default class EditProfile extends React.Component {
 
     if (this.state.selectedProfileImgFile) {
       profileData.append('image', this.state.selectedProfileImgFile, changedProfileFileName);
+      profileData.append('profileImg', changedProfileFileName);
+    } else {
+      profileData.append('profileImg', profileImg);
     }
     if (this.state.selectedCoverImgFile) {
       profileData.append('image', this.state.selectedCoverImgFile, changedCoverFileName);
-    }
-    if (profileImg) {
-      profileData.append('profileImg', changedProfileFileName);
-    }
-    if (coverImg) {
       profileData.append('coverImg', changedCoverFileName);
+    } else {
+      profileData.append('coverImg', coverImg);
     }
     if (description) {
       profileData.append('description', description);
@@ -174,7 +174,7 @@ export default class EditProfile extends React.Component {
       >
         {
           props =>
-            <div className='d-flex flex-column align-items-center'>
+            <div style={props} className='d-flex flex-column align-items-center'>
               <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
