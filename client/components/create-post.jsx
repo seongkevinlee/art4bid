@@ -34,9 +34,7 @@ export default class CreatePost extends React.Component {
     // this.dummyFunction = this.dummyFunction.bind(this);
   }
 
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   getTodaysDate() {
     let today = new Date();
@@ -71,6 +69,8 @@ export default class CreatePost extends React.Component {
     );
 
     replaceImage[0].setAttribute('src', './images/create-new-post.png');
+
+    this.props.setView('search');
   }
 
   handleCancel() {
@@ -96,12 +96,24 @@ export default class CreatePost extends React.Component {
         replaceImage[0].setAttribute('src', this.result);
       });
       reader.readAsDataURL(file);
+      if (
+        event.target &&
+        event.target.files[0] &&
+        event.target.files[0].name
+      ) {
+        this.setState({
+          selectedFile: event.target.files[0],
+          [event.target.name]: event.target.value,
+          filePathImageURL: event.target.files[0].name
+        });
+      }
+    } else {
+      this.setState({
+        selectedFile: '',
+        [event.target.name]: '',
+        filePathImageURL: ''
+      });
     }
-    this.setState({
-      selectedFile: event.target.files[0],
-      [event.target.name]: event.target.value,
-      filePathImageURL: event.target.files[0].name
-    });
   }
 
   handleSubmit(event) {
@@ -124,12 +136,14 @@ export default class CreatePost extends React.Component {
     }
 
     const formData = new FormData();
-
+    const newDate = Date.now();
+    const newFileURL = filePathImageURL.split('.')[0].length > 13 ? filePathImageURL.substring(13) : filePathImageURL;
+    const changedFileName = newDate.toString().concat(newFileURL.split(' ').join(''));
     // Update the formData object
-    formData.append('image', this.state.selectedFile, filePathImageURL);
+    formData.append('image', this.state.selectedFile, changedFileName);
     formData.append('sellerId', sellerId);
     formData.append('description', description);
-    formData.append('imageUrl', `/images/user-posts/${filePathImageURL}`);
+    formData.append('imageUrl', `/images/user-posts/${changedFileName}`);
     formData.append('title', title);
     formData.append('startingBid', startingBid);
     formData.append('biddingEnabled', biddingEnabled);
@@ -157,11 +171,9 @@ export default class CreatePost extends React.Component {
     return (
       <div>
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
-          <div
-            className='back-container text-center d-flex justify-content-start align-items-center'
-          >
+          <div className="back-container text-center d-flex justify-content-start align-items-center">
             <img
-              type='button'
+              type="button"
               className="back-arrow"
               src="./images/backarrow.png"
               alt="back-arrow"
@@ -311,9 +323,8 @@ export default class CreatePost extends React.Component {
                 disabled={!this.state.biddingEnabled}
                 type="date"
                 name="expiredAt"
+                defaultValue={this.getTodaysDate()}
                 // value={this.state.expiredAt}
-                value={this.getTodaysDate()}
-                // value="08-26-1980"
                 onChange={this.handleChange}
                 className="bid-expiry"
               />

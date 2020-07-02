@@ -126,6 +126,7 @@ export default class SpecificPost extends React.Component {
       isWatchlisted
     } = this.state;
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
+    // const biddingClosed = new Date(postInfo.expiredAt) < new Date();
     const { userId, postId, setView } = this.props;
     if (postInfo && watchlistInfo && bidInfo) {
       let highestBid;
@@ -135,6 +136,10 @@ export default class SpecificPost extends React.Component {
         highestBid = bidInfo.highestBid;
       }
       let bodyview;
+      if (postInfo.biddingEnabled === 'false') {
+        bodyview = <h1>hi</h1>;
+      }
+
       if (this.state.bidHistory === 'off') {
         bodyview = (
           <PostBody
@@ -149,6 +154,7 @@ export default class SpecificPost extends React.Component {
             messageBtnClick={messageBtnClick}
             getBidInfo={this.getBidInfo}
             editModeToggle = {this.editModeToggle}
+            biddingEnabled = {postInfo.biddingEnabled}
           />
         );
       } else if (this.state.bidHistory === 'on') {

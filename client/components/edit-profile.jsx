@@ -6,8 +6,11 @@ export default class EditProfile extends React.Component {
     super(props);
     this.state = {
       profileImg: this.props.userInfo.profileImg,
+      profileImgFileObject: '',
       coverImg: this.props.userInfo.coverImg,
+      coverImgFileObject: '',
       location: this.props.userInfo.location,
+      city: '',
       description: this.props.userInfo.description,
       email: this.props.userInfo.email,
       userId: this.props.userInfo.userId,
@@ -21,24 +24,53 @@ export default class EditProfile extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.handleProfileImgChange = this.handleProfileImgChange.bind(this);
     this.handleCoverImgChange = this.handleCoverImgChange.bind(this);
+    this.getLocationByZipcode = this.getLocationByZipcode.bind(this);
+    this.handleCoverImgClick = this.handleCoverImgClick.bind(this);
+    this.handleProfileImgClick = this.handleProfileImgClick.bind(this);
+    this.coverImgUploader = React.createRef();
+    this.profileImgUploader = React.createRef();
+  }
+
+  componentDidMount() {
+    const { location } = this.state;
+    if (location) {
+      this.getLocationByZipcode(location);
+    }
   }
 
   handleChange(event) {
     this.setState({ [event.target.name]: event.target.value });
+    if (event.target.id === 'location' && event.target.value.trim().length === 5) {
+      this.getLocationByZipcode(event.target.value.trim());
+    }
   }
 
   handleProfileImgChange(event) {
-    this.setState({
-      selectedProfileImgFile: event.target.files[0],
-      profileImg: event.target.files[0].name
-    });
+    if (event.target.files[0]) {
+      this.setState({
+        selectedProfileImgFile: event.target.files[0],
+        profileImgFileObject: URL.createObjectURL(event.target.files[0]),
+        profileImg: event.target.files[0].name
+      });
+    }
   }
 
   handleCoverImgChange(event) {
-    this.setState({
-      selectedCoverImgFile: event.target.files[0],
-      coverImg: event.target.files[0].name
-    });
+    if (event.target.files[0]) {
+      this.setState({
+        selectedCoverImgFile: event.target.files[0],
+        coverImgFileObject: URL.createObjectURL(event.target.files[0]),
+        coverImg: event.target.files[0].name
+      });
+    }
+  }
+
+  handleCoverImgClick() {
+    this.coverImgUploader.current.click();
+  }
+
+  handleProfileImgClick() {
+    this.profileImgUploader.current.click();
   }
 
   handleSubmit(event) {
@@ -47,17 +79,23 @@ export default class EditProfile extends React.Component {
 
     const { profileImg, coverImg, description, location, email, userId } = this.state;
     const profileData = new FormData();
+    const newDate = Date.now();
+    const newProfileFileURL = profileImg.split('.')[0].length > 13 ? profileImg.substring(13) : profileImg;
+    const newCoverFileURL = coverImg.split('.')[0].length > 13 ? coverImg.substring(13) : coverImg;
+    const changedProfileFileName = newDate.toString().concat(newProfileFileURL.split(' ').join(''));
+    const changedCoverFileName = newDate.toString().concat(newCoverFileURL.split(' ').join(''));
+
     if (this.state.selectedProfileImgFile) {
-      profileData.append('image', this.state.selectedProfileImgFile, profileImg);
+      profileData.append('image', this.state.selectedProfileImgFile, changedProfileFileName);
     }
     if (this.state.selectedCoverImgFile) {
-      profileData.append('image', this.state.selectedCoverImgFile, coverImg);
+      profileData.append('image', this.state.selectedCoverImgFile, changedCoverFileName);
     }
     if (profileImg) {
-      profileData.append('profileImg', profileImg);
+      profileData.append('profileImg', changedProfileFileName);
     }
     if (coverImg) {
-      profileData.append('coverImg', coverImg);
+      profileData.append('coverImg', changedCoverFileName);
     }
     if (description) {
       profileData.append('description', description);
@@ -86,9 +124,49 @@ export default class EditProfile extends React.Component {
     this.props.getUserData();
   }
 
-  render() {
-    const { profileImg, coverImg, description, userName, location, email } = this.state;
+  getLocationByZipcode(zipcode) {
+    const host = 'https://www.zipcodeapi.com/rest';
+    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
+    const param = 'info.json';
+    const url = `${host}/${key}/${param}/${zipcode}/degrees`;
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        if (data.city) {
+          this.setState({
+            city: `${data.city},${data.state}`
+          });
+        } else {
+          this.setState({
+            location: '',
+            city: 'No city found'
+          });
+        }
+      })
+      .catch(err => console.error(err.message));
+  }
 
+  render() {
+    const {
+      profileImg,
+      profileImgFileObject,
+      coverImg,
+      coverImgFileObject,
+      description,
+      userName,
+      location,
+      city,
+      email
+    } = this.state;
+    const {
+      handleCoverImgChange,
+      handleCoverImgClick,
+      handleSubmit,
+      coverImgUploader,
+      profileImgUploader,
+      handleProfileImgChange,
+      handleProfileImgClick
+    } = this;
     return (
       <Spring
         from={{ marginLeft: -500 }}

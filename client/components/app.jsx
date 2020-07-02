@@ -81,7 +81,9 @@ export default class App extends React.Component {
         <Message
           setView={setView}
           getPostInfo={getPostInfo}
-          userInfo={this.state.userInfo} />);
+          userInfo={this.state.userInfo}
+        />
+      );
     } else if (this.state.view === 'post') {
       pageBody = (
         <SpecificPost
@@ -92,15 +94,17 @@ export default class App extends React.Component {
         />
       );
     } else if (this.state.view === 'create') {
-      pageBody = <CreatePost setView={this.setView} userInfo={this.state.userInfo} />;
+      pageBody = (
+        <CreatePost setView={this.setView} userInfo={this.state.userInfo} />
+      );
     } else if (this.state.view === 'my-bids') {
       pageBody = (
         <MyBids
           getPostInfo={getPostInfo}
           setView={this.setView}
           userInfo={this.state.userInfo}
-          previousView={this.state.previousView}/>
-
+          previousView={this.state.previousView}
+        />
       );
     } else if (this.state.view === 'watchlist') {
       pageBody = (
@@ -110,6 +114,15 @@ export default class App extends React.Component {
           userInfo={this.state.userInfo}
           previousView={this.state.previousView}
         />
+      );
+    }
+
+    if (this.state.view === 'create') {
+      return (
+        <div>
+          {pageBody}
+          {/* <NavBar view={this.state.view} setView={setView} /> */}
+        </div>
       );
     }
 

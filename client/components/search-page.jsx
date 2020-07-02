@@ -1,6 +1,9 @@
 import React from 'react';
-import ThumbnailColumn from './thumbnail-column';
+// import ThumbnailColumn from './thumbnail-column';
 import Autocomplete from 'react-google-autocomplete';
+import PaintingsThumbnailColumn from './paintings-thumbnail-column';
+import PhotographsThumbnailColumn from './photographs-thumbnail-column';
+import OtherThumbnailColumn from './other-thumbnail-column';
 
 export default class SearchPage extends React.Component {
   constructor(props) {
@@ -14,20 +17,13 @@ export default class SearchPage extends React.Component {
       query: ''
     };
     this.getThumbnails = this.getThumbnails.bind(this);
-
-    // COMMENTED OUT CODE IS FOR INFINITE SCROLL LATER ON
-    // this.addThumbnails = this.addThumbnails.bind(this);
-    // this.paintingOffset = 10;
-    // this.photographOffset = 10;
-    // this.otherOffset = 10;
-
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleSearchClick = this.handleSearchClick.bind(this);
     this.getZipcodesByCity = this.getZipcodesByCity.bind(this);
     this.getZipcodesByZipcodeWithinRadius = this.getZipcodesByZipcodeWithinRadius.bind(this);
     this.searchPostsByZipcodes = this.searchPostsByZipcodes.bind(this);
     this.showMessage = this.showMessage.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.loadPostsAgain = this.loadPostsAgain.bind(this);
   }
 
   componentDidMount() {
@@ -59,44 +55,6 @@ export default class SearchPage extends React.Component {
         }
       });
   }
-
-  // addThumbnails(category) {
-  //   let offset;
-  //   switch (category) {
-  //     case 'paintings':
-  //       offset = this.paintingOffset;
-  //       break;
-  //     case 'photographs':
-  //       offset = this.photographOffset;
-  //       break;
-  //     case 'other':
-  //       offset = this.otherOffset;
-  //       break;
-  //   }
-  //   fetch(`./api/posts/${category}/${offset}`)
-  //     .then(res => res.json())
-  //     .then(thumbnailInfo => {
-  //       if (category === 'paintings') {
-  //         this.paintingOffset += thumbnailInfo.length;
-  //         const paintingsArr = this.state.paintings.slice().concat(thumbnailInfo);
-  //         this.setState({
-  //           paintings: paintingsArr
-  //         });
-  //       } else if (category === 'photographs') {
-  //         this.photographOffset += thumbnailInfo.length;
-  //         const photographsArr = this.state.photographs.slice().concat(thumbnailInfo);
-  //         this.setState({
-  //           photographs: photographsArr
-  //         });
-  //       } else if (category === 'other') {
-  //         this.otherOffset += thumbnailInfo.length;
-  //         const otherArr = this.state.other.slice().concat(thumbnailInfo);
-  //         this.setState({
-  //           other: otherArr
-  //         });
-  //       }
-  //     });
-  // }
 
   getZipcodesByCity(city, state) {
     const host = 'https://www.zipcodeapi.com/rest/';
@@ -178,7 +136,7 @@ export default class SearchPage extends React.Component {
 
   handleSearchClick(selectedPlace) {
     const { search } = this.state;
-    if (selectedPlace) {
+    if (selectedPlace.length) {
       const city = selectedPlace.split(',')[0].trim().toUpperCase();
       const state = selectedPlace.split(',')[1] ? selectedPlace.split(',')[1].trim().substring(0, 2).toUpperCase() : '';
       this.getZipcodesByCity(city, state);
@@ -201,25 +159,36 @@ export default class SearchPage extends React.Component {
     });
   }
 
+  loadPostsAgain() {
+    this.setState({
+      search: '',
+      city: '',
+      query: ''
+    });
+    this.getThumbnails('paintings');
+    this.getThumbnails('photographs');
+    this.getThumbnails('other');
+  }
+
   handleSubmit(event) {
     event.preventDefault();
     this.handleSearchClick();
   }
 
   render() {
-    const { handleSearchChange, handleSearchClick, handleSubmit } = this;
+    const { handleSearchChange, handleSearchClick, loadPostsAgain } = this;
     const { search, paintings, photographs, other } = this.state;
     if (paintings.length > 0 || photographs.length > 0 || other.length > 0) {
       return (
         <div>
           <div>
-            <form className="text-center pt-3" onSubmit={handleSubmit}>
+            <form className="text-center pt-3">
               <div className="position-relative">
                 <Autocomplete
                   autoFocus
                   types={['(regions)']}
                   onPlaceSelected={place => {
-                    handleSearchClick(place.formatted_address);
+                    return handleSearchClick(place.formatted_address);
                   }}
                   componentRestrictions={{ country: 'us' }}
                   className="search-bar text-center w-75 border-0 pt-2 pb-2"
@@ -253,10 +222,11 @@ export default class SearchPage extends React.Component {
             {
               paintings.length > 0
                 ? (
-                  <ThumbnailColumn
-                    thumbnails={paintings}
+                  <PaintingsThumbnailColumn
+                    // thumbnails={paintings}
                     setView={this.props.setView}
-                    getPostInfo={this.props.getPostInfo} />
+                    getPostInfo={this.props.getPostInfo}
+                  />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
@@ -265,10 +235,11 @@ export default class SearchPage extends React.Component {
             {
               photographs.length > 0
                 ? (
-                  <ThumbnailColumn
-                    thumbnails={photographs}
+                  <PhotographsThumbnailColumn
+                    // thumbnails={photographs}
                     setView={this.props.setView}
-                    getPostInfo={this.props.getPostInfo} />
+                    getPostInfo={this.props.getPostInfo}
+                  />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
@@ -277,10 +248,11 @@ export default class SearchPage extends React.Component {
             {
               other.length > 0
                 ? (
-                  <ThumbnailColumn
-                    thumbnails={other}
+                  <OtherThumbnailColumn
+                    // thumbnails={other}
                     setView={this.props.setView}
-                    getPostInfo={this.props.getPostInfo} />
+                    getPostInfo={this.props.getPostInfo}
+                  />
                 )
                 : <div className="flex-column thumbnail-column">
                   <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
@@ -290,7 +262,55 @@ export default class SearchPage extends React.Component {
         </div>
       );
     } else {
-      return <h6 className="mt-5 text-center mt-3">No posts are found</h6>;
+      return (
+        <>
+          <div>
+            <form className="text-center pt-3">
+              <div className="position-relative">
+                <Autocomplete
+                  autoFocus
+                  types={['(regions)']}
+                  onPlaceSelected={place => {
+                    handleSearchClick(place.formatted_address);
+                  }}
+                  componentRestrictions={{ country: 'us' }}
+                  className="search-bar text-center w-75 border-0 pt-2 pb-2"
+                  type="text"
+                  name="search"
+                  placeholder="search"
+                  value={search || ''}
+                  onChange={handleSearchChange} />
+                <img
+                  alt=""
+                  className="search-mag position-absolute cursor-pointer"
+                  src="./images/search-solid.svg"
+                  onClick={handleSearchClick}></img>
+              </div>
+            </form>
+          </div>
+          <div className="d-flex mt-4 justify-content-around text-center" style={{
+            marginBottom: '6px'
+          }}>
+            <div className="column-label align-text-bottom">
+              <h6>Paintings</h6>
+            </div>
+            <div className="column-label">
+              <h6>Photographs</h6>
+            </div>
+            <div className="column-label">
+              <h6>Other</h6>
+            </div>
+          </div>
+          <div className="d-flex justify-content-around">
+            <h6 className="mt-5 text-center mt-3">No posts are found</h6>
+            <div>
+              <button
+                className="btn btn-sm btn-outline-danger"
+                onClick={loadPostsAgain}>Try Again</button>
+            </div>
+          </div>
+        </>
+      );
     }
   }
 }
