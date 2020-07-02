@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spring } from 'react-spring/renderprops';
 
 export default class EditProfile extends React.Component {
   constructor(props) {
@@ -89,91 +90,101 @@ export default class EditProfile extends React.Component {
     const { profileImg, coverImg, description, userName, location, email } = this.state;
 
     return (
-      <div className='d-flex flex-column align-items-center'>
-        <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
-          <div
-            className='back-container text-center d-flex justify-content-start align-items-center'
-          >
-            <img type='button' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel}/>
-          </div>
-          <div className='header-title pt-3 pb-3'>EDIT</div>
-          <div className="back-container d-flex justify-content-center align-items-center">
-            <button
-              type="Submit"
-              className="yes-button"
-              style={{ height: '40px' }}
-              onClick={this.handleSubmit}>
-              SAVE
-            </button>
-          </div>
-        </div>
-        <div className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4' style={{ backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})` }}>
-          <input
-            type="file"
-            id="cover-img-upload"
-            name="cover-img-upload"
-            accept=".png, .jpeg, .gif"
-            className="cover-img-upload"
-            onChange={this.handleCoverImgChange}
-          />
-          <button
-            className='profileImgEdit btn'
-            style={{ backgroundImage: `url(/images/user-profiles/${profileImg})` } }>
-            {!profileImg ? <i className="fas fa-plus fa-3x"></i> : null}
-          </button>
-          <input
-            type="file"
-            id="profile-img-upload"
-            name="profile-img-upload"
-            accept=".png, .jpeg, .gif"
-            className="profile-img-upload"
-            onChange={this.handleProfileImgChange}
-          />
-          <h4>{userName}</h4>
-        </div>
-        <textarea
-          name="description"
-          id="description-input"
-          className='description-input mt-2 mb-2 border-0 text-center'
-          cols="50"
-          rows="4"
-          placeholder='Enter description here...'
-          value={description}
-          onChange={this.handleChange}>
-        </textarea>
-        <div className='location-info d-flex flex-column align-items-center justify-content-center'>
-          <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-            <label htmlFor="zip-input" className='col-5 text-center'>Your Zip-code:</label>
-            <input
-              name='location'
-              id='location'
-              type="number"
-              value={location}
-              className='zip-input mt-3 col-5 border-0'
-              onChange={this.handleChange}/>
-          </div>
-          <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-            <label htmlFor="location" className='col-5 text-center'>Location:</label>
-            <input
-              name='city'
-              id='city'
-              type="text"
-              className='zip-input mt-3 col-5 border-0'
-              disabled/>
-          </div>
-          <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-            <label htmlFor="email-input" className='col-5 text-center'>Email:</label>
-            <input
-              name='email'
-              id='email'
-              type="text"
-              value={email}
-              onChange={this.handleChange}
-              className='email-input mt-3 col-5 border-0'
-            />
-          </div>
-        </div>
-      </div>
+      <Spring
+        from={{ marginLeft: -500 }}
+        to={{ marginLeft: 0 }}
+      >
+        {
+          props =>
+            <div style={props} className='d-flex flex-column align-items-center'>
+              <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
+                <div
+                  className='back-container text-center d-flex justify-content-start align-items-center'
+                >
+                  <img type='button' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel}/>
+                </div>
+                <div className='header-title pt-3 pb-3'>EDIT</div>
+                <div className="back-container d-flex justify-content-center align-items-center">
+                  <button
+                    type="Submit"
+                    className="yes-button"
+                    style={{ height: '40px' }}
+                    onClick={this.handleSubmit}>
+                  SAVE
+                  </button>
+                </div>
+              </div>
+              <div className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4' style={{ backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})` }}>
+                <input
+                  type="file"
+                  id="cover-img-upload"
+                  name="cover-img-upload"
+                  accept=".png, .jpeg, .gif"
+                  className="cover-img-upload"
+                  onChange={this.handleCoverImgChange}
+                />
+                <button
+                  className='profileImgEdit btn'
+                  style={{ backgroundImage: `url(/images/user-profiles/${profileImg})` } }>
+                  {!profileImg ? <i className="fas fa-plus fa-3x"></i> : null}
+                </button>
+                <input
+                  type="file"
+                  id="profile-img-upload"
+                  name="profile-img-upload"
+                  accept=".png, .jpeg, .gif"
+                  className="profile-img-upload"
+                  onChange={this.handleProfileImgChange}
+                />
+                <h4>{userName}</h4>
+              </div>
+              <textarea
+                name="description"
+                id="description-input"
+                className='description-input mt-2 mb-2 border-0 text-center'
+                cols="50"
+                rows="4"
+                placeholder='Enter description here...'
+                value={description}
+                onChange={this.handleChange}>
+              </textarea>
+              <div className='location-info d-flex flex-column align-items-center justify-content-center'>
+                <div className='d-flex flex-end justify-content-center align-items-end col-12'>
+                  <label htmlFor="zip-input" className='col-5 text-center'>Your Zip-code:</label>
+                  <input
+                    name='location'
+                    id='location'
+                    type="number"
+                    value={location}
+                    className='zip-input mt-3 col-5 border-0'
+                    onChange={this.handleChange}/>
+                </div>
+                <div className='d-flex flex-end justify-content-center align-items-end col-12'>
+                  <label htmlFor="location" className='col-5 text-center'>Location:</label>
+                  <input
+                    name='city'
+                    id='city'
+                    type="text"
+                    className='zip-input mt-3 col-5 border-0'
+                    disabled/>
+                </div>
+                <div className='d-flex flex-end justify-content-center align-items-end col-12'>
+                  <label htmlFor="email-input" className='col-5 text-center'>Email:</label>
+                  <input
+                    name='email'
+                    id='email'
+                    type="text"
+                    value={email}
+                    onChange={this.handleChange}
+                    className='email-input mt-3 col-5 border-0'
+                  />
+                </div>
+              </div>
+            </div>
+
+        }
+
+      </Spring>
     );
   }
 }

@@ -105,8 +105,9 @@
     "pg": "^8.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-toggle-button": "2.2.0",
     "react-google-autocomplete": "1.2.6",
+    "react-spring": "8.0.27",
+    "react-toggle-button": "2.2.0",
     "session-file-store": "^1.4.0"
   },
   "devDependencies": {
