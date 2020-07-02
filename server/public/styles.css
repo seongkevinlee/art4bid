@@ -193,6 +193,7 @@ button {
   height: 150px;
   border-radius: 50%;
   border: 2px solid white;
+  object-fit: cover;
   /* opacity: 0; */
 }
 
