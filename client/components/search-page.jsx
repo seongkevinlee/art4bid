@@ -125,8 +125,8 @@ export default class SearchPage extends React.Component {
     }
   }
 
-  handleSearchChange() {
-    event.preventDefault();
+  handleSearchChange(e) {
+    e.preventDefault();
     if (event.target.value.length < 2) {
       event.target.value = event.target.value.trim();
     }
@@ -171,9 +171,9 @@ export default class SearchPage extends React.Component {
     this.getThumbnails('other');
   }
 
-  handleSubmit() {
-    event.preventDefault();
-    this.handleSearchClick();
+  handleSubmit(e) {
+    e.preventDefault();
+    // this.handleSearchClick();
   }
 
   render() {
@@ -187,6 +187,7 @@ export default class SearchPage extends React.Component {
               <div className="position-relative">
                 <Autocomplete
                   autoFocus
+                  id="search"
                   types={['(regions)']}
                   onPlaceSelected={place => {
                     this.setState({
@@ -195,17 +196,18 @@ export default class SearchPage extends React.Component {
                     // handleSearchClick(place.formatted_address);
                   }}
                   componentRestrictions={{ country: 'us' }}
-                  className="search-bar text-center w-75 border-0 pt-2 pb-2"
+                  className="mx-auto search-bar text-center w-75 border-0 pt-2 pb-2 form-control"
                   type="text"
                   name="search"
                   placeholder="search"
                   value={search || ''}
                   onChange={handleSearchChange}/>
-                <img
-                  alt=""
-                  className="search-mag position-absolute cursor-pointer"
-                  src="./images/search-solid.svg"
-                  onClick={handleSearchClick}></img>
+                <button type="button" className="search-mag position-absolute" onClick={handleSearchClick}>
+                  <img
+                    alt=""
+                    className="cursor-pointer search-mag-icon"
+                    src="./images/search-solid.svg"></img>
+                </button>
               </div>
             </form>
           </div>
@@ -284,11 +286,12 @@ export default class SearchPage extends React.Component {
                   placeholder="search"
                   value={search || ''}
                   onChange={handleSearchChange} />
-                <img
-                  alt=""
-                  className="search-mag position-absolute cursor-pointer"
-                  src="./images/search-solid.svg"
-                  onClick={handleSearchClick}></img>
+                <button type="button" className="search-mag position-absolute" onClick={handleSearchClick}>
+                  <img
+                    alt=""
+                    className="cursor-pointer search-mag-icon"
+                    src="./images/search-solid.svg"></img>
+                </button>
               </div>
             </form>
           </div>

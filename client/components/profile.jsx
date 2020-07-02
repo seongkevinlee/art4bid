@@ -66,12 +66,9 @@ export default class Profile extends React.Component {
                   backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})`
                 }}
               >
-                <div
-                  className="profileImg-container"
-                  style={{
-                    backgroundImage: `url(/images/user-profiles/${profileImg})`
-                  }}
-                ></div>
+                <div className="profileImg-container">
+                  <img className="profile-img-upload" src={`/images/user-profiles/${profileImg}`} alt=""/>
+                </div>
                 <h4 id="profileUserName">{userName}</h4>
                 <p className="profile-description text-center mt-2 mb-2 ml-1 mr-1">
                   {!description ? ' ' : description}
@@ -80,9 +77,7 @@ export default class Profile extends React.Component {
               <UserPosts getPostInfo={this.props.getPostInfo} setView={this.props.setView} />
             </div>
         }
-
       </Spring>
-
     );
   }
 
