@@ -27,8 +27,16 @@ export default class MyBids extends React.Component {
         return response.json();
       })
       .then(data => {
+        const postIdTracker = [];
+        const filteredArr = [];
+        for (let i = 0; i < data.length; i++) {
+          if (!postIdTracker.includes(data[i].postId)) {
+            postIdTracker.push(data[i].postId);
+            filteredArr.push(data[i]);
+          }
+        }
         this.setState({
-          postThumbnails: data
+          postThumbnails: filteredArr
         });
       })
       .catch(err => console.error(err));

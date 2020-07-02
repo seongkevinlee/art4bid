@@ -668,7 +668,7 @@ app.post('/api/bid', (req, res, next) => {
   const { bidderId, postId, currentBid } = req.body;
   if (!bidderId || !postId || !currentBid) {
     return res.status(400).json({
-      error: 'Must be logged in and add a bid price'
+      error: 'Must be logged in and have added a bid price'
     });
   } else if (isNaN(Number(currentBid)) || Number(currentBid) < 0) {
     return res.status(400).json({
