@@ -41,7 +41,7 @@ export default class ToggleButton extends React.Component {
           </span>
           <div
             className={biddingEnabled ? 'slider-left' : 'slider-right'}
-            onClick={this.handleClick}
+            // onClick={this.handleClick}
           ></div>
         </div>
       </div>
