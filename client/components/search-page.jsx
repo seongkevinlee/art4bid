@@ -202,12 +202,12 @@ export default class SearchPage extends React.Component {
                   placeholder="search"
                   value={search || ''}
                   onChange={handleSearchChange}/>
-                <button type="button" className="search-mag position-absolute" onClick={handleSearchClick}>
-                  <img
-                    alt=""
-                    className="cursor-pointer search-mag-icon"
-                    src="./images/search-solid.svg"></img>
-                </button>
+                <img
+                  alt=""
+                  type="button"
+                  className="search-mag position-absolute cursor-pointer"
+                  src="./images/search-brush.png"
+                  onClick={handleSearchClick}></img>
               </div>
             </form>
           </div>
@@ -286,12 +286,12 @@ export default class SearchPage extends React.Component {
                   placeholder="search"
                   value={search || ''}
                   onChange={handleSearchChange} />
-                <button type="button" className="search-mag position-absolute" onClick={handleSearchClick}>
-                  <img
-                    alt=""
-                    className="cursor-pointer search-mag-icon"
-                    src="./images/search-solid.svg"></img>
-                </button>
+                <img
+                  alt=""
+                  type="button"
+                  className="search-mag position-absolute cursor-pointer"
+                  src="./images/search-brush.png"
+                  onClick={handleSearchClick}></img>
               </div>
             </form>
           </div>

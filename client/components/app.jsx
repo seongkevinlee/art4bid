@@ -9,6 +9,7 @@ import CreatePost from './create-post';
 import SpecificPost from './specific-post';
 import MyBids from './my-bids';
 import Watchlist from './watchlist';
+// import { Spring } from 'react-spring/renderprops';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -84,9 +85,7 @@ export default class App extends React.Component {
         <Message
           setView={setView}
           getPostInfo={getPostInfo}
-          userInfo={this.state.userInfo}
-        />
-      );
+          userInfo={this.state.userInfo} />);
     } else if (this.state.view === 'post') {
       pageBody = (
         <SpecificPost
@@ -97,17 +96,15 @@ export default class App extends React.Component {
         />
       );
     } else if (this.state.view === 'create') {
-      pageBody = (
-        <CreatePost setView={this.setView} userInfo={this.state.userInfo} />
-      );
+      pageBody = <CreatePost setView={this.setView} userInfo={this.state.userInfo} />;
     } else if (this.state.view === 'my-bids') {
       pageBody = (
         <MyBids
           getPostInfo={getPostInfo}
           setView={this.setView}
           userInfo={this.state.userInfo}
-          previousView={this.state.previousView}
-        />
+          previousView={this.state.previousView}/>
+
       );
     } else if (this.state.view === 'watchlist') {
       pageBody = (

@@ -54,7 +54,7 @@ export default class Profile extends React.Component {
                 <div className="back-container"></div>
                 <div className="header-title pt-3 pb-3">PROFILE</div>
                 <button
-                  className="profile-edit-btn btn btn-submit-header text-center"
+                  className="mt-1 profile-edit-btn btn btn-submit-header text-center"
                   onClick={this.editModeToggle}
                 >
                   EDIT

@@ -3,7 +3,7 @@ import React from 'react';
 export default function NavBar(props) {
   const view = props.view;
   let searchIcon = './images/search-solid.svg';
-  let messageIcon = './images/envelope-open-text-solid.svg';
+  let messageIcon = './images/chat2-black.svg';
   let createPostIcon = './images/plus-black.png';
   let watchlistIcon = './images/fire-alt-solid.svg';
   let profileIcon = './images/user-alt-solid.svg';
@@ -14,7 +14,7 @@ export default function NavBar(props) {
       searchIcon = './images/search-red.png';
       break;
     case 'message':
-      messageIcon = './images/message-red.png';
+      messageIcon = './images/chat2-red.png';
       break;
     case 'create':
       createPostIcon = './images/plusicon-darkred.png';
