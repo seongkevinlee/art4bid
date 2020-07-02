@@ -14,7 +14,7 @@ export default class CreatePost extends React.Component {
       startingBid: 0,
       biddingEnabled: false,
       isDeleted: false,
-      expiredAt: '2020/06/30',
+      expiredAt: '',
       notes: '',
       category: '',
       selectedFile: null,
@@ -23,7 +23,6 @@ export default class CreatePost extends React.Component {
     };
     this.date = new Date();
     this.baseState = this.state;
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleFileChange = this.handleFileChange.bind(this);
@@ -34,7 +33,12 @@ export default class CreatePost extends React.Component {
     this.isEnabled = this.isEnabled.bind(this);
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    const expiredAt = this.getTodaysDate();
+    this.setState(() => {
+      return { expiredAt };
+    });
+  }
 
   getTodaysDate() {
     let today = new Date();
@@ -51,30 +55,24 @@ export default class CreatePost extends React.Component {
     return today;
   }
 
-  dummyFunction() {
-    // eslint-disable-next-line no-console
-    console.log('does nothing');
-  }
-
   handleModal() {
     this.setState({ display: '' });
   }
 
-  // delete all changes
-  handleReset() {
-    this.setState(this.baseState);
-
-    const replaceImage = document.getElementsByClassName(
-      'create-new-post-image'
-    );
-
-    replaceImage[0].setAttribute('src', './images/create-new-post.png');
-
-    this.props.setView('search');
-  }
-
   handleCancel() {
     this.setState({ display: 'none' });
+  }
+
+  // delete all changes
+  handleReset() {
+    // don't need this anymore because back button is taking us back to search
+    // this.setState(this.baseState);
+    // const replaceImage = document.getElementsByClassName(
+    //   'create-new-post-image'
+    // );
+    // replaceImage[0].setAttribute('src', './images/create-new-post.png');
+
+    this.props.setView('search');
   }
 
   // setting state for each form input
@@ -113,7 +111,11 @@ export default class CreatePost extends React.Component {
   }
 
   isEnabled() {
-    this.setState({ biddingEnabled: !this.state.biddingEnabled });
+    this.setState(prevState => {
+      return {
+        biddingEnabled: !prevState.biddingEnabled
+      };
+    });
   }
 
   handleSubmit(event) {
@@ -161,9 +163,6 @@ export default class CreatePost extends React.Component {
       method: 'POST',
       body: formData
     })
-      .then(res => {
-        // res.json();
-      })
       .then(data => {
         // eslint-disable-next-line no-console
         console.log('new post created');
@@ -295,11 +294,8 @@ export default class CreatePost extends React.Component {
             </div>
 
             <div className="bidding-content">
-
               <div>
-                <ToggleButton
-                  isEnabled={this.isEnabled}
-                />
+                <ToggleButton isEnabled={this.isEnabled} />
               </div>
 
               {/* starting bid */}
@@ -321,7 +317,7 @@ export default class CreatePost extends React.Component {
                 disabled={!this.state.biddingEnabled}
                 type="date"
                 name="expiredAt"
-                defaultValue={this.getTodaysDate()}
+                defaultValue={this.state.expiredAt}
                 // value={this.state.expiredAt}
                 onChange={this.handleChange}
                 className="bid-expiry"

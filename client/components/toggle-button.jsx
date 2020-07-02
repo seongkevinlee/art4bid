@@ -13,10 +13,17 @@ export default class ToggleButton extends React.Component {
     } else {
       this.setState({ biddingEnabled: false });
     }
+
+    // this.setState(prevState => {
+    //   return {
+    //     biddingEnabled: !prevState.biddingEnabled
+    //   };
+    // });
     this.props.isEnabled();
   }
 
   render() {
+
     const { biddingEnabled } = this.state;
 
     return (
