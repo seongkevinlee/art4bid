@@ -55,6 +55,9 @@ export default class App extends React.Component {
         this.setState(() => {
           return { userInfo: data.userInfo, loggedIn: true };
         });
+      }).catch(err => {
+        this.setState({ loggedIn: false });
+        console.error(err);
       });
   }
 
@@ -117,7 +120,7 @@ export default class App extends React.Component {
     return (
       <div>
         {pageBody}
-        <NavBar view={this.state.view} setView={setView} />
+        {this.state.view !== 'create' && <NavBar view={this.state.view} setView={setView} />}
       </div>
     );
   }

@@ -87,15 +87,15 @@ export default class EditProfile extends React.Component {
 
     if (this.state.selectedProfileImgFile) {
       profileData.append('image', this.state.selectedProfileImgFile, changedProfileFileName);
+      profileData.append('profileImg', changedProfileFileName);
+    } else {
+      profileData.append('profileImg', profileImg);
     }
     if (this.state.selectedCoverImgFile) {
       profileData.append('image', this.state.selectedCoverImgFile, changedCoverFileName);
-    }
-    if (profileImg) {
-      profileData.append('profileImg', changedProfileFileName);
-    }
-    if (coverImg) {
       profileData.append('coverImg', changedCoverFileName);
+    } else {
+      profileData.append('coverImg', coverImg);
     }
     if (description) {
       profileData.append('description', description);

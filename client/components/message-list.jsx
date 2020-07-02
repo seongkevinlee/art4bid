@@ -27,7 +27,7 @@ export default class MessageList extends React.Component {
                     <div className="d-flex justify-space-between">
                       <span
                         className="col mt-2 ml-1 message-sender text-left"
-                        id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.recipientId}
+                        id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.title + ',' + message.recipientId}
                         onClick={handleViewMessageClick}>
                         {name}
                       </span>

@@ -85,7 +85,11 @@ export default class PostBody extends React.Component {
     const { handleSubmit, handleChange, handleClick } = this;
     const { isEditing } = this.state;
     const formattedHighestBid = new Intl.NumberFormat().format(highestBid);
-    const biddingClosed = new Date(this.props.bidEnd) < new Date();
+    const bidDate = new Date(this.props.bidEnd);
+    bidDate.setUTCMinutes(1439);
+    bidDate.setUTCSeconds(59);
+    const biddingClosed = bidDate < new Date();
+
     let notesOrBid = (
       <div
         className="bid-buttons-container d-flex flex-column"
@@ -139,7 +143,7 @@ export default class PostBody extends React.Component {
             className="text-center"
             onClick={() => this.props.editModeToggle()}
           >
-            Edit Post
+              Edit Post
           </button>
         </div>
       );
@@ -149,7 +153,7 @@ export default class PostBody extends React.Component {
           onClick={() => this.props.toggleBidHistory('on')}
           className="red-underline text-right m-0"
         >
-          Total Bids:
+            Total Bids:
         </p>
       );
       totalBidsNumber = (
@@ -168,7 +172,7 @@ export default class PostBody extends React.Component {
         style={{ opacity: biddingClosed ? '40%' : '100%' }}
       >
         <p id="expire-disclaimer" className="text-center">
-          All bids expire at 12AM PST on expiration date
+          All bids expire at 11:59 PST on expiration date
         </p>
         <div className="bid-numbers d-flex justify-content-between">
           <div className="text-right bid-numbers">
@@ -191,30 +195,42 @@ export default class PostBody extends React.Component {
     );
 
     if (biddingEnabled === false) {
-      notesOrBid = (
-        <div
-          className="bid-buttons-container d-flex flex-column"
-        >
-          <button
-            id="message"
-            type="button"
-            onClick={() => this.props.messageBtnClick()}
+      if (userId !== sellerId) {
+        notesOrBid = (
+          <div
+            className="bid-buttons-container d-flex flex-column"
           >
-            {' '}
+            <button
+              id="message"
+              type="button"
+              onClick={() => this.props.messageBtnClick()}
+            >
+              {' '}
           Message
-          </button>
-        </div>
-      );
+            </button>
+          </div>
+        );
 
-      bidWindow = (
-        <div
-          className="bid-stats p-3"
-        >
-          <p id="expire-disclaimer" className="text-center">
+        bidWindow = (
+          <div
+            className="bid-stats p-3"
+          >
+            <p id="expire-disclaimer" className="text-center">
             The artist is not selling this artwork currently.
-          </p>
-        </div>
-      );
+            </p>
+          </div>
+        );
+      } else {
+        bidWindow = (
+          <div
+            className="bid-stats p-3"
+          >
+            <p id="expire-disclaimer" className="text-center">
+             You are not selling this artwork.
+            </p>
+          </div>
+        );
+      }
     }
 
     let modalDisplay = { display: 'none' };

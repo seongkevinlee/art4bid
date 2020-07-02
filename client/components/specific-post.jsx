@@ -125,6 +125,7 @@ export default class SpecificPost extends React.Component {
       isModalOpen,
       isWatchlisted
     } = this.state;
+
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
     // const biddingClosed = new Date(postInfo.expiredAt) < new Date();
     const { userId, postId, setView } = this.props;
@@ -147,7 +148,8 @@ export default class SpecificPost extends React.Component {
             description={postInfo.description}
             highestBid={highestBid}
             totalBids={bidInfo.totalBids}
-            bidEnd={new Date(postInfo.expiredAt).toLocaleString().split(',')[0]}
+            bidEnd={new Date(postInfo.expiredAt).toLocaleString('en-US', { timeZone: 'UTC' }).split(',')[0]}
+            bidExpireTimer = {postInfo.expiredAt.toLocaleString()}
             userId={userId}
             sellerId={postInfo.sellerId}
             toggleBidHistory={toggleBidHistory}

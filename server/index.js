@@ -436,7 +436,7 @@ app.post('/api/message/list/', (req, res, next) => {
       const message = result.rows;
       if (!result.rows[0]) {
         return res.status(400).json({
-          error: 'You don\'t have a received message'
+          error: 'You don\'t have any received messages'
         });
       } else {
         return res.status(200).json(message);
