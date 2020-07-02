@@ -81,7 +81,7 @@ export default class PostBody extends React.Component {
   }
 
   render() {
-    const { userId, sellerId, highestBid, description, bidEnd } = this.props;
+    const { userId, sellerId, highestBid, description, bidEnd, biddingEnabled } = this.props;
     const { handleSubmit, handleChange, handleClick } = this;
     const { isEditing } = this.state;
     const formattedHighestBid = new Intl.NumberFormat().format(highestBid);
@@ -162,10 +162,66 @@ export default class PostBody extends React.Component {
       );
     }
 
+    let bidWindow = (
+      <div
+        className="bid-stats p-3"
+        style={{ opacity: biddingClosed ? '40%' : '100%' }}
+      >
+        <p id="expire-disclaimer" className="text-center">
+          All bids expire at 12AM PST on expiration date
+        </p>
+        <div className="bid-numbers d-flex justify-content-between">
+          <div className="text-right bid-numbers">
+            <p className="text-right m-0">Highest Bid:</p>
+            {totalBids}
+            <p className="text-right m-0">Expires:</p>
+          </div>
+          <div className="bid-numbers">
+            <p className="m-0">${formattedHighestBid}</p>
+            {totalBidsNumber}
+            <p
+              className="m-0"
+              style={{ color: biddingClosed ? 'red' : 'black' }}
+            >
+              {bidEnd}
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+
+    if (biddingEnabled === false) {
+      notesOrBid = (
+        <div
+          className="bid-buttons-container d-flex flex-column"
+        >
+          <button
+            id="message"
+            type="button"
+            onClick={() => this.props.messageBtnClick()}
+          >
+            {' '}
+          Message
+          </button>
+        </div>
+      );
+
+      bidWindow = (
+        <div
+          className="bid-stats p-3"
+        >
+          <p id="expire-disclaimer" className="text-center">
+            The artist is not selling this artwork currently.
+          </p>
+        </div>
+      );
+    }
+
     let modalDisplay = { display: 'none' };
     if (this.state.bidAlert) {
       modalDisplay = null;
     }
+
     return (
       <div>
         <div className="post-description">
@@ -173,31 +229,7 @@ export default class PostBody extends React.Component {
         </div>
         <div className="post-bid-info d-flex align-items-center justify-content-between">
           {notesOrBid}
-          <div
-            className="bid-stats p-3"
-            style={{ opacity: biddingClosed ? '40%' : '100%' }}
-          >
-            <p id="expire-disclaimer" className="text-center">
-              All bids expire at 12AM PST on expiration date
-            </p>
-            <div className="bid-numbers d-flex justify-content-between">
-              <div className="text-right bid-numbers">
-                <p className="text-right m-0">Highest Bid:</p>
-                {totalBids}
-                <p className="text-right m-0">Expires:</p>
-              </div>
-              <div className="bid-numbers">
-                <p className="m-0">${formattedHighestBid}</p>
-                {totalBidsNumber}
-                <p
-                  className="m-0"
-                  style={{ color: biddingClosed ? 'red' : 'black' }}
-                >
-                  {bidEnd}
-                </p>
-              </div>
-            </div>
-          </div>
+          {bidWindow}
         </div>
         {/* Modal */}
         <div className="new-post-modal" style={modalDisplay}>
