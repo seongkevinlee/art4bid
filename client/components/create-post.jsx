@@ -11,7 +11,7 @@ export default class CreatePost extends React.Component {
       description: '',
       imageUrl: '',
       title: '',
-      startingBid: '',
+      startingBid: 0,
       biddingEnabled: false,
       isDeleted: false,
       expiredAt: '2020/06/30',
@@ -32,7 +32,6 @@ export default class CreatePost extends React.Component {
     this.handleCancel = this.handleCancel.bind(this);
     this.getTodaysDate = this.getTodaysDate.bind(this);
     this.isEnabled = this.isEnabled.bind(this);
-    // this.dummyFunction = this.dummyFunction.bind(this);
   }
 
   componentDidMount() {}
@@ -167,7 +166,7 @@ export default class CreatePost extends React.Component {
       })
       .then(data => {
         // eslint-disable-next-line no-console
-        console.log('it works');
+        console.log('new post created');
         this.props.setView('profile');
       })
       .catch(error => console.error('image uploading error', error));
@@ -296,19 +295,6 @@ export default class CreatePost extends React.Component {
             </div>
 
             <div className="bidding-content">
-              {/* toggle bidding button */}
-              {/* <div>
-                <ToggleButton
-                  className="big"
-                  oChange={this.dummyFunction}
-                  value={this.state.biddingEnabled || false}
-                  onToggle={value => {
-                    this.setState({
-                      biddingEnabled: !this.state.biddingEnabled
-                    });
-                  }}
-                />
-              </div> */}
 
               <div>
                 <ToggleButton
