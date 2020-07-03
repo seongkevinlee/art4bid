@@ -32,6 +32,7 @@ export default class EditPost extends React.Component {
     this.handleReset = this.handleReset.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
+    this.getTodaysDate = this.getTodaysDate.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +43,21 @@ export default class EditPost extends React.Component {
 
     const expireDate = this.props.postInfo.expiredAt.slice(0, 10);
     this.setState({ expiredAt: expireDate });
+  }
+
+  getTodaysDate() {
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    const yyyy = today.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
   }
 
   handleModal() {
@@ -122,6 +138,9 @@ export default class EditPost extends React.Component {
   }
 
   render() {
+
+    const today = this.getTodaysDate();
+
     // Changing Category
 
     let paintingDisabled = null;
@@ -133,7 +152,7 @@ export default class EditPost extends React.Component {
         case 'paintings':
           paintingDisabled = 'disabled';
           break;
-        case 'photographs':
+        case 'phot raphs':
           photoDisabled = 'disabled';
           break;
         case 'other':
@@ -149,7 +168,7 @@ export default class EditPost extends React.Component {
       >
         {
           props =>
-            <div  className="non-nav" style={props}>
+            <div className="non-nav" style={props}>
               <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
@@ -305,6 +324,7 @@ export default class EditPost extends React.Component {
                       value={this.state.expiredAt}
                       onChange={this.handleChange}
                       className="bid-expiry"
+                      min={today}
                     />
                   </div>
                 </div>

@@ -302,7 +302,7 @@ export default class CreatePost extends React.Component {
                     />
                   </div>
 
-                  <div className="bidding-content">
+                  <div className="bidding-content" style={{ marginTop: '1%' }}>
                     <div>
                       <ToggleButton isEnabled={this.isEnabled} />
                     </div>
@@ -320,7 +320,10 @@ export default class CreatePost extends React.Component {
                     />
 
                     {/* bid expiry */}
-                    <label htmlFor="bid-expiry">Bid Expiration Date:</label>
+                    <label
+                      htmlFor="bid-expiry"
+                      style={{ marginTop: '3%' }}
+                    >Bid Expiration Date:</label>
                     <input
                       style={{ fontSize: '12px', padding: '4px' }}
                       disabled={!this.state.biddingEnabled}
