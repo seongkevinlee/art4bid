@@ -4,6 +4,7 @@ import PostBody from './post-body';
 import BidHistory from './bid-history';
 import Modal from './modal';
 import EditPost from './edit-post';
+import { Spring } from 'react-spring/renderprops';
 
 export default class SpecificPost extends React.Component {
   constructor(props) {
@@ -168,37 +169,45 @@ export default class SpecificPost extends React.Component {
         );
       }
       return (
-        <div className="non-nav">
-          <PostHeader
-            setView={setView}
-            title={postInfo.title}
-            userName={postInfo.userName}
-            watchlist={watchlistInfo}
-            addToWatchlist={this.addToWatchlist}
-            isWatchlisted={isWatchlisted}
-            getWatchlistInfo={this.getWatchlistInfo}
-            postId={postInfo.postId}
-            previousView={this.props.previousView}
+        <Spring
+          from={{ marginLeft: -500 }}
+          to={{ marginLeft: 0 }}
+        >
+          {
+            props =>
+              <div style={props} className="non-nav">
+                <PostHeader
+                  setView={setView}
+                  title={postInfo.title}
+                  userName={postInfo.userName}
+                  watchlist={watchlistInfo}
+                  addToWatchlist={this.addToWatchlist}
+                  isWatchlisted={isWatchlisted}
+                  getWatchlistInfo={this.getWatchlistInfo}
+                  postId={postInfo.postId}
+                  previousView={this.props.previousView}
 
-          />
-          <div className="post-image-container">
-            <img alt="" src={postInfo.imageUrl}></img>
-          </div>
-          {/* <div className="description-bid-container">{bodyview}</div> */}
-          {bodyview}
-          <div>
-            {isModalOpen ? (
-              <Modal
-                userId={userId}
-                postId={postId}
-                recipientId={postInfo.sellerId}
-                handleModalCloseClick={handleModalCloseClick}
-              />
-            ) : (
-              ''
-            )}
-          </div>
-        </div>
+                />
+                <div className="post-image-container">
+                  <img alt="" src={postInfo.imageUrl}></img>
+                </div>
+                {/* <div className="description-bid-container">{bodyview}</div> */}
+                {bodyview}
+                <div>
+                  {isModalOpen ? (
+                    <Modal
+                      userId={userId}
+                      postId={postId}
+                      recipientId={postInfo.sellerId}
+                      handleModalCloseClick={handleModalCloseClick}
+                    />
+                  ) : (
+                    ''
+                  )}
+                </div>
+              </div>
+          }
+        </Spring>
       );
     } else {
       return null;

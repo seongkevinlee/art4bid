@@ -1,4 +1,5 @@
 import React from 'react';
+import { Spring, config } from 'react-spring/renderprops';
 
 export default class OtherThumbnailColumn extends React.Component {
   constructor(props) {
@@ -46,6 +47,7 @@ export default class OtherThumbnailColumn extends React.Component {
     const { other } = this.state;
     const thumbnails = other.map(thumbnail => {
       return (
+
         <div key={thumbnail.postId} className="thumbnail-container">
           <img
             alt=""
@@ -59,12 +61,22 @@ export default class OtherThumbnailColumn extends React.Component {
             }>
           </img>
         </div>
+
       );
     });
     return (
-      <div className="flex-column thumbnail-column" ref={this.container}>
-        {thumbnails}
-      </div>
+      <Spring
+        from = {{ marginRight: -500 }}
+        to = {{ marginRight: 0 }}
+        config = {config.slow}
+      >
+        {
+          props =>
+            <div style={props} className="flex-column thumbnail-column" ref={this.container}>
+              {thumbnails}
+            </div>
+        }
+      </Spring>
     );
   }
 }
