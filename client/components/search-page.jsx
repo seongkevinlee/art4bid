@@ -1,8 +1,6 @@
 import React from 'react';
 import Autocomplete from 'react-google-autocomplete';
-import PaintingsThumbnailColumn from './paintings-thumbnail-column';
-import PhotographsThumbnailColumn from './photographs-thumbnail-column';
-import OtherThumbnailColumn from './other-thumbnail-column';
+import ThumbnailColumn from './thumbnail-column';
 
 export default class SearchPage extends React.Component {
   constructor(props) {
@@ -232,10 +230,10 @@ export default class SearchPage extends React.Component {
             {
               paintings.length > 0
                 ? (
-                  <PaintingsThumbnailColumn
-                    // thumbnails={paintings}
+                  <ThumbnailColumn
                     setView={this.props.setView}
                     getPostInfo={this.props.getPostInfo}
+                    category={'paintings'}
                   />
                 )
                 : <div className="flex-column thumbnail-column">
@@ -245,10 +243,10 @@ export default class SearchPage extends React.Component {
             {
               photographs.length > 0
                 ? (
-                  <PhotographsThumbnailColumn
-                    // thumbnails={photographs}
+                  <ThumbnailColumn
                     setView={this.props.setView}
                     getPostInfo={this.props.getPostInfo}
+                    category={'photographs'}
                   />
                 )
                 : <div className="flex-column thumbnail-column">
@@ -258,10 +256,10 @@ export default class SearchPage extends React.Component {
             {
               other.length > 0
                 ? (
-                  <OtherThumbnailColumn
-                    // thumbnails={other}
+                  <ThumbnailColumn
                     setView={this.props.setView}
                     getPostInfo={this.props.getPostInfo}
+                    category={'other'}
                   />
                 )
                 : <div className="flex-column thumbnail-column">
