@@ -253,6 +253,7 @@ export default class PostBody extends React.Component {
             {this.state.bidAlert}
             <div>
               <button
+                type="button"
                 onClick={() => {
                   this.setState({ bidAlert: null });
                 }}
