@@ -125,10 +125,8 @@ export default class EditProfile extends React.Component {
   }
 
   getLocationByZipcode(zipcode) {
-    const host = 'https://www.zipcodeapi.com/rest';
-    const key = 'js-VdpRhCiVZ9dvq6rnYEmkyzyJ6frYN5RJHQKTtfS8CnnZB130NLTKIBRce8xawVmG';
-    const param = 'info.json';
-    const url = `${host}/${key}/${param}/${zipcode}/degrees`;
+    const host = 'https://ziptasticapi.com/';
+    const url = `${host}${zipcode}`;
     fetch(url)
       .then(res => res.json())
       .then(data => {
@@ -238,7 +236,7 @@ export default class EditProfile extends React.Component {
                   ref={profileImgUploader}
                   onChange={handleProfileImgChange}
                 />
-                <h4>{userName}</h4>
+                <h4 className="edit-profile-username">{userName}</h4>
               </div>
               <textarea
                 name="description"
@@ -250,37 +248,38 @@ export default class EditProfile extends React.Component {
                 value={description || ''}
                 onChange={this.handleChange}>
               </textarea>
-              <div className='location-info d-flex flex-column align-items-center justify-content-center'>
-                <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-                  <label htmlFor="zip-input" className='col text-center'>Your Zip-code:</label>
+              <div className='mt-1 location-info d-flex flex-column align-items-center justify-content-center'>
+                <div className='mt-3 d-flex flex-end justify-content-center align-items-end col-12'>
+                  <label htmlFor="zip-input" className='my-auto col text-center'>Your Zip-code:</label>
                   <input
-                    limit="5"
                     name='location'
                     id='location'
-                    type="number"
+                    type="text"
+                    pattern="\d*"
+                    maxLength="5"
                     value={location || ''}
-                    className='zip-input mt-3 col-5 border-0'
+                    className='zip-input my-auto col-7 border-0'
                     onChange={this.handleChange} />
                 </div>
-                <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-                  <label htmlFor="location" className='col text-center'>Location:</label>
+                <div className='mt-4 d-flex flex-end justify-content-center align-items-end col-12'>
+                  <label htmlFor="location" className='my-auto col text-center'>Location:</label>
                   <input
                     name='city'
                     id='city'
                     type="text"
                     disabled
                     value={city}
-                    className='zip-input mt-3 col-5 border-0 text-center' />
+                    className='zip-input my-auto col-7 border-0 text-center' />
                 </div>
-                <div className='d-flex flex-end justify-content-center align-items-end col-12'>
-                  <label htmlFor="email-input" className='col text-center'>Email:</label>
+                <div className='mt-4 d-flex flex-end justify-content-center align-items-end col-12'>
+                  <label htmlFor="email-input" className='my-auto col text-center'>Email:</label>
                   <input
                     name='email'
                     id='email'
                     type="text"
                     value={email || ''}
                     onChange={this.handleChange}
-                    className='email-input mt-3 col-5 border-0'
+                    className='email-input my-auto col-7 border-0'
                   />
                 </div>
               </div>
