@@ -173,7 +173,7 @@ export default class CreatePost extends React.Component {
   }
 
   render() {
-    // const today = this.getTodaysDate();
+    const today = this.getTodaysDate();
     return (
       <Spring
         from={{ opacity: 0 }}
@@ -231,18 +231,18 @@ export default class CreatePost extends React.Component {
                   />
                 </div>
 
-          <label className="m-0" htmlFor="imageUrl"></label>
-          <input
-            type="file"
-            id="imageUrl"
-            name="imageUrl"
-            accept="image/png, image/jpeg"
-            className="new-post-input"
-            title=" "
-            value={this.state.imageUrl}
-            onChange={this.handleFileChange}
-            required
-          />
+                <label className="m-0" htmlFor="imageUrl"></label>
+                <input
+                  type="file"
+                  id="imageUrl"
+                  name="imageUrl"
+                  accept="image/png, image/jpeg"
+                  className="new-post-input"
+                  title=" "
+                  value={this.state.imageUrl}
+                  onChange={this.handleFileChange}
+                  required
+                />
 
                 <div className="title-description">
                   {/* enter title */}
@@ -330,6 +330,7 @@ export default class CreatePost extends React.Component {
                       // value={this.state.expiredAt}
                       onChange={this.handleChange}
                       className="bid-expiry"
+                      min={today}
                     />
                   </div>
                 </div>

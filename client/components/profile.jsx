@@ -49,32 +49,34 @@ export default class Profile extends React.Component {
       >
         {
           props =>
-            <div style={props} className="d-flex flex-column align-items-center">
-              <div className="profile-header d-flex justify-content-between col-12 mt-1">
-                <div className="back-container"></div>
-                <div className="header-title pt-3 pb-3">PROFILE</div>
-                <button
-                  className="mt-1 profile-edit-btn btn btn-submit-header text-center"
-                  onClick={this.editModeToggle}
-                >
+            <div className="non-nav">
+              <div className="profile-container" style={props}>
+                <div className="profile-header d-flex justify-content-between col-12 mt-1">
+                  <div className="back-container"></div>
+                  <div className="header-title pt-3 pb-3">PROFILE</div>
+                  <button
+                    className="mt-1 profile-edit-btn btn btn-submit-header text-center"
+                    onClick={this.editModeToggle}
+                  >
                   EDIT
-                </button>
-              </div>
-              <div
-                className="coverPhoto d-flex flex-column align-items-center justify-content-center pt-4 col-12"
-                style={{
-                  backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})`
-                }}
-              >
-                <div className="profileImg-container">
-                  <img className="profile-img-upload" src={`/images/user-profiles/${profileImg}`} alt=""/>
+                  </button>
                 </div>
-                <h4 id="profileUserName">{userName}</h4>
-                <p className="profile-description text-center mt-2 mb-2 ml-1 mr-1">
-                  {!description ? ' ' : description}
-                </p>
+                <div
+                  className="coverPhoto d-flex flex-column align-items-center justify-content-center pt-4 col-12"
+                  style={{
+                    backgroundImage: `linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4)), url(/images/user-profiles/${coverImg})`
+                  }}
+                >
+                  <div className="profileImg-container">
+                    <img className="profile-img-upload" src={`/images/user-profiles/${profileImg}`} alt=""/>
+                  </div>
+                  <h4 id="profileUserName">{userName}</h4>
+                  <p className="profile-description text-center mt-2 mb-2 ml-1 mr-1">
+                    {!description ? ' ' : description}
+                  </p>
+                </div>
+                <UserPosts getPostInfo={this.props.getPostInfo} setView={this.props.setView} />
               </div>
-              <UserPosts getPostInfo={this.props.getPostInfo} setView={this.props.setView} />
             </div>
         }
       </Spring>
