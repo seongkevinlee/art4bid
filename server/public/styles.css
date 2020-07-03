@@ -279,7 +279,7 @@ button {
 }
 
 /* HEADERS*/
-.my-bids-header, .watchlist-header, .profile-header, .edit-profile-header {
+.my-bids-header, .watchlist-header, .profile-header, .edit-profile-header, .message-header {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .watchlist-button, .profile-edit-btn, .edit-profile-save-btn, .my-bids-btn {
@@ -362,11 +362,6 @@ button {
 .message-detail-box {
   position: relative;
   top: 85px;
-}
-
-.message-header {
-  width: 375px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .send-message-custom {

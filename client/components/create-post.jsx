@@ -223,7 +223,7 @@ export default class CreatePost extends React.Component {
             />
           </div>
 
-          <label htmlFor="imageUrl"></label>
+          <label className="m-0" htmlFor="imageUrl"></label>
           <input
             type="file"
             id="imageUrl"
