@@ -1,29 +1,35 @@
 /* View Specific Post */
 .post-header {
-  height: 12vh;
+  height: 14%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 }
 .post-image-container {
-  height: 32vh;
+  height: 38%;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   background-color: lightgray
 }
+
+.description-bid-container{
+  height: 46%;
+  padding: 1% 0;
+}
+
 .post-description {
-  height: 21vh;
+  height: 45%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin: 1vh 1%;
-  padding: 0 1rem;
+  margin: 0 1% 1%;
+  padding: 1% 1rem;
   border-radius: 9px;
   overflow: auto;
   text-align: center;
 }
 .post-bid-info {
-  height: 22vh;
+  height: 55%;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   padding: 0 5%;
   border-radius: 9px;
-  margin: 1vh 1%;
+  margin: 0 1% 1%;
 }
 .header-icon-container {
   width: 20%;
@@ -100,7 +106,7 @@ button#message {
 }
 #expire-disclaimer {
   font-size: 0.6rem;
-  margin-bottom: 0.5vh;
+  margin-bottom: 2.5%;
   color: #A0A0A0;
 }
 .bid-numbers > p {
@@ -113,7 +119,7 @@ button#message {
 
 /* Bid History */
 .bid-history {
-  height: 42vh;
+  height: 45%;
   box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin: 1vh 1%;
   padding: 1vh 1rem;
@@ -190,9 +196,4 @@ button#edit-post {
   margin: 0;
   font-size: 0.78rem;
   font-weight: 300;
-}
-
-/* Edit Post */
-.edit-post {
-  margin-bottom: 17px;
 }

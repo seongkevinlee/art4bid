@@ -24,13 +24,12 @@ option {
 }
 
 .title-description {
-  box-shadow: 1px 1px 5px #555 inset;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25) inset;
   border-radius: 9px;
   height: 140px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  margin-top: -20px;
 }
 
 .title-description > * {
@@ -60,7 +59,7 @@ option {
 
 .category-notes > * {
   border: 1px;
-  box-shadow: 1px 1px 5px #555 inset;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.25) inset;
   width: 100%;
   text-align: center;
   border-radius: 9px;
@@ -75,7 +74,6 @@ option {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  margin-bottom: 17px;
 }
 
 .bidding-content > * {
@@ -136,4 +134,8 @@ option {
     background-color:#CA0303;
     color:white;
     border: none;
+}
+
+form#new-post > * {
+  margin: 1%;
 }

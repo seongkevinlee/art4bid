@@ -231,18 +231,18 @@ export default class CreatePost extends React.Component {
                   />
                 </div>
 
-                <label htmlFor="imageUrl"></label>
-                <input
-                  type="file"
-                  id="imageUrl"
-                  name="imageUrl"
-                  accept="image/png, image/jpeg"
-                  className="new-post-input"
-                  title=" "
-                  value={this.state.imageUrl}
-                  onChange={this.handleFileChange}
-                  required
-                />
+          <label className="m-0" htmlFor="imageUrl"></label>
+          <input
+            type="file"
+            id="imageUrl"
+            name="imageUrl"
+            accept="image/png, image/jpeg"
+            className="new-post-input"
+            title=" "
+            value={this.state.imageUrl}
+            onChange={this.handleFileChange}
+            required
+          />
 
                 <div className="title-description">
                   {/* enter title */}

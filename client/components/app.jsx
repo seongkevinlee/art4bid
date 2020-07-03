@@ -17,6 +17,7 @@ export default class App extends React.Component {
     this.state = {
       isLoading: false,
       loggedIn: false,
+      // change to false
       userInfo: {},
       view: 'search',
       postInfo: null,
@@ -118,7 +119,7 @@ export default class App extends React.Component {
     }
 
     return (
-      <div>
+      <div className="doc-body">
         {pageBody}
         {this.state.view !== 'create' && <NavBar view={this.state.view} setView={setView} />}
       </div>

@@ -2,7 +2,7 @@ body {
   margin: auto;
   width: 375px;
   height: 667px;
-  display: relative;
+  position: relative;
 }
 
 input, button {
@@ -10,11 +10,30 @@ input, button {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
+.doc-body {
+  height: 100%;
+}
+/* skeleton */
+.navbar {
+  height: 10%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: auto;
+  z-index: 1;
+}
+
+.non-nav {
+  height: 90%;
+}
+
 /* search-page */
 .search-bar {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 5px;
-  display: relative;
+  position: relative;
 }
 
 .search-mag {
@@ -31,15 +50,17 @@ input, button {
   filter: drop-shadow(1px 3px 2px rgba(0, 0, 0, 0.7));
 }
 
+.thumbnail-column-container {
+  height: 80%;
+}
 .thumbnail-column {
   overflow-y: scroll;
-  height: 70vh;
   width: calc(100% / 3);
   text-align: center
 }
 
 .profile-thumbnail-container {
-    height: 37vh;
+    height: 45vh;
     overflow-y: scroll;
 }
 
@@ -66,17 +87,6 @@ input, button {
 }
 
 /* navbar */
-.navbar {
-  height: 10vh;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  width: 375px;
-  margin: auto;
-  z-index: 1;
-}
-
 .navbar > div {
   height: 100%;
   border: 4px solid #ffffff;
@@ -269,7 +279,7 @@ button {
 }
 
 /* HEADERS*/
-.my-bids-header, .watchlist-header, .profile-header, .edit-profile-header {
+.my-bids-header, .watchlist-header, .profile-header, .edit-profile-header, .message-header {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 .watchlist-button, .profile-edit-btn, .edit-profile-save-btn, .my-bids-btn {
@@ -352,11 +362,6 @@ button {
 .message-detail-box {
   position: relative;
   top: 85px;
-}
-
-.message-header {
-  width: 375px;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 .send-message-custom {
@@ -493,5 +498,5 @@ button {
 /* watchlist */
 .watchlist-bids-container {
   overflow-y: scroll;
-  height: 75vh;
+  height: 84%;
 }
