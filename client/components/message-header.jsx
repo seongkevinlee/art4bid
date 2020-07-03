@@ -56,7 +56,7 @@ export default class MessageHeader extends React.Component {
     const { search } = this.state;
     const displayName = Number(senderId) === Number(userInfo.userId) ? 'Me' : senderName;
     return (
-      <div className={`mx-auto message-header fixed-top ${isSearch ? 'bg-light' : 'bg-white'}`}>
+      <div className={`mx-auto message-header ${isSearch ? 'bg-light' : 'bg-white'}`}>
         <div className='col-12 mt-1'>
           <div className="my-auto icon-custom-back">
             <i

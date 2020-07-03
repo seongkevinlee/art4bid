@@ -181,7 +181,7 @@ export default class SearchPage extends React.Component {
     const { search, paintings, photographs, other } = this.state;
     if (paintings.length > 0 || photographs.length > 0 || other.length > 0) {
       return (
-        <div>
+        <div className="non-nav">
           <div>
             <form className="text-center pt-3" onSubmit={handleSubmit}>
               <div className="position-relative">
@@ -223,7 +223,7 @@ export default class SearchPage extends React.Component {
               <h6>Other</h6>
             </div>
           </div>
-          <div className="d-flex justify-content-around">
+          <div className="thumbnail-column-container d-flex justify-content-around">
             {
               paintings.length > 0
                 ? (

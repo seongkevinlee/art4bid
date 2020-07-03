@@ -12,7 +12,7 @@ export default class PaintingsThumbnailColumn extends React.Component {
   }
 
   addContainerListener() {
-    this.container.current.addEventListener('scroll', event => { if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight) { this.addPaintingThumbnails(); } });
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addPaintingThumbnails(); } });
   }
 
   componentDidMount() {
