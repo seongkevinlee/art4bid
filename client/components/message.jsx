@@ -112,13 +112,12 @@ export default class Message extends React.Component {
   }
 
   sendMessage(message) {
-    const { postId, senderId } = this.state;
-    const { userInfo } = this.props;
-    const { userName, userId } = userInfo;
+    const { postId, recipientId } = this.state;
+    const { userName, userId } = this.props.userInfo;
     const sendMsg = {
       senderName: userName,
       senderId: userId,
-      recipientId: senderId,
+      recipientId: recipientId,
       postId: postId,
       message: message,
       createdAt: new Date()

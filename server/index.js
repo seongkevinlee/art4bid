@@ -425,7 +425,7 @@ app.post('/api/message/list/', (req, res, next) => {
       JOIN "user" AS "u"
       ON "u"."userId" = "m"."senderId"
       WHERE "m"."recipientId" = $1 OR "m"."senderId" = $1
-      ORDER BY "m"."senderId", "m"."recipientId", "m"."postId" DESC) AS "me"
+      ORDER BY "m"."senderId", "m"."recipientId", "m"."postId", "m"."createdAt" DESC) AS "me"
       JOIN "post" AS "p"
       ON "p"."postId" = "me"."postId"
       ORDER BY "me"."createdAt" DESC

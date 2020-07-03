@@ -194,16 +194,18 @@ export default class SpecificPost extends React.Component {
                 {/* <div className="description-bid-container">{bodyview}</div> */}
                 {bodyview}
                 <div>
-                  {isModalOpen ? (
-                    <Modal
-                      userId={userId}
-                      postId={postId}
-                      recipientId={postInfo.sellerId}
-                      handleModalCloseClick={handleModalCloseClick}
-                    />
-                  ) : (
-                    ''
-                  )}
+                  {isModalOpen
+                    ? (
+                      <Modal
+                        userId={userId}
+                        postId={postId}
+                        recipientId={postInfo.sellerId}
+                        handleModalCloseClick={handleModalCloseClick}
+                      />
+                    )
+                    : (
+                      ''
+                    )}
                 </div>
               </div>
           }
