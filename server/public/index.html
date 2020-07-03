@@ -28,7 +28,10 @@
 
 <body>
   <div id="root"></div>
-
+  <script>
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+  </script>
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAC9Fi6o6spd5c8WnclK_FJj1z1wfkl26g&libraries=places"></script>
   <script src="/main.js"></script>
