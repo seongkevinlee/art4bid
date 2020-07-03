@@ -1,0 +1,87 @@
+/* ----------- iPhone 6+, 7+ and 8+ ----------- */
+
+
+/* Portrait */
+@media only screen
+  and (min-device-width: 414px)
+  and (max-device-width: 736px)
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) {
+    body {
+      width: 100%;
+      height: 100vh;
+    }
+}
+
+
+/* ----------- iPhone X ----------- */
+
+
+/* Portrait */
+@media only screen
+  and (min-device-width: 375px)
+  and (max-device-width: 812px)
+  and (-webkit-min-device-pixel-ratio: 3)
+  and (orientation: portrait) {
+    body {
+      width: 100%;
+      height: 100vh;
+    }
+
+  .navbar > div {
+    height: 90%;
+  }
+
+  .thumbnail-column-container {
+    height: 85%;
+  }
+
+  .profile-thumbnail-container {
+    height: 48vh;
+  }
+}
+
+/* ----------- iPad 3, 4 and Pro 9.7" ----------- */
+
+/* Portrait */
+@media only screen
+  and (min-device-width: 768px)
+  and (max-device-width: 1024px)
+  and (orientation: portrait)
+  and (-webkit-min-device-pixel-ratio: 2) {
+    body {
+      width: 100%;
+      height: 100vh;
+    }
+
+    .logo {
+      width: 100%;
+      text-align: center;
+    }
+
+    .thumbnail-column-container {
+      height: 90%;
+    }
+
+    .thumbnail-container, .user-post-thumbnail {
+      height: 256px;
+    }
+
+      .profile-thumbnail-container {
+    height: 57vh;
+  }
+
+    .search-mag {
+      right: 110px;
+    }
+
+    .icon-custom-search {
+      top: 50%;
+      right: 13%;
+    }
+
+    .bid-numbers {
+      width: 50%;
+      margin: auto;
+    }
+}
