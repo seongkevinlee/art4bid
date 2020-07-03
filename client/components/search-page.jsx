@@ -244,7 +244,7 @@ export default class SearchPage extends React.Component {
             )
           }
         </div>
-        <div className="d-flex mt-4 justify-content-around text-center" style={{ marginBottom: '6px' }}>
+        <div className="d-flex mt-3 justify-content-around text-center" style={{ marginBottom: '6px' }}>
           <div className="column-label align-text-bottom">
             <h6>Paintings</h6>
           </div>
