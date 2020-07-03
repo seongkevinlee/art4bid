@@ -288,7 +288,7 @@ export default class EditPost extends React.Component {
                     />
                   </div>
 
-                  <div className="bidding-content">
+                  <div className="bidding-content d-none">
                     {/* toggle bidding button */}
                     <div>
                       <ToggleButton
