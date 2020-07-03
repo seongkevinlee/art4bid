@@ -2,6 +2,7 @@ import React from 'react';
 import MessageHeader from './message-header';
 import MessageList from './message-list';
 import MessageDetail from './message-detail';
+import { Spring } from 'react-spring/renderprops';
 
 export default class Message extends React.Component {
   constructor(props) {
@@ -302,48 +303,56 @@ export default class Message extends React.Component {
       keyword
     } = this.state;
     return (
-      <div>
-        <MessageHeader
-          postId={postId}
-          postTitle={postTitle}
-          userInfo={userInfo}
-          senderId={senderId}
-          senderName={senderName}
-          isMessageDetail={isMessageDetail}
-          handleBackClick={handleBackClick}
-          getMessageList={getMessageList}
-          searchKeyword={searchKeyword}
-          detailMessages={detailMessages}
-          isSearch={isSearch}
-          searchToggle={searchToggle}
-          setView={setView}
-          getPostInfo={getPostInfo}
-        />
-        {isMessageDetail
-          ? (<MessageDetail
-            getTimeMsg={getTimeMsg}
-            userInfo={userInfo}
-            postId={postId}
-            senderId={senderId}
-            recipientId={recipientId}
-            viewMessageDetail={viewMessageDetail}
-            sendMessage={sendMessage}
-            detailMessages={detailMessages}
-            keyword={keyword}
-            textBolder={textBolder}
-          />
-          )
-          : (<MessageList
-            messages={messages}
-            userInfo={userInfo}
-            getTimeMsg={getTimeMsg}
-            handleViewMessageClick={handleViewMessageClick}
-            keyword={keyword}
-            textBolder={textBolder}
-          />
-          )
+      <Spring
+        from={{ marginRight: -500 }}
+        to={{ marginRight: 0 }}
+      >
+        {
+          props =>
+            <div style={props}>
+              <MessageHeader
+                postId={postId}
+                postTitle={postTitle}
+                userInfo={userInfo}
+                senderId={senderId}
+                senderName={senderName}
+                isMessageDetail={isMessageDetail}
+                handleBackClick={handleBackClick}
+                getMessageList={getMessageList}
+                searchKeyword={searchKeyword}
+                detailMessages={detailMessages}
+                isSearch={isSearch}
+                searchToggle={searchToggle}
+                setView={setView}
+                getPostInfo={getPostInfo}
+              />
+              {isMessageDetail
+                ? (<MessageDetail
+                  getTimeMsg={getTimeMsg}
+                  userInfo={userInfo}
+                  postId={postId}
+                  senderId={senderId}
+                  recipientId={recipientId}
+                  viewMessageDetail={viewMessageDetail}
+                  sendMessage={sendMessage}
+                  detailMessages={detailMessages}
+                  keyword={keyword}
+                  textBolder={textBolder}
+                />
+                )
+                : (<MessageList
+                  messages={messages}
+                  userInfo={userInfo}
+                  getTimeMsg={getTimeMsg}
+                  handleViewMessageClick={handleViewMessageClick}
+                  keyword={keyword}
+                  textBolder={textBolder}
+                />
+                )
+              }
+            </div>
         }
-      </div>
+      </Spring>
     );
   }
 }
