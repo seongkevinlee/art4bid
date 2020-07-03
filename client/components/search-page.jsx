@@ -203,7 +203,8 @@ export default class SearchPage extends React.Component {
                   value={search || ''}
                   onChange={handleSearchChange}/>
                 <img
-                  alt=""
+                  alt="search-button"
+                  type="button"
                   className="search-mag position-absolute cursor-pointer"
                   src="./images/search-brush.png"
                   onClick={handleSearchClick}></img>
@@ -286,7 +287,8 @@ export default class SearchPage extends React.Component {
                   value={search || ''}
                   onChange={handleSearchChange} />
                 <img
-                  alt=""
+                  alt="search-button"
+                  type="button"
                   className="search-mag position-absolute cursor-pointer"
                   src="./images/search-brush.png"
                   onClick={handleSearchClick}></img>

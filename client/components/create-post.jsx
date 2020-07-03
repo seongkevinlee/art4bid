@@ -1,5 +1,6 @@
 import React from 'react';
 import ToggleButton from './toggle-button';
+import { Spring, config } from 'react-spring/renderprops';
 
 export default class CreatePost extends React.Component {
   constructor(props) {
@@ -174,160 +175,168 @@ export default class CreatePost extends React.Component {
   render() {
     const today = this.getTodaysDate();
     return (
-      <div>
-        <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
-          <div className="back-container text-center d-flex justify-content-start align-items-center">
-            <img
-              type="button"
-              className="back-arrow"
-              src="./images/backarrow.png"
-              alt="back-arrow"
-              onClick={this.handleModal}
-            />
-          </div>
-          <div className="header-title pt-3 pb-3 new-post-header">NEW POST</div>
-          <div className="back-container d-flex justify-content-center align-items-center">
-            <button
-              type="Submit"
-              form="new-post"
-              className="yes-button"
-              style={{ height: '40px' }}
-            >
+      <Spring
+        from={{ opacity: 0 }}
+        to={{ opacity: 1 }}
+        config={config.molasses}
+      >
+        {
+          props =>
+            <div style={props}>
+              <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
+                <div className="back-container text-center d-flex justify-content-start align-items-center">
+                  <img
+                    type="button"
+                    className="back-arrow"
+                    src="./images/backarrow.png"
+                    alt="back-arrow"
+                    onClick={this.handleModal}
+                  />
+                </div>
+                <div className="header-title pt-3 pb-3 new-post-header">NEW POST</div>
+                <div className="back-container d-flex justify-content-center align-items-center">
+                  <button
+                    type="Submit"
+                    form="new-post"
+                    className="yes-button"
+                    style={{ height: '40px' }}
+                  >
               SAVE
-            </button>
-          </div>
-        </header>
+                  </button>
+                </div>
+              </header>
 
-        <div
-          className="new-post-modal"
-          style={{ display: `${this.state.display}` }}
-        >
-          <div className="new-post-modal-content">
-            Are you sure you want to cancel creating a post?
-            <div>
-              <button className="yes-button" onClick={this.handleReset}>
-                Yes
-              </button>
-              <button onClick={this.handleCancel}>No</button>
-            </div>
-          </div>
-        </div>
-
-        <form id="new-post" onSubmit={this.handleSubmit}>
-          {/* add picture */}
-          <div style={{ textAlign: 'center' }}>
-            <img
-              src="./images/create-new-post.png"
-              alt="create-new-post"
-              className="create-new-post-image"
-            />
-          </div>
-
-          <label htmlFor="imageUrl"></label>
-          <input
-            type="file"
-            id="imageUrl"
-            name="imageUrl"
-            accept="image/png, image/jpeg"
-            className="new-post-input"
-            title=" "
-            value={this.state.imageUrl}
-            onChange={this.handleFileChange}
-            required
-          />
-
-          <div className="title-description">
-            {/* enter title */}
-            <label htmlFor="title"></label>
-            <input
-              type="text"
-              placeholder="Enter Title"
-              value={this.state.title}
-              onChange={this.handleChange}
-              name="title"
-              form="new-post"
-              required
-            />
-
-            {/* enter description */}
-            <label htmlFor="description"></label>
-            <textarea
-              placeholder="Enter Description"
-              value={this.state.description}
-              onChange={this.handleChange}
-              name="description"
-              form="new-post"
-              className="enter-description"
-              required
-            />
-          </div>
-
-          <div className="second-half">
-            <div className="category-notes">
-              {/* select category */}
-              <label name="category"></label>
-              <select
-                name="category"
-                id="category"
-                required
-                // value={this.state.category}
-                onChange={this.handleChange}
-                style={{ padding: '7.5px', color: 'gray' }}
-                defaultValue={this.state.category}
+              <div
+                className="new-post-modal"
+                style={{ display: `${this.state.display}` }}
               >
-                <option disabled="disabled" value={this.state.category}>
-                  Select Category
-                </option>
-                <option value="paintings">Paintings</option>
-                <option value="photographs">Photographs</option>
-                <option value="other">Other</option>
-              </select>
-
-              {/* notes */}
-              <label htmlFor="notes"></label>
-              <textarea
-                placeholder="Notes"
-                name="notes"
-                value={this.state.notes}
-                onChange={this.handleChange}
-                style={{ height: '80px' }}
-              />
-            </div>
-
-            <div className="bidding-content">
-              <div>
-                <ToggleButton isEnabled={this.isEnabled} />
+                <div className="new-post-modal-content">
+            Are you sure you want to cancel creating a post?
+                  <div>
+                    <button className="yes-button" onClick={this.handleReset}>
+                Yes
+                    </button>
+                    <button onClick={this.handleCancel}>No</button>
+                  </div>
+                </div>
               </div>
 
-              {/* starting bid */}
-              <label htmlFor="starting-bid">Starting Bid:</label>
-              <input
-                disabled={!this.state.biddingEnabled}
-                type="number"
-                min="1.00"
-                placeholder="$"
-                name="startingBid"
-                value={this.state.startingBid}
-                onChange={this.handleChange}
-              />
+              <form id="new-post" onSubmit={this.handleSubmit}>
+                {/* add picture */}
+                <div style={{ textAlign: 'center' }}>
+                  <img
+                    src="./images/create-new-post.png"
+                    alt="create-new-post"
+                    className="create-new-post-image"
+                  />
+                </div>
 
-              {/* bid expiry */}
-              <label htmlFor="bid-expiry">Bid Expiration Date:</label>
-              <input
-                style={{ fontSize: '12px', padding: '4px' }}
-                disabled={!this.state.biddingEnabled}
-                type="date"
-                name="expiredAt"
-                defaultValue={this.state.expiredAt}
-                min={today}
-                // value={this.state.expiredAt}
-                onChange={this.handleChange}
-                className="bid-expiry"
-              />
+                <label htmlFor="imageUrl"></label>
+                <input
+                  type="file"
+                  id="imageUrl"
+                  name="imageUrl"
+                  accept="image/png, image/jpeg"
+                  className="new-post-input"
+                  title=" "
+                  value={this.state.imageUrl}
+                  onChange={this.handleFileChange}
+                  required
+                />
+
+                <div className="title-description">
+                  {/* enter title */}
+                  <label htmlFor="title"></label>
+                  <input
+                    type="text"
+                    placeholder="Enter Title"
+                    value={this.state.title}
+                    onChange={this.handleChange}
+                    name="title"
+                    form="new-post"
+                    required
+                  />
+
+                  {/* enter description */}
+                  <label htmlFor="description"></label>
+                  <textarea
+                    placeholder="Enter Description"
+                    value={this.state.description}
+                    onChange={this.handleChange}
+                    name="description"
+                    form="new-post"
+                    className="enter-description"
+                    required
+                  />
+                </div>
+
+                <div className="second-half">
+                  <div className="category-notes">
+                    {/* select category */}
+                    <label name="category"></label>
+                    <select
+                      name="category"
+                      id="category"
+                      required
+                      // value={this.state.category}
+                      onChange={this.handleChange}
+                      style={{ padding: '7.5px', color: 'gray' }}
+                      defaultValue={this.state.category}
+                    >
+                      <option disabled="disabled" value={this.state.category}>
+                  Select Category
+                      </option>
+                      <option value="paintings">Paintings</option>
+                      <option value="photographs">Photographs</option>
+                      <option value="other">Other</option>
+                    </select>
+
+                    {/* notes */}
+                    <label htmlFor="notes"></label>
+                    <textarea
+                      placeholder="Notes"
+                      name="notes"
+                      value={this.state.notes}
+                      onChange={this.handleChange}
+                      style={{ height: '80px' }}
+                    />
+                  </div>
+
+                  <div className="bidding-content">
+                    <div>
+                      <ToggleButton isEnabled={this.isEnabled} />
+                    </div>
+
+                    {/* starting bid */}
+                    <label htmlFor="starting-bid">Starting Bid:</label>
+                    <input
+                      disabled={!this.state.biddingEnabled}
+                      type="number"
+                      min="1.00"
+                      placeholder="$"
+                      name="startingBid"
+                      value={this.state.startingBid}
+                      onChange={this.handleChange}
+                    />
+
+                    {/* bid expiry */}
+                    <label htmlFor="bid-expiry">Bid Expiration Date:</label>
+                    <input
+                      style={{ fontSize: '12px', padding: '4px' }}
+                      disabled={!this.state.biddingEnabled}
+                      type="date"
+                      name="expiredAt"
+                      defaultValue={this.state.expiredAt}
+                      // value={this.state.expiredAt}
+                      onChange={this.handleChange}
+                      className="bid-expiry"
+                    />
+                  </div>
+                </div>
+              </form>
             </div>
-          </div>
-        </form>
-      </div>
+        }
+      </Spring>
     );
   }
 }
