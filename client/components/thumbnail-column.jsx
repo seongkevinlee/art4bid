@@ -1,53 +1,46 @@
 import React from 'react';
 import { Spring, config } from 'react-spring/renderprops';
 
-export default class OtherThumbnailColumn extends React.Component {
+export default class ThumbnailColumn extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      other: [],
-      otherOffset: 0
+      thumbnails: [],
+      offsetCounter: 0
     };
     this.container = React.createRef();
-    this.addOtherThumbnails = this.addOtherThumbnails.bind(this);
+    this.addPhotographThumbnails = this.addPhotographThumbnails.bind(this);
   }
 
   addContainerListener() {
-    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addOtherThumbnails(); } });
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addPhotographThumbnails(); } });
   }
 
   componentDidMount() {
-    this.addOtherThumbnails();
+    this.addPhotographThumbnails();
     this.addContainerListener();
   }
 
-  addOtherThumbnails() {
-    const offset = this.state.otherOffset;
-    fetch(`./api/posts/other/${offset}`)
+  addPhotographThumbnails() {
+    let offset = this.state.offsetCounter;
+    fetch(`./api/posts/${this.props.category}/${offset}`)
       .then(res => res.json())
       .then(thumbnailInfo => {
         if (thumbnailInfo.length !== 0) {
-          let otherOffset = this.state.otherOffset;
-          otherOffset += thumbnailInfo.length;
-          this.setState({ otherOffset });
-          const otherArr = this.state.other.slice().concat(thumbnailInfo);
+          offset += thumbnailInfo.length;
+          this.setState({ offsetCounter: offset });
+          const thumbnailsArr = this.state.thumbnails.slice().concat(thumbnailInfo);
           this.setState({
-            other: otherArr
+            thumbnails: thumbnailsArr
           });
-          if (this.state.other.length <= 10) {
-            this.setState({ buttonDisplay: 'd-none' });
-          }
-        } else {
-          this.setState({ buttonDisplay: 'd-none' });
         }
       });
   }
 
   render() {
-    const { other } = this.state;
-    const thumbnails = other.map(thumbnail => {
+    const { thumbnails } = this.state;
+    const thumbnailsMap = thumbnails.map(thumbnail => {
       return (
-
         <div key={thumbnail.postId} className="thumbnail-container">
           <img
             alt=""
@@ -61,19 +54,18 @@ export default class OtherThumbnailColumn extends React.Component {
             }>
           </img>
         </div>
-
       );
     });
     return (
       <Spring
-        from = {{ marginRight: -500 }}
-        to = {{ marginRight: 0 }}
-        config = {config.slow}
+        from={{ opacity: 0 }}
+        to={{ opacity: 1 }}
+        config={config.molasses}
       >
         {
           props =>
             <div style={props} className="flex-column thumbnail-column" ref={this.container}>
-              {thumbnails}
+              {thumbnailsMap}
             </div>
         }
       </Spring>
