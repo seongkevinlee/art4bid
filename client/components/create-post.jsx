@@ -173,6 +173,7 @@ export default class CreatePost extends React.Component {
   }
 
   render() {
+    const today = this.getTodaysDate();
     return (
       <Spring
         from={{ opacity: 0 }}
