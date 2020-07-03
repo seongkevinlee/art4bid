@@ -191,7 +191,6 @@ export default class SpecificPost extends React.Component {
                 <div className="post-image-container">
                   <img alt="" src={postInfo.imageUrl}></img>
                 </div>
-                {/* <div className="description-bid-container">{bodyview}</div> */}
                 {bodyview}
                 <div>
                   {isModalOpen ? (
