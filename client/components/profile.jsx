@@ -51,7 +51,7 @@ export default class Profile extends React.Component {
           props =>
             <div className="non-nav">
               <div className="profile-container" style={props}>
-                <div className="profile-header d-flex justify-content-between col-12 mt-1">
+                <div className="profile-header d-flex justify-content-between col-12 pt-1">
                   <div className="back-container"></div>
                   <div className="header-title pt-3 pb-3">PROFILE</div>
                   <button

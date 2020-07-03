@@ -46,7 +46,6 @@ option {
 
 .second-half {
   display: flex;
-  height: 150px;
   justify-content: space-around;
 }
 
@@ -137,5 +136,5 @@ option {
 }
 
 form#new-post > * {
-  margin: 1%;
+  margin: 0.5%;
 }
