@@ -142,7 +142,7 @@ export default class EditPost extends React.Component {
     }
 
     return (
-      <div>
+      <div className="non-nav">
         <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
           <div
             className='back-container text-center d-flex justify-content-start align-items-center'
