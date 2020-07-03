@@ -193,16 +193,18 @@ export default class SpecificPost extends React.Component {
                 </div>
                 {bodyview}
                 <div>
-                  {isModalOpen ? (
-                    <Modal
-                      userId={userId}
-                      postId={postId}
-                      recipientId={postInfo.sellerId}
-                      handleModalCloseClick={handleModalCloseClick}
-                    />
-                  ) : (
-                    ''
-                  )}
+                  {isModalOpen
+                    ? (
+                      <Modal
+                        userId={userId}
+                        postId={postId}
+                        recipientId={postInfo.sellerId}
+                        handleModalCloseClick={handleModalCloseClick}
+                      />
+                    )
+                    : (
+                      ''
+                    )}
                 </div>
               </div>
           }
