@@ -498,5 +498,5 @@ button {
 /* watchlist */
 .watchlist-bids-container {
   overflow-y: scroll;
-  height: 75vh;
+  height: 84%;
 }

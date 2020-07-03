@@ -74,7 +74,7 @@ export default class MyBids extends React.Component {
       >
         {
           props =>
-            <div style={props}>
+            <div className="non-nav" style={props}>
               <div className='my-bids-header d-flex justify-content-between col-12 mb-2 pt-1'>
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
