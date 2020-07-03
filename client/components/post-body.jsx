@@ -239,7 +239,7 @@ export default class PostBody extends React.Component {
     }
 
     return (
-      <div>
+      <div className="description-bid-container">
         <div className="post-description">
           <p className="text-center">{description}</p>
         </div>

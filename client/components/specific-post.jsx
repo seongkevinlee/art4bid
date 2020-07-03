@@ -168,7 +168,7 @@ export default class SpecificPost extends React.Component {
         );
       }
       return (
-        <div className="indiv-post">
+        <div className="non-nav">
           <PostHeader
             setView={setView}
             title={postInfo.title}
@@ -184,7 +184,8 @@ export default class SpecificPost extends React.Component {
           <div className="post-image-container">
             <img alt="" src={postInfo.imageUrl}></img>
           </div>
-          <div>{bodyview}</div>
+          {/* <div className="description-bid-container">{bodyview}</div> */}
+          {bodyview}
           <div>
             {isModalOpen ? (
               <Modal
