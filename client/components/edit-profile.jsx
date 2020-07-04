@@ -16,7 +16,8 @@ export default class EditProfile extends React.Component {
       userId: this.props.userInfo.userId,
       userName: this.props.userInfo.userName,
       selectedProfileImgFile: null,
-      selectedCoverImgFile: null
+      selectedCoverImgFile: null,
+      isSaving: false
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -76,22 +77,24 @@ export default class EditProfile extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
-
+    this.setState({
+      isSaving: true
+    });
     const { profileImg, coverImg, description, location, email, userId } = this.state;
     const profileData = new FormData();
     const newDate = Date.now();
-    const newProfileFileURL = profileImg.split('.')[0].length > 13 ? profileImg.substring(13) : profileImg;
-    const newCoverFileURL = coverImg.split('.')[0].length > 13 ? coverImg.substring(13) : coverImg;
-    const changedProfileFileName = newDate.toString().concat(newProfileFileURL.split(' ').join(''));
-    const changedCoverFileName = newDate.toString().concat(newCoverFileURL.split(' ').join(''));
 
     if (this.state.selectedProfileImgFile) {
+      const newProfileFileURL = profileImg.split('.')[0].length > 13 ? profileImg.substring(13) : profileImg;
+      const changedProfileFileName = newDate.toString().concat(newProfileFileURL.split(' ').join(''));
       profileData.append('image', this.state.selectedProfileImgFile, changedProfileFileName);
       profileData.append('profileImg', changedProfileFileName);
     } else {
       profileData.append('profileImg', profileImg);
     }
     if (this.state.selectedCoverImgFile) {
+      const newCoverFileURL = coverImg.split('.')[0].length > 13 ? coverImg.substring(13) : coverImg;
+      const changedCoverFileName = newDate.toString().concat(newCoverFileURL.split(' ').join(''));
       profileData.append('image', this.state.selectedCoverImgFile, changedCoverFileName);
       profileData.append('coverImg', changedCoverFileName);
     } else {
@@ -114,10 +117,18 @@ export default class EditProfile extends React.Component {
       .then(data => {
         // eslint-disable-next-line no-console
         console.log(`user profile has been changed. userId:${data.userId}`);
+        this.setState({
+          isSaving: false
+        });
         this.props.getUserData();
         this.props.editModeToggle();
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        console.error(err);
+        this.setState({
+          isSaving: false
+        });
+      });
   }
 
   handleCancel() {
@@ -156,7 +167,8 @@ export default class EditProfile extends React.Component {
       userName,
       location,
       city,
-      email
+      email,
+      isSaving
     } = this.state;
     const {
       handleCoverImgChange,
@@ -183,13 +195,24 @@ export default class EditProfile extends React.Component {
                 </div>
                 <div className='header-title pt-3 pb-3'>EDIT</div>
                 <div className="back-container d-flex justify-content-center align-items-center">
-                  <button
-                    type="Submit"
-                    className="yes-button"
-                    style={{ height: '40px' }}
-                    onClick={handleSubmit}>
-                    SAVE
-                  </button>
+                  {isSaving
+                    ? (
+                      <div
+                        className="spinner-border spinner-border-sm text-danger"
+                        role="status">
+                        <span className="sr-only"></span>
+                      </div>
+                    )
+                    : (
+                      <button
+                        type="Submit"
+                        className="yes-button"
+                        style={{ height: '40px' }}
+                        onClick={handleSubmit}>
+                        SAVE
+                      </button>
+                    )
+                  }
                 </div>
               </div>
               <div
@@ -245,7 +268,7 @@ export default class EditProfile extends React.Component {
                 id="description-input"
                 className='description-input mt-2 mb-2 border-0 text-center'
                 cols="50"
-                rows="4"
+                rows="3"
                 placeholder='Enter description here...'
                 value={description || ''}
                 onChange={this.handleChange}>

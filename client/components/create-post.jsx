@@ -20,7 +20,8 @@ export default class CreatePost extends React.Component {
       category: '',
       selectedFile: null,
       filePathImageURL: null,
-      display: 'none'
+      display: 'none',
+      isSaving: false
     };
     this.date = new Date();
     this.baseState = this.state;
@@ -121,6 +122,9 @@ export default class CreatePost extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.setState({
+      isSaving: true
+    });
     const {
       sellerId,
       description,
@@ -167,13 +171,22 @@ export default class CreatePost extends React.Component {
       .then(data => {
         // eslint-disable-next-line no-console
         console.log(`new post created. postId:${data.postId}`);
+        this.setState({
+          isSaving: false
+        });
         this.props.setView('profile');
       })
-      .catch(error => console.error('image uploading error', error));
+      .catch(error => {
+        console.error('image uploading error', error);
+        this.setState({
+          isSaving: false
+        });
+      });
   }
 
   render() {
     const today = this.getTodaysDate();
+    const { isSaving } = this.state;
     return (
       <Spring
         from={{ opacity: 0 }}
@@ -195,14 +208,25 @@ export default class CreatePost extends React.Component {
                 </div>
                 <div className="header-title pt-3 pb-3 new-post-header">NEW POST</div>
                 <div className="back-container d-flex justify-content-center align-items-center">
-                  <button
-                    type="Submit"
-                    form="new-post"
-                    className="yes-button"
-                    style={{ height: '40px' }}
-                  >
-              SAVE
-                  </button>
+                  {isSaving
+                    ? (
+                      <div
+                        className="spinner-border spinner-border-sm text-danger"
+                        role="status">
+                        <span className="sr-only"></span>
+                      </div>
+                    )
+                    : (
+                      <button
+                        type = "Submit"
+                        form = "new-post"
+                        className = "yes-button"
+                        style = {{ height: '40px' }}
+                      >SAVE
+                      </button>
+                    )
+                  }
+
                 </div>
               </header>
 
