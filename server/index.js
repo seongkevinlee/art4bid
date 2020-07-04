@@ -379,6 +379,54 @@ app.post('/api/edit/post/image/:path', (req, res) => {
       // return res.status(200).json();
     }
   });
+// USER CAN EDIT A POST
+app.post('/api/edit/post', (req, res) => {
+  const {
+    description,
+    title,
+    isDeleted,
+    category,
+    notes,
+    postId,
+    sellerId
+  } = req.body;
+
+  const sql = `
+      UPDATE "post"
+         SET "description" = $1,
+             "title" = $2,
+             "isDeleted" = $3,
+             "category" = $4,
+             "notes" = $5
+      WHERE "postId" = $6
+      AND "sellerId" = $7
+      RETURNING *
+  `;
+  const params = [
+    description,
+    title,
+    isDeleted,
+    category,
+    notes,
+    postId,
+    sellerId
+  ];
+  db.query(sql, params)
+    .then(result => {
+      const post = result.rows[0];
+      if (!post) {
+        return res.status(400).json({
+          error: 'Failed to update post'
+        });
+      } else {
+        return res.status(202).json(post);
+      }
+    })
+    .catch(err => {
+      return res.status(500).json({
+        error: `An unexpected error occurred. ${err.message}`
+      });
+    });
 });
 
 // USER CAN SEND A PRIVATE MESSAGE
@@ -700,7 +748,7 @@ app.post('/api/bid', (req, res, next) => {
             const post = result.rows[0];
             if (currentBid < post.startingBid) {
               return res.status(403).json({
-                error: `Bid placed must be higher than current highest bid: $${post.startingBid}`
+                error: `Bid placed must be equal to or higher than starting bid: $${post.startingBid}`
               });
             } else {
               const sql = `

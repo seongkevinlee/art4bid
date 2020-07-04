@@ -1,5 +1,4 @@
 import React from 'react';
-import ToggleButton from 'react-toggle-button';
 import { Spring } from 'react-spring/renderprops';
 
 export default class EditPost extends React.Component {
@@ -20,19 +19,14 @@ export default class EditPost extends React.Component {
       expiredAt: postInfo.expiredAt,
       notes: postInfo.notes,
       category: postInfo.category,
-      // selectedFile: null,
-      // filePathImageURL: null,
-      // newImageUrl: '',
       display: 'none'
     };
     this.baseState = this.state;
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    // this.handleFileChange = this.handleFileChange.bind(this);
     this.handleReset = this.handleReset.bind(this);
     this.handleModal = this.handleModal.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
-    this.getTodaysDate = this.getTodaysDate.bind(this);
   }
 
   componentDidMount() {
@@ -43,21 +37,6 @@ export default class EditPost extends React.Component {
 
     const expireDate = this.props.postInfo.expiredAt.slice(0, 10);
     this.setState({ expiredAt: expireDate });
-  }
-
-  getTodaysDate() {
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth() + 1;
-    const yyyy = today.getFullYear();
-    if (dd < 10) {
-      dd = '0' + dd;
-    }
-    if (mm < 10) {
-      mm = '0' + mm;
-    }
-    today = yyyy + '-' + mm + '-' + dd;
-    return today;
   }
 
   handleModal() {
@@ -78,57 +57,37 @@ export default class EditPost extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  // setting state for image input
-  // handleFileChange(event) {
-  //   if (!this.state.imageUrl) {
-  //     this.setState({
-  //       filePathImageURL: this.props.imageUrl
-  //     });
-  //   }
-
-  //   this.setState({
-  //     selectedFile: event.target.files[0],
-  //     [event.target.name]: event.target.value,
-  //     filePathImageURL: event.target.files[0].name
-  //   });
-  // }
-
   handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
     const {
-      sellerId,
       description,
-      // filePathImageURL,
       title,
-      startingBid,
-      biddingEnabled,
       isDeleted,
-      expiredAt,
       category,
-      postId
+      postId,
+      sellerId
     } = this.state;
 
     let { notes } = this.state;
     if (!notes) {
       notes = ' ';
     }
-    const formData = new FormData();
 
-    formData.append('sellerId', sellerId);
-    formData.append('description', description);
-    formData.append('title', title);
-    formData.append('startingBid', startingBid);
-    formData.append('biddingEnabled', biddingEnabled);
-    formData.append('isDeleted', isDeleted);
-    formData.append('expiredAt', expiredAt);
-    formData.append('notes', notes);
-    formData.append('category', category);
-    formData.append('postId', postId);
+    const request = {
+      description: description,
+      title: title,
+      isDeleted: isDeleted,
+      category: category,
+      notes: notes,
+      postId: postId,
+      sellerId: sellerId
+    };
 
-    fetch(`/api/edit/post/image/${'user-posts'}`, {
+    fetch('/api/edit/post', {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request)
     })
       .then(data => {
         this.props.getPostInfo(this.props.postId);
@@ -138,9 +97,6 @@ export default class EditPost extends React.Component {
   }
 
   render() {
-
-    const today = this.getTodaysDate();
-
     // Changing Category
 
     let paintingDisabled = null;
@@ -217,20 +173,7 @@ export default class EditPost extends React.Component {
                   <img src={this.state.imageUrl} alt="create-new-post" className="create-new-post-image edit-post" />
                 </div>
 
-                {/* <label htmlFor="imageUrl"></label>
-          <input
-            type="file"
-            id="imageUrl"
-            name="newImageUrl"
-            accept="image/png, image/jpeg"
-            className="new-post-input"
-            title=" "
-            value={this.state.newImageUrl}
-            onChange={this.handleFileChange}
-            required
-          /> */}
-
-                <div className="title-description">
+                <div className="title-description" style={{ margin: '0.5% 2%' }}>
                   {/* enter title */}
                   <label htmlFor="title"></label>
                   <input
@@ -285,46 +228,6 @@ export default class EditPost extends React.Component {
                       value={this.state.notes}
                       onChange={this.handleChange}
                       style={{ height: '80px' }}
-                    />
-                  </div>
-
-                  <div className="bidding-content d-none">
-                    {/* toggle bidding button */}
-                    <div>
-                      <ToggleButton
-                        className="big"
-                        value={this.state.biddingEnabled || false}
-                        onToggle={value => {
-                          this.setState({
-                            biddingEnabled: !this.state.biddingEnabled
-                          });
-                        }}
-                      />
-                    </div>
-
-                    {/* starting bid */}
-                    <label htmlFor="starting-bid">Starting Bid:</label>
-                    <input
-                      disabled={!this.state.biddingEnabled}
-                      type="number"
-                      min="1.00"
-                      placeholder="$0"
-                      name="startingBid"
-                      value={this.state.startingBid}
-                      onChange={this.handleChange}
-                    />
-
-                    {/* bid expiry */}
-                    <label htmlFor="bid-expiry">Bid Expiration Date:</label>
-                    <input
-                      style={{ fontSize: '12px', padding: '4px' }}
-                      disabled={!this.state.biddingEnabled}
-                      type="date"
-                      name="expiredAt"
-                      value={this.state.expiredAt}
-                      onChange={this.handleChange}
-                      className="bid-expiry"
-                      min={today}
                     />
                   </div>
                 </div>

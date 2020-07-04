@@ -16,7 +16,8 @@ export default class SpecificPost extends React.Component {
       bidHistory: 'off',
       isModalOpen: false,
       isWatchlisted: false,
-      editMode: false
+      editMode: false,
+      bidText: 'Starting Bid:'
     };
     this.getPostInfo = this.getPostInfo.bind(this);
     this.getWatchlistInfo = this.getWatchlistInfo.bind(this);
@@ -58,6 +59,9 @@ export default class SpecificPost extends React.Component {
     fetch(`/api/bidinfo/${postId}`)
       .then(res => res.json())
       .then(bidInfo => {
+        if (bidInfo.highestBid !== null) {
+          this.setState({ bidText: 'Highest Bid:' });
+        }
         this.setState({ bidInfo });
       });
   }
@@ -128,7 +132,6 @@ export default class SpecificPost extends React.Component {
     } = this.state;
 
     const { handleModalCloseClick, messageBtnClick, toggleBidHistory } = this;
-    // const biddingClosed = new Date(postInfo.expiredAt) < new Date();
     const { userId, postId, setView } = this.props;
     if (postInfo && watchlistInfo && bidInfo) {
       let highestBid;
@@ -148,6 +151,7 @@ export default class SpecificPost extends React.Component {
             postId={postInfo.postId}
             description={postInfo.description}
             highestBid={highestBid}
+            bidText = {this.state.bidText}
             totalBids={bidInfo.totalBids}
             bidEnd={new Date(postInfo.expiredAt).toLocaleString('en-US', { timeZone: 'UTC' }).split(',')[0]}
             bidExpireTimer = {postInfo.expiredAt.toLocaleString()}
