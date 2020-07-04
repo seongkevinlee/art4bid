@@ -163,10 +163,10 @@ export default class CreatePost extends React.Component {
     fetch(`/api/post/image/${'user-posts'}`, {
       method: 'POST',
       body: formData
-    })
+    }).then(res => res.json())
       .then(data => {
         // eslint-disable-next-line no-console
-        console.log('new post created');
+        console.log(`new post created. postId:${data.postId}`);
         this.props.setView('profile');
       })
       .catch(error => console.error('image uploading error', error));

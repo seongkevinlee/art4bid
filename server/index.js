@@ -140,34 +140,33 @@ app.post('/api/user/:userId', (req, res, next) => {
     }
   }).array('image');
   upload(req, res, function (err) {
-    const userId = parseInt(req.params.userId);
-    const { email, profileImg, coverImg, description, location } = req.body;
-    const sql = `
-    UPDATE     "user"
-    SET        "email" = $1,
-               "profileImg" = $2,
-               "coverImg" = $3,
-               "description" = $4,
-               "location" = $5
-    WHERE      "userId" = $6
-    RETURNING  *
-    `;
-    const params = [email, profileImg, coverImg, description, location, userId];
-    db.query(sql, params)
-      .then(result => res.json(result.rows))
-      .catch(err => next(err));
     if (err) {
       res.status(400).json({
-        error: 'Failed to upload an image'
+        error: 'Failed to upload a profile or cover image'
       });
     } else {
-      res.status(200).json();
+      const userId = parseInt(req.params.userId);
+      const { email, profileImg, coverImg, description, location } = req.body;
+      const sql = `
+        UPDATE     "user"
+        SET        "email" = $1,
+                   "profileImg" = $2,
+                   "coverImg" = $3,
+                   "description" = $4,
+                   "location" = $5
+        WHERE      "userId" = $6
+        RETURNING  *
+    `;
+      const params = [email, profileImg, coverImg, description, location, userId];
+      db.query(sql, params)
+        .then(result => res.json(result.rows[0]))
+        .catch(err => next(err));
+      // res.status(200).json();
     }
   });
-
 });
 
-// TO UPLOAD AN IMAGE to a path(param)
+// TO UPLOAD AN POST IMAGE(CREATE A POST)
 app.post('/api/post/image/:path', (req, res) => {
   const folder = `./server/public/images/${req.params.path}`;
   if (!fs.existsSync(folder)) {
@@ -194,75 +193,74 @@ app.post('/api/post/image/:path', (req, res) => {
     }
   }).single('image');
   upload(req, res, function (err) {
-    // USER CAN CREATE A POST
-    const {
-      sellerId,
-      description,
-      imageUrl,
-      title,
-      startingBid,
-      biddingEnabled,
-      isDeleted,
-      expiredAt,
-      notes,
-      category
-    } = req.body;
-    if (
-      !sellerId ||
-      !description ||
-      !imageUrl ||
-      !title ||
-      !startingBid ||
-      !biddingEnabled ||
-      !isDeleted ||
-      !expiredAt ||
-      !notes ||
-      !category
-    ) {
-      return res.status(404).json({
-        error: 'Some fields are missing!'
-      });
-    }
-    const sql = `
-    INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category", "createdAt")
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now())
-      RETURNING "postId"
-  `;
-    const params = [
-      sellerId,
-      description,
-      imageUrl,
-      title,
-      startingBid,
-      biddingEnabled,
-      isDeleted,
-      expiredAt,
-      notes,
-      category
-    ];
-    db.query(sql, params)
-      .then(result => {
-        const post = result.rows[0];
-        if (!post) {
-          return res.status(400).json({
-            error: 'Failed to create post'
-          });
-        } else {
-          return res.json(post);
-        }
-      })
-      .catch(err => {
-        return res.status(500).json({
-          error: `An unexpected error occurred. ${err.message}`
-        });
-      });
-
     if (err) {
       return res.status(400).json({
-        error: 'Failed to upload an image'
+        error: 'Failed to upload a post image'
       });
     } else {
-      return res.status(200).json();
+      // USER CAN CREATE A POST
+      const {
+        sellerId,
+        description,
+        imageUrl,
+        title,
+        startingBid,
+        biddingEnabled,
+        isDeleted,
+        expiredAt,
+        notes,
+        category
+      } = req.body;
+      if (
+        !sellerId ||
+        !description ||
+        !imageUrl ||
+        !title ||
+        !startingBid ||
+        !biddingEnabled ||
+        !isDeleted ||
+        !expiredAt ||
+        !notes ||
+        !category
+      ) {
+        return res.status(404).json({
+          error: 'Some fields are missing!'
+        });
+      }
+      const sql = `
+        INSERT INTO "post" ("sellerId", "description", "imageUrl", "title", "startingBid", "biddingEnabled", "isDeleted", "expiredAt","notes","category", "createdAt")
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, now())
+          RETURNING "postId"
+      `;
+      const params = [
+        sellerId,
+        description,
+        imageUrl,
+        title,
+        startingBid,
+        biddingEnabled,
+        isDeleted,
+        expiredAt,
+        notes,
+        category
+      ];
+      db.query(sql, params)
+        .then(result => {
+          const post = result.rows[0];
+          if (!post) {
+            return res.status(400).json({
+              error: 'Failed to create post'
+            });
+          } else {
+            return res.json(post);
+          }
+        })
+        .catch(err => {
+          return res.status(500).json({
+            error: `An unexpected error occurred. ${err.message}`
+          });
+        });
+      // return res.status(200).json();
     }
   });
 });
@@ -320,65 +318,65 @@ app.post('/api/edit/post/image/:path', (req, res) => {
     }
   }).single('image');
   upload(req, res, function (err) {
-    // USER CAN EDIT A POST
-    const {
-      postId,
-      description,
-      // imageUrl,
-      title,
-      startingBid,
-      biddingEnabled,
-      isDeleted,
-      expiredAt,
-      category,
-      notes
-    } = req.body;
-    const sql = `
-      UPDATE "post"
-         SET "description" = $1,
-             "title" = $2,
-             "startingBid" = $3,
-             "biddingEnabled" = $4,
-             "isDeleted" = $5,
-             "expiredAt" = $6,
-             "category" = $7,
-             "notes" = $8
-      WHERE "postId" = $9
-      RETURNING *
-  `;
-    const params = [
-      description,
-      title,
-      startingBid,
-      biddingEnabled,
-      isDeleted,
-      expiredAt,
-      category,
-      notes,
-      postId
-    ];
-    db.query(sql, params)
-      .then(result => {
-        const post = result.rows[0];
-        if (!post) {
-          return res.status(400).json({
-            error: 'Failed to update post'
-          });
-        } else {
-          return res.status(202).json(post);
-        }
-      })
-      .catch(err => {
-        return res.status(500).json({
-          error: `An unexpected error occurred. ${err.message}`
-        });
-      });
     if (err) {
       return res.status(400).json({
         error: 'Failed to upload an image'
       });
     } else {
-      return res.status(200).json();
+      // USER CAN EDIT A POST
+      const {
+        postId,
+        description,
+        // imageUrl,
+        title,
+        startingBid,
+        biddingEnabled,
+        isDeleted,
+        expiredAt,
+        category,
+        notes
+      } = req.body;
+      const sql = `
+        UPDATE "post"
+          SET "description" = $1,
+              "title" = $2,
+              "startingBid" = $3,
+              "biddingEnabled" = $4,
+              "isDeleted" = $5,
+              "expiredAt" = $6,
+              "category" = $7,
+              "notes" = $8
+        WHERE "postId" = $9
+        RETURNING *
+    `;
+      const params = [
+        description,
+        title,
+        startingBid,
+        biddingEnabled,
+        isDeleted,
+        expiredAt,
+        category,
+        notes,
+        postId
+      ];
+      db.query(sql, params)
+        .then(result => {
+          const post = result.rows[0];
+          if (!post) {
+            return res.status(400).json({
+              error: 'Failed to update post'
+            });
+          } else {
+            return res.status(202).json(post);
+          }
+        })
+        .catch(err => {
+          return res.status(500).json({
+            error: `An unexpected error occurred. ${err.message}`
+          });
+        });
+      // return res.status(200).json();
     }
   });
 });
