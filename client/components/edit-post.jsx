@@ -200,7 +200,7 @@ export default class EditPost extends React.Component {
                 </div>
 
                 <div className="second-half">
-                  <div className="category-notes">
+                  <div className="category-notes edit-category-notes">
                     {/* select category */}
                     <label name="category"></label>
                     <select

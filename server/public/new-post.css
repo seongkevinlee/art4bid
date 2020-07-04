@@ -138,3 +138,8 @@ option {
 form#new-post > * {
   margin: 0.5%;
 }
+
+/* edit post */
+.edit-category-notes {
+  width: 98%;
+}
