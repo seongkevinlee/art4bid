@@ -45,17 +45,21 @@
       height: calc(var(--vh, 1vh) * 100);
     }
 
-  .navbar > div {
-    height: 90%;
-  }
+    .navbar > div {
+      height: 90%;
+    }
 
-  .thumbnail-column-container {
-    height: 85%;
-  }
+    .thumbnail-column-container {
+      height: 83%;
+    }
 
-  .profile-thumbnail-container {
-    height: 39%;
-  }
+    .profile-thumbnail-container {
+      height: 39%;
+    }
+
+    .search-button {
+      right: 57px;
+    }
  }
 
 /* ----------- iPad 3, 4 and Pro 9.7" ----------- */
