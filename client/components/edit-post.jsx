@@ -57,57 +57,37 @@ export default class EditPost extends React.Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
-  // setting state for image input
-  // handleFileChange(event) {
-  //   if (!this.state.imageUrl) {
-  //     this.setState({
-  //       filePathImageURL: this.props.imageUrl
-  //     });
-  //   }
-
-  //   this.setState({
-  //     selectedFile: event.target.files[0],
-  //     [event.target.name]: event.target.value,
-  //     filePathImageURL: event.target.files[0].name
-  //   });
-  // }
-
   handleSubmit(event) {
     event.preventDefault();
     event.stopPropagation();
     const {
-      sellerId,
       description,
-      // filePathImageURL,
       title,
-      startingBid,
-      biddingEnabled,
       isDeleted,
-      expiredAt,
       category,
-      postId
+      postId,
+      sellerId
     } = this.state;
 
     let { notes } = this.state;
     if (!notes) {
       notes = ' ';
     }
-    const formData = new FormData();
 
-    formData.append('sellerId', sellerId);
-    formData.append('description', description);
-    formData.append('title', title);
-    formData.append('startingBid', startingBid);
-    formData.append('biddingEnabled', biddingEnabled);
-    formData.append('isDeleted', isDeleted);
-    formData.append('expiredAt', expiredAt);
-    formData.append('notes', notes);
-    formData.append('category', category);
-    formData.append('postId', postId);
+    const request = {
+      description: description,
+      title: title,
+      isDeleted: isDeleted,
+      category: category,
+      notes: notes,
+      postId: postId,
+      sellerId: sellerId
+    };
 
-    fetch(`/api/edit/post/image/${'user-posts'}`, {
+    fetch('/api/edit/post', {
       method: 'POST',
-      body: formData
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(request)
     })
       .then(data => {
         this.props.getPostInfo(this.props.postId);
