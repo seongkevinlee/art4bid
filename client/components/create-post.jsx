@@ -244,7 +244,7 @@ export default class CreatePost extends React.Component {
                   required
                 />
 
-                <div className="title-description">
+                <div className="title-description" style={{ margin: '0.5% 2%' }}>
                   {/* enter title */}
                   <label htmlFor="title"></label>
                   <input
@@ -298,7 +298,7 @@ export default class CreatePost extends React.Component {
                       name="notes"
                       value={this.state.notes}
                       onChange={this.handleChange}
-                      style={{ height: '80px' }}
+                      style={{ height: '108px' }}
                     />
                   </div>
 

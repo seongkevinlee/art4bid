@@ -268,7 +268,7 @@ export default class SearchPage extends React.Component {
                     />
                   )
                   : <div className="flex-column thumbnail-column">
-                    <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
+                    <p className="h6 mt-4 px-1 text-secondary">There are no posts</p>
                   </div>
               }
               {
@@ -281,7 +281,7 @@ export default class SearchPage extends React.Component {
                     />
                   )
                   : <div className="flex-column thumbnail-column">
-                    <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
+                    <p className="h6 mt-4 px-1 text-secondary">There are no posts</p>
                   </div>
               }
               {
@@ -294,7 +294,7 @@ export default class SearchPage extends React.Component {
                     />
                   )
                   : <div className="flex-column thumbnail-column">
-                    <p className="h6 mt-4 px-1 text-secondary">There are no images</p>
+                    <p className="h6 mt-4 px-1 text-secondary">There are no posts</p>
                   </div>
               }
             </div>
