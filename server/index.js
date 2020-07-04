@@ -662,7 +662,7 @@ app.post('/api/bid', (req, res, next) => {
             const post = result.rows[0];
             if (currentBid < post.startingBid) {
               return res.status(403).json({
-                error: `Bid placed must be higher than current highest bid: $${post.startingBid}`
+                error: `Bid placed must be equal to or higher than starting bid: $${post.startingBid}`
               });
             } else {
               const sql = `
