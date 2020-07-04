@@ -42,6 +42,7 @@ input, button {
   border: none;
   background: none;
   box-shadow: none;
+  padding: 0;
 }
 
 .search-mag {

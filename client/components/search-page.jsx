@@ -203,7 +203,7 @@ export default class SearchPage extends React.Component {
                     placeholder={message}/>
                   <button
                     disabled
-                    className="search-mag position-absolute cursor-pointer search-button">
+                    className="search-mag position-absolute cursor-pointer search-button p-0">
                     <img
                       alt="search-button"
                       className="search-mag cursor-pointer"
@@ -225,7 +225,7 @@ export default class SearchPage extends React.Component {
                     }}
                     formdata={formData}
                     componentRestrictions={{ country: 'us' }}
-                    className="mx-auto search-bar text-center w-75 border-0 pt-2 pb-2 form-control"
+                    className="mx-auto search-bar text-center w-75 border-0 p-0 form-control"
                     type="text"
                     name="search"
                     placeholder="search"
