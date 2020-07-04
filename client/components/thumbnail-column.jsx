@@ -9,28 +9,28 @@ export default class ThumbnailColumn extends React.Component {
       offsetCounter: 0
     };
     this.container = React.createRef();
-    this.addPhotographThumbnails = this.addPhotographThumbnails.bind(this);
+    this.addThumbnails = this.addThumbnails.bind(this);
   }
 
   addContainerListener() {
-    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addPhotographThumbnails(); } });
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addThumbnails(); } });
   }
 
   componentDidMount() {
-    this.addPhotographThumbnails();
+    this.addThumbnails();
     this.addContainerListener();
   }
 
-  addPhotographThumbnails() {
+  addThumbnails() {
     let offset = this.state.offsetCounter;
     fetch(`./api/posts/${this.props.category}/${offset}`)
       .then(res => res.json())
       .then(thumbnailInfo => {
         if (thumbnailInfo.length !== 0) {
           offset += thumbnailInfo.length;
-          this.setState({ offsetCounter: offset });
           const thumbnailsArr = this.state.thumbnails.slice().concat(thumbnailInfo);
           this.setState({
+            offsetCounter: offset,
             thumbnails: thumbnailsArr
           });
         }
