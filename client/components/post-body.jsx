@@ -176,7 +176,7 @@ export default class PostBody extends React.Component {
         </p>
         <div className="bid-numbers d-flex justify-content-between">
           <div className="text-right bid-numbers">
-            <p className="text-right m-0">Highest Bid:</p>
+            <p className="text-right m-0">{this.props.bidText}</p>
             {totalBids}
             <p className="text-right m-0">Expires:</p>
           </div>
