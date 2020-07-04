@@ -6,14 +6,15 @@ export default class ThumbnailColumn extends React.Component {
     super(props);
     this.state = {
       thumbnails: [],
-      offsetCounter: 0
+      offsetCounter: 0,
+      isLoading: false
     };
     this.container = React.createRef();
     this.addThumbnails = this.addThumbnails.bind(this);
   }
 
   addContainerListener() {
-    this.container.current.addEventListener('scroll', event => { if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight) { this.addThumbnails(); } });
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addThumbnails(); } });
   }
 
   componentDidMount() {
@@ -22,19 +23,26 @@ export default class ThumbnailColumn extends React.Component {
   }
 
   addThumbnails() {
-    let offset = this.state.offsetCounter;
-    fetch(`./api/posts/${this.props.category}/${offset}`)
-      .then(res => res.json())
-      .then(thumbnailInfo => {
-        if (thumbnailInfo.length !== 0) {
-          offset += thumbnailInfo.length;
-          const thumbnailsArr = this.state.thumbnails.slice().concat(thumbnailInfo);
-          this.setState({
-            offsetCounter: offset,
-            thumbnails: thumbnailsArr
-          });
-        }
-      });
+    this.setState({ isLoading: true }, () => {
+      let offset = this.state.offsetCounter;
+      fetch(`./api/posts/${this.props.category}/${offset}`)
+        .then(res => res.json())
+        .then(thumbnailInfo => {
+          if (thumbnailInfo.length !== 0 && this.state.isLoading) {
+            offset += thumbnailInfo.length;
+            const thumbnailsArr = this.state.thumbnails.slice().concat(thumbnailInfo);
+            this.setState({
+              offsetCounter: offset,
+              isLoading: false,
+              thumbnails: thumbnailsArr
+            });
+          }
+        })
+        .catch(err => {
+          this.setState({ isLoading: false });
+          console.error(err);
+        });
+    });
   }
 
   render() {
