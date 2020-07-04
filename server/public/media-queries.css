@@ -49,16 +49,12 @@
       height: 90%;
     }
 
-    .thumbnail-column-container {
-      height: 83%;
-    }
-
     .profile-thumbnail-container {
       height: 39%;
     }
 
     .search-button {
-      right: 57px;
+      right: 65px;
     }
  }
 
