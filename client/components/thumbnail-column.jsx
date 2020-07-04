@@ -13,7 +13,7 @@ export default class ThumbnailColumn extends React.Component {
   }
 
   addContainerListener() {
-    this.container.current.addEventListener('scroll', event => { if (event.target.scrollTop + event.target.clientHeight >= event.target.scrollHeight) { this.addThumbnails(); } });
+    this.container.current.addEventListener('scroll', event => { if (event.target.scrollHeight - event.target.scrollTop === event.target.clientHeight) { this.addThumbnails(); } });
   }
 
   componentDidMount() {
