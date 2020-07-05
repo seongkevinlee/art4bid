@@ -191,7 +191,7 @@ export default class EditProfile extends React.Component {
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
                 >
-                  <img type='button' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel} />
+                  <input type='image' className="back-arrow" src="./images/backarrow.png" alt="back-arrow" onClick={this.handleCancel} />
                 </div>
                 <div className='header-title pt-3 pb-3'>EDIT</div>
                 <div className="back-container d-flex justify-content-center align-items-center">
