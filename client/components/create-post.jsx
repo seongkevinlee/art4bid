@@ -198,8 +198,8 @@ export default class CreatePost extends React.Component {
             <div style={props}>
               <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
                 <div className="back-container text-center d-flex justify-content-start align-items-center">
-                  <img
-                    type="button"
+                  <input
+                    type="image"
                     className="back-arrow"
                     src="./images/backarrow.png"
                     alt="back-arrow"

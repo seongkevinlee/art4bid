@@ -7,10 +7,10 @@ export default function PostHeader(props) {
     <header className="post-header text-center d-flex justify-content-between align-items-center pl-3 pr-3">
       <div className="header-icon-container d-flex flex-column justify-content-center mt-2">
         <div
-          className='back-container text-center d-flex justify-content-start align-items-center'
+          className='text-center d-flex justify-content-start align-items-center'
         >
-          <img
-            type='button'
+          <input
+            type='image'
             className="back-arrow"
             src="./images/backarrow.png"
             alt="back-arrow"

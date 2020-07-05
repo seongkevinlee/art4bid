@@ -233,7 +233,7 @@ export default class SpecificPost extends React.Component {
   render() {
     if (this.state.editMode === false) {
       return this.renderPost();
-    } else {
+    } else if (this.state.editMode && this.props.userId === this.state.postInfo.sellerId) {
       return this.renderEditPost();
     }
   }
