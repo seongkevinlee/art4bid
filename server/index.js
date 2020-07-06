@@ -377,7 +377,7 @@ app.post('/api/message/list/', (req, res, next) => {
     });
   }
   const sql = `
-      SELECT "me"."senderName", "me"."senderId", "me"."recipientId", "me"."postId", "p"."title", "me"."message", "me"."createdAt" FROM (
+      SELECT DISTINCT ON ("me"."postId") "me"."senderName", "me"."senderId", "me"."recipientId", "me"."postId", "p"."title", "me"."message", "me"."createdAt" FROM (
       SELECT DISTINCT ON ("m"."senderId", "m"."recipientId", "m"."postId") "u"."userName" AS "senderName", "m"."senderId", "m"."recipientId", "m"."postId", "m"."message", "m"."createdAt"
       FROM "message" AS "m"
       JOIN "user" AS "u"
@@ -386,7 +386,7 @@ app.post('/api/message/list/', (req, res, next) => {
       ORDER BY "m"."senderId", "m"."recipientId", "m"."postId", "m"."createdAt" DESC) AS "me"
       JOIN "post" AS "p"
       ON "p"."postId" = "me"."postId"
-      ORDER BY "me"."createdAt" DESC
+      ORDER BY "me"."postId", "me"."createdAt" DESC
   `;
   const params = [recipientId];
   db.query(sql, params)
