@@ -664,8 +664,8 @@ app.post('/api/bid', (req, res, next) => {
               });
             } else {
               const sql = `
-                insert into "bid" ("bidderId", "postId", "currentBid")
-                values ($1, $2, $3)
+                insert into "bid" ("bidderId", "postId", "currentBid", "createdAt")
+                values ($1, $2, $3, now())
                 RETURNING *
               `;
               const params = [bidderId, postId, currentBid];
