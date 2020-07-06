@@ -53,7 +53,8 @@ export default class Message extends React.Component {
       .then(res => res.json())
       .then(messages => {
         this.setState({
-          messages
+          messages,
+          detailMessages: []
         });
       });
   }
@@ -73,7 +74,8 @@ export default class Message extends React.Component {
       .then(res => res.json())
       .then(messages => {
         this.setState({
-          messages: messages
+          messages,
+          detailMessages: []
         });
       });
   }
