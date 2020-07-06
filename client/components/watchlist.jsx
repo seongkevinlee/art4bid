@@ -65,7 +65,7 @@ export default class ViewWatchlist extends React.Component {
       >
         {
           props =>
-            <div style={props}>
+            <div style={props} className="non-nav">
               <div className="watchlist-header d-flex justify-content-between col-12 mb-2 pt-1">
                 <button
                   className="mt-1 my-bids-btn btn text-center btn-submit-header"
