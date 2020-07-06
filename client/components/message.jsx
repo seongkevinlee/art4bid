@@ -96,7 +96,8 @@ export default class Message extends React.Component {
       .then(res => res.json())
       .then(messages => {
         this.setState({
-          detailMessages: messages
+          detailMessages: messages,
+          recipientId
         });
       });
   }
