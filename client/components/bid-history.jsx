@@ -51,7 +51,7 @@ export default class BidHistory extends React.Component {
           <table>
             <thead>
               <tr>
-                <th>Bid</th>
+                <th>Bid ID</th>
                 <th>Username</th>
                 <th>Date</th>
                 <th>Price</th>
