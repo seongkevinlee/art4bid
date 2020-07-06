@@ -95,13 +95,7 @@ export default class MessageDetail extends React.Component {
                 );
               })
             )
-            : (
-              <div className='d-flex flex-column align-items-center message-list-box'>
-                <div className='d-flex justify-content-between col-12 mb-2 mt-1'>
-                  <div className='pt-3 pb-3 mx-auto'>You have no messages.</div>
-                </div>
-              </div>
-            )
+            : ('')
           }
         </div>
         <div className="message-padding"></div>
