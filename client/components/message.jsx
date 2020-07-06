@@ -52,10 +52,6 @@ export default class Message extends React.Component {
     })
       .then(res => res.json())
       .then(messages => {
-        if (messages.error) {
-          // eslint-disable-next-line no-console
-          console.log(messages.error);
-        }
         this.setState({
           messages
         });
@@ -76,10 +72,6 @@ export default class Message extends React.Component {
     })
       .then(res => res.json())
       .then(messages => {
-        if (messages.error) {
-          // eslint-disable-next-line no-console
-          console.log(messages.error);
-        }
         this.setState({
           messages: messages
         });
@@ -101,10 +93,6 @@ export default class Message extends React.Component {
     })
       .then(res => res.json())
       .then(messages => {
-        if (messages.error) {
-          // eslint-disable-next-line no-console
-          console.log(messages.error);
-        }
         this.setState({
           detailMessages: messages
         });
