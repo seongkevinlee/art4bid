@@ -169,8 +169,6 @@ export default class CreatePost extends React.Component {
       body: formData
     }).then(res => res.json())
       .then(data => {
-        // eslint-disable-next-line no-console
-        console.log(`new post created. postId:${data.postId}`);
         this.setState({
           isSaving: false
         });

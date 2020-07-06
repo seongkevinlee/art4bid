@@ -115,8 +115,6 @@ export default class EditProfile extends React.Component {
       body: profileData
     }).then(res => res.json())
       .then(data => {
-        // eslint-disable-next-line no-console
-        console.log(`user profile has been changed. userId:${data.userId}`);
         this.setState({
           isSaving: false
         });

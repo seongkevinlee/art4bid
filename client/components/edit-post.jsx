@@ -129,8 +129,8 @@ export default class EditPost extends React.Component {
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
                 >
-                  <img
-                    type='button'
+                  <input
+                    type='image'
                     className="back-arrow"
                     src="./images/backarrow.png"
                     alt="back-arrow"
@@ -167,7 +167,7 @@ export default class EditPost extends React.Component {
                   </div>
                 </div>
               </div>
-              <form id="new-post" onSubmit={this.handleSubmit}>
+              <form id="new-post" onSubmit={this.handleSubmit} style={{ height: '84%' }}>
                 {/* add picture */}
                 <div style={{ textAlign: 'center' }}>
                   <img src={this.state.imageUrl} alt="create-new-post" className="create-new-post-image edit-post" />

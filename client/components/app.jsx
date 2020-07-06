@@ -51,8 +51,6 @@ export default class App extends React.Component {
     })
       .then(res => res.json())
       .then(data => {
-        // eslint-disable-next-line no-console
-        console.log(data, 'data');
         this.setState(() => {
           return { userInfo: data.userInfo, loggedIn: true };
         });
