@@ -57,8 +57,8 @@ export default class MessageDetail extends React.Component {
     const { detailMessages, getTimeMsg, userInfo, keyword, textBolder } = this.props;
     const { handleMessageChange, handleMessageSend } = this;
     return (
-      <div ref={element => { this.element = element; }} className="message-detail-box">
-        <div>
+      <div className="message-detail-box">
+        <div ref={element => { this.element = element; }} style={{ height: '78%', overflow: 'auto' }}>
           {detailMessages.length > 0
             ? (
               detailMessages.map((message, index) => {
@@ -99,7 +99,7 @@ export default class MessageDetail extends React.Component {
           }
         </div>
         <div className="message-padding"></div>
-        <div className="mb-5 fixed-bottom send-message-custom mx-auto">
+        <div className="send-message-custom mx-auto">
           <div className="mx-auto">
             <textarea
               autoFocus

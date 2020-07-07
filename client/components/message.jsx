@@ -299,7 +299,7 @@ export default class Message extends React.Component {
       >
         {
           props =>
-            <div style={props}>
+            <div className="non-nav" style={props}>
               <MessageHeader
                 postId={postId}
                 postTitle={postTitle}

@@ -27,6 +27,7 @@ input, button {
 
 .non-nav {
   height: 90%;
+  position: relative;
 }
 
 /* search-page */
@@ -376,11 +377,13 @@ button {
 .message-detail-box {
   /* position: relative; */
   margin-top: 5px;
+  height: 84%;
 }
 
 .send-message-custom {
   width: 375px;
   bottom: 3%;
+  position: absolute;
 }
 
 .textarea-custom {
