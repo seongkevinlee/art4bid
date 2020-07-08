@@ -4,7 +4,8 @@ export default class MessageDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      message: ''
+      message: '',
+      isTyping: false
     };
     this.scrollToBottom = this.scrollToBottom.bind(this);
     this.handleMessageChange = this.handleMessageChange.bind(this);
@@ -17,7 +18,10 @@ export default class MessageDetail extends React.Component {
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    const { isTyping } = this.state;
+    if (!isTyping) {
+      this.scrollToBottom();
+    }
   }
 
   scrollToBottom() {
@@ -29,14 +33,16 @@ export default class MessageDetail extends React.Component {
       event.target.value = event.target.value.trim();
     }
     this.setState({
-      message: event.target.value
+      message: event.target.value,
+      isTyping: true
     });
   }
 
   handleMessageSend() {
     const { message } = this.state;
     this.setState({
-      message: ''
+      message: '',
+      isTyping: false
     });
     this.props.sendMessage(message);
   }
@@ -100,10 +106,9 @@ export default class MessageDetail extends React.Component {
           <div ref={element => { this.element = element; }} />
         </div>
         <div className="message-padding"></div>
-        <div className="send-message-custom mx-auto">
+        <div className="send-message-custom w-100">
           <div className="mx-auto">
             <textarea
-              autoFocus
               rows="3"
               className="form-control textarea-custom"
               value={message}
