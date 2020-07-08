@@ -184,8 +184,8 @@ export default class EditProfile extends React.Component {
       >
         {
           props =>
-            <div style={props} className='d-flex flex-column align-items-center'>
-              <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 mt-1'>
+            <div style={props} className='non-nav'>
+              <div className='edit-profile-header d-flex justify-content-between col-12 mb-2 pt-1'>
                 <div
                   className='back-container text-center d-flex justify-content-start align-items-center'
                 >
@@ -214,7 +214,7 @@ export default class EditProfile extends React.Component {
                 </div>
               </div>
               <div
-                className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4'
+                className='coverPhotoEdit d-flex flex-column align-items-center justify-content-center pt-4 pb-4 m-auto'
                 style={{ backgroundImage: 'linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.4))' }}>
                 {coverImg
                   ? (
@@ -264,16 +264,16 @@ export default class EditProfile extends React.Component {
               <textarea
                 name="description"
                 id="description-input"
-                className='description-input mt-2 mb-2 border-0 text-center'
+                className='m-2 description-input border-0 text-center pt-2 pb-2'
                 cols="50"
                 rows="3"
                 placeholder='Enter description here...'
                 value={description || ''}
                 onChange={this.handleChange}>
               </textarea>
-              <div className='mt-1 location-info d-flex flex-column align-items-center justify-content-center'>
-                <div className='mt-3 d-flex flex-end justify-content-center align-items-end col-12'>
-                  <label htmlFor="zip-input" className='my-auto col text-center'>Your Zip-code:</label>
+              <div className='location-info d-flex flex-column align-items-center justify-content-around m-auto pt-2 pb-2' style={{ height: '27%' }}>
+                <div className='d-flex flex-end justify-content-center align-items-end w-100 pl-2 pr-2'>
+                  <label htmlFor="zip-input" className='col text-center'>Your Zip-code:</label>
                   <input
                     name='location'
                     id='location'
@@ -281,28 +281,28 @@ export default class EditProfile extends React.Component {
                     pattern="\d*"
                     maxLength="5"
                     value={location || ''}
-                    className='zip-input my-auto col-7 border-0'
+                    className='zip-input col-7 border-0'
                     onChange={this.handleChange} />
                 </div>
-                <div className='mt-4 d-flex flex-end justify-content-center align-items-end col-12'>
-                  <label htmlFor="location" className='my-auto col text-center'>Location:</label>
+                <div className='d-flex flex-end justify-content-center align-items-end w-100 pl-2 pr-2'>
+                  <label htmlFor="location" className='col text-center'>Location:</label>
                   <input
                     name='city'
                     id='city'
                     type="text"
                     disabled
                     value={city}
-                    className='zip-input my-auto col-7 border-0 text-center' />
+                    className='zip-input col-7 border-0 text-center' />
                 </div>
-                <div className='mt-4 d-flex flex-end justify-content-center align-items-end col-12'>
-                  <label htmlFor="email-input" className='my-auto col text-center'>Email:</label>
+                <div className='d-flex flex-end justify-content-center align-items-end w-100 pl-2 pr-2'>
+                  <label htmlFor="email-input" className='col text-center'>Email:</label>
                   <input
                     name='email'
                     id='email'
                     type="text"
                     value={email || ''}
                     onChange={this.handleChange}
-                    className='email-input my-auto col-7 border-0'
+                    className='email-input col-7 border-0'
                   />
                 </div>
               </div>
