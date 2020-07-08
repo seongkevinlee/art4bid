@@ -35,3 +35,8 @@ Try the application live at [[http://art4bid.seongkevinlee.com](http://art4bid.s
 * User can edit profile
 
 ### Preview
+![user-can-login-and-search](https://github.com/seongkevinlee/art4bid/blob/master/user-can-login-and-search.gif?raw=true)
+![user-view-post-and-submit-bid](https://github.com/seongkevinlee/art4bid/blob/master/user-view-post-and-submit-bid.gif?raw=true)
+![user-can-send-message](https://github.com/seongkevinlee/art4bid/blob/master/user-can-send-message.gif?raw=true)
+![user-can-create-post](https://github.com/seongkevinlee/art4bid/blob/master/user-can-create-post.gif?raw=true)
+![user-can-view-and-edit-profile](https://github.com/seongkevinlee/art4bid/blob/master/user-can-view-and-edit-profile.gif?raw=true)
