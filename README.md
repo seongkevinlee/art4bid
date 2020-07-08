@@ -11,6 +11,9 @@ A fullstack dynamic web application for artists or photographers who want to pro
 * react-spring
 * Node.js
 * PostgreSQL
+* Express
+* Webpack
+* Babel
 
 ##### Features
 * User can login with username
