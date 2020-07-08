@@ -2,20 +2,24 @@
 
 A fullstack dynamic web application for artists or photographers who want to promote or sell their work through a social network bidding system.
 
-### [[Live Site](http://art4bid.seongkevinlee.com)]
+### Live Demo
+Try the application live at [[http://art4bid.seongkevinlee.com](http://art4bid.seongkevinlee.com)]
 
-##### List of Technologies used:
-* JavaScript ES5, ES6
+### Technologies Used
+* JavaScript (ES5, ES6)
+* HTML5
+* CSS3
 * React
 * Bootstrap 4
 * react-spring
 * Node.js
 * PostgreSQL
 * Express
-* Webpack
+* Webpack 4
 * Babel
+* AWS EC2
 
-##### Features:
+### Features
 * User can login with username
 * User can view search page
 * User can search for posts based on location
@@ -29,3 +33,5 @@ A fullstack dynamic web application for artists or photographers who want to pro
 * User can add a post to their watch-list
 * User can view profile
 * User can edit profile
+
+### Preview
