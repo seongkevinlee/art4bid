@@ -28,26 +28,36 @@ export default class MessageList extends React.Component {
                           </>
                         );
                       }
+                      const id = message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.title + ',' + message.recipientId;
                       return (
                         <div
                           key={index}
-                          className={`mb-1 fadeIn mx-auto ${isMe ? 'message-box-list-me' : 'message-box-list-sender'}`}>
-                          <div className="d-flex justify-space-between">
+                          className={`cursor-pointer mb-1 fadeIn mx-auto ${isMe ? 'message-box-list-me' : 'message-box-list-sender'}`}>
+                          <div
+                            id={id}
+                            className="d-flex justify-space-between"
+                            onClick={handleViewMessageClick}>
                             <span
+                              id={id}
                               className="col mt-2 ml-1 message-sender text-left"
-                              id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.title + ',' + message.recipientId}
                               onClick={handleViewMessageClick}>
                               {name}
                             </span>
-                            <span className="col mr-2 mt-2 text-right text-dark message-date">
+                            <span
+                              id={id}
+                              className="col mr-2 mt-2 text-right text-dark message-date"
+                              onClick={handleViewMessageClick}>
                               {new Date(message.createdAt).toLocaleString().split(',')[0] + ' |' + new Date(message.createdAt).toLocaleString().split(',')[1]}
                             </span>
                           </div>
                           <div>
-                            <div className="col text-dark pb-1 message-content">
+                            <div
+                              id={id}
+                              className="col text-dark pb-1 message-content"
+                              onClick={handleViewMessageClick}>
                               <span
-                                className="ml-1 text-left cursor-pointer"
-                                id={message.senderId + ',' + message.senderName + ',' + message.postId + ',' + message.title + ',' + message.recipientId}
+                                id={id}
+                                className="ml-1 text-left"
                                 onClick={handleViewMessageClick}>{'Title: ' + message.title}</span>
                             </div>
                           </div>
