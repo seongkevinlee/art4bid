@@ -2,7 +2,7 @@
 
 A fullstack dynamic web application for artists or photographers who want to promote or sell their work through a social network bidding system.
 
-###[Live Site](http://art4bid.seongkevinlee.com)
+### [Live Site](http://art4bid.seongkevinlee.com)
 
 ##### List of Technologies used:
 * JavaScript ES5, ES6
