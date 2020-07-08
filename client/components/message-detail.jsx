@@ -58,7 +58,7 @@ export default class MessageDetail extends React.Component {
     const { handleMessageChange, handleMessageSend } = this;
     return (
       <div className="message-detail-box">
-        <div ref={element => { this.element = element; }} style={{ height: '78%', overflow: 'auto' }}>
+        <div style={{ height: '78%', overflow: 'auto' }}>
           {detailMessages.length > 0
             ? (
               detailMessages.map((message, index) => {
@@ -97,6 +97,7 @@ export default class MessageDetail extends React.Component {
             )
             : ('')
           }
+          <div ref={element => { this.element = element; }} />
         </div>
         <div className="message-padding"></div>
         <div className="send-message-custom mx-auto">
