@@ -47,7 +47,7 @@ Try the application live at [[http://art4bid.seongkevinlee.com](http://art4bid.s
 * NPM 6 or higher
 * PostgreSQL
 
-## Getting Started
+### Getting Started
 1. Clone the respository
 ```
 git clone https://github.com/seongkevinlee/art4bid.git
