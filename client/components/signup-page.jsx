@@ -132,7 +132,7 @@ export default class SignupPage extends React.Component {
         <div className={message ? 'signup-msg text-centet' : ''}>
           <p className="my-auto">{message}</p>
         </div>
-        <div className="mb-5">
+        <div className="mb-5 cursor-pointer">
           <p onClick={this.handleCancelClick}>cancel</p>
         </div>
       </div>

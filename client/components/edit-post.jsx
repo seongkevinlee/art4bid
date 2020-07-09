@@ -163,7 +163,7 @@ export default class EditPost extends React.Component {
                     }}>
                 Yes
                     </button>
-                    <button onClick={this.handleCancel}>No</button>
+                    <button className="cursor-pointer" onClick={this.handleCancel}>No</button>
                   </div>
                 </div>
               </div>

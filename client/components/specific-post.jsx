@@ -15,6 +15,7 @@ export default class SpecificPost extends React.Component {
       bidInfo: null,
       bidHistory: 'off',
       isModalOpen: false,
+      mode: '',
       isWatchlisted: false,
       editMode: false,
       bidText: 'Starting Bid:'
@@ -28,6 +29,7 @@ export default class SpecificPost extends React.Component {
     this.checkIfWatchlisted = this.checkIfWatchlisted.bind(this);
     this.addToWatchlist = this.addToWatchlist.bind(this);
     this.editModeToggle = this.editModeToggle.bind(this);
+    this.handleDeleteBtnClick = this.handleDeleteBtnClick.bind(this);
   }
 
   componentDidMount() {
@@ -72,7 +74,15 @@ export default class SpecificPost extends React.Component {
 
   messageBtnClick() {
     this.setState({
-      isModalOpen: true
+      isModalOpen: true,
+      mode: 'message'
+    });
+  }
+
+  handleDeleteBtnClick() {
+    this.setState({
+      isModalOpen: true,
+      mode: 'deletePost'
     });
   }
 
@@ -128,6 +138,7 @@ export default class SpecificPost extends React.Component {
       watchlistInfo,
       bidInfo,
       isModalOpen,
+      mode,
       isWatchlisted
     } = this.state;
 
@@ -161,6 +172,7 @@ export default class SpecificPost extends React.Component {
             messageBtnClick={messageBtnClick}
             getBidInfo={this.getBidInfo}
             editModeToggle = {this.editModeToggle}
+            handleDeleteBtnClick={this.handleDeleteBtnClick}
             biddingEnabled = {postInfo.biddingEnabled}
           />
         );
@@ -198,14 +210,25 @@ export default class SpecificPost extends React.Component {
                 {bodyview}
                 <div>
                   {isModalOpen
-                    ? (
-                      <Modal
-                        userId={userId}
-                        postId={postId}
-                        recipientId={postInfo.sellerId}
-                        handleModalCloseClick={handleModalCloseClick}
-                      />
-                    )
+                    ? mode === 'message'
+                      ? (
+                        <Modal
+                          userId={userId}
+                          postId={postId}
+                          mode={mode}
+                          recipientId={postInfo.sellerId}
+                          handleModalCloseClick={handleModalCloseClick}
+                        />
+                      )
+                      : (
+                        <Modal
+                          userId={userId}
+                          postId={postId}
+                          mode={mode}
+                          setView={setView}
+                          handleModalCloseClick={handleModalCloseClick}
+                        />
+                      )
                     : (
                       ''
                     )}

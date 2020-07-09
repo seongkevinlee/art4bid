@@ -28,7 +28,7 @@ export default function PostHeader(props) {
         <p className="m-0">{props.userName}</p>
       </div>
       <div
-        className="header-icon-container d-flex flex-column justify-content-center mt-2"
+        className="header-icon-container d-flex flex-column justify-content-center mt-2 cursor-pointer"
         onClick={() => { props.addToWatchlist(); }}
       >
         <FireAltIcon

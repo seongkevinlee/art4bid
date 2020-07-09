@@ -238,7 +238,7 @@ export default class CreatePost extends React.Component {
                     <button className="yes-button" onClick={this.handleReset}>
                 Yes
                     </button>
-                    <button onClick={this.handleCancel}>No</button>
+                    <button className="cursor-pointer" onClick={this.handleCancel}>No</button>
                   </div>
                 </div>
               </div>

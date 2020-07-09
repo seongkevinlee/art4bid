@@ -141,6 +141,13 @@ export default class PostBody extends React.Component {
           <button
             id="edit-post"
             className="text-center"
+            onClick={() => this.props.handleDeleteBtnClick()}
+          >
+            Delete Post
+          </button>
+          <button
+            id="edit-post"
+            className="text-center"
             onClick={() => this.props.editModeToggle()}
           >
               Edit Post
