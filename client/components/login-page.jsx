@@ -49,7 +49,7 @@ export default class LoginPage extends React.Component {
           </form>
         </div>
         <div>
-          <p onClick={this.handleSignUpClick}>sign-up</p>
+          <p className="cursor-pointer" onClick={this.handleSignUpClick}>sign-up</p>
         </div>
       </div>
     );

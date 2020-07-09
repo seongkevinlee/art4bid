@@ -45,7 +45,7 @@ export default class MessageList extends React.Component {
                             </span>
                             <span
                               id={id}
-                              className="col mr-2 mt-2 text-right text-dark message-date"
+                              className="col mr-2 mt-2 text-right text-dark message-date cursor-pointer"
                               onClick={handleViewMessageClick}>
                               {new Date(message.createdAt).toLocaleString().split(',')[0] + ' |' + new Date(message.createdAt).toLocaleString().split(',')[1]}
                             </span>
@@ -53,11 +53,11 @@ export default class MessageList extends React.Component {
                           <div>
                             <div
                               id={id}
-                              className="col text-dark pb-1 message-content"
+                              className="col text-dark pb-1 message-content cursor-pointer"
                               onClick={handleViewMessageClick}>
                               <span
                                 id={id}
-                                className="ml-1 text-left"
+                                className="ml-1 text-left cursor-pointer"
                                 onClick={handleViewMessageClick}>{'Title: ' + message.title}</span>
                             </div>
                           </div>

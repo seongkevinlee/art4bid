@@ -53,7 +53,7 @@ export default class MyBids extends React.Component {
           <img
             alt=""
             key={thumbnail.postId}
-            className="user-post-thumbnail col-4 p-0 col-4"
+            className="user-post-thumbnail col-4 p-0 col-4 cursor-pointer"
             src={thumbnail.imageUrl}
             onClick={() => {
               this.props.getPostInfo(thumbnail.postId);

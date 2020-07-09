@@ -123,16 +123,17 @@ option {
 }
 
 .new-post-modal-content > div > button {
-    margin: 6px;
-    height: 40px;
-    width: 70px;
-    border: transparent;
+  margin: 6px;
+  height: 40px;
+  width: 70px;
+  border: transparent;
 }
 
 .yes-button {
-    background-color:#CA0303;
-    color:white;
-    border: none;
+  cursor: pointer;
+  background-color:#CA0303;
+  color:white;
+  border: none;
 }
 
 form#new-post > * {

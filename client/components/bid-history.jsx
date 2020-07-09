@@ -42,7 +42,7 @@ export default class BidHistory extends React.Component {
     return (
       <div className="bid-history text-center">
         <header>
-          <div className="bid-back-icon-container">
+          <div className="bid-back-icon-container cursor-pointer">
             <img alt="" onClick={() => this.props.toggleBidHistory('off')} className="bid-back-icon" src="./images/kindpng.png"></img>
           </div>
           <p id="bid-history" className="mb-1">Bid History</p>

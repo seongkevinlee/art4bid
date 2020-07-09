@@ -75,7 +75,8 @@ app.get('/api/post/:location', (req, res, next) => {
   const sql = `
     SELECT *
       FROM "post"
-     WHERE "sellerId" IN
+     WHERE "isDeleted" = 'false'
+       AND "sellerId" IN
       (SELECT "userId"
          FROM "user"
         WHERE "location" = ANY($1))
@@ -275,6 +276,7 @@ app.get('/api/posts/:category/:offset', (req, res, next) => {
            "createdAt"
     from  "post"
     where "category" = $1
+      and "isDeleted" = 'false'
     order by "createdAt" desc
     limit 10 offset $2
   `;
@@ -382,10 +384,10 @@ app.post('/api/message/list/', (req, res, next) => {
       FROM "message" AS "m"
       JOIN "user" AS "u"
       ON "u"."userId" = "m"."senderId"
-      WHERE "m"."recipientId" = $1 OR "m"."senderId" = $1
+      WHERE ("m"."recipientId" = $1 OR "m"."senderId" = $1)
       ORDER BY "m"."senderId", "m"."recipientId", "m"."postId", "m"."createdAt" DESC) AS "me"
       JOIN "post" AS "p"
-      ON "p"."postId" = "me"."postId"
+      ON "p"."postId" = "me"."postId" AND "p"."isDeleted" = 'false'
       ORDER BY "me"."postId", "me"."createdAt" DESC
   `;
   const params = [recipientId];
@@ -463,6 +465,7 @@ app.get('/api/viewpost/:postId', (req, res, next) => {
            "user"."userName"
     from "post" join "user" on "post"."sellerId" = "user"."userId"
     where "post"."postId" = $1
+      and "post"."isDeleted" = 'false'
   `;
   const params = [postId];
   db.query(sql, params)
@@ -497,6 +500,7 @@ app.get('/api/watchlist/:userId', (req, res, next) => {
     JOIN "watchlists" AS "w"
     ON "p"."postId" =  "w"."postId"
     WHERE "userId" = $1
+      AND "p"."isDeleted" = 'false'
   `;
   const params = [userId];
   db.query(sql, params)
@@ -594,6 +598,7 @@ app.get('/api/notes/:postId', (req, res, next) => {
   select "notes"
   from "post"
   where "postId" = $1
+    and "isDeleted" = 'false'
   `;
   const params = [postId];
   db.query(sql, params)
@@ -615,12 +620,26 @@ app.get('/api/posts', (req, res, next) => {
   SELECT  "postId", "imageUrl"
   FROM    "post"
   WHERE   "sellerId" = $1
+    AND   "isDeleted" = 'false'
   `;
   db.query(findUserPosts, userId)
     .then(result => res.json(result.rows))
     .catch(err => next(err));
 });
-
+// USER CAN DELETE POST
+app.delete('/api/posts', (req, res, next) => {
+  const { userId, postId } = req.body;
+  const sql = `
+    UPDATE "post"
+    SET "isDeleted" = 'true'
+    WHERE "sellerId" = $1
+    AND "postId" = $2
+  `;
+  const params = [userId, postId];
+  db.query(sql, params)
+    .then(result => res.json({ status: 'deleted' }))
+    .catch(err => next(err));
+});
 // USER CAN BID ON ART
 app.post('/api/bid', (req, res, next) => {
   const { bidderId, postId, currentBid } = req.body;
@@ -653,6 +672,7 @@ app.post('/api/bid', (req, res, next) => {
         select "startingBid"
         from "post"
         where "postId" = $1
+          and "isDeleted" = 'false'
         `;
         const params = [postId];
         db.query(sql, params)
